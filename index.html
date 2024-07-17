@@ -266,112 +266,124 @@
     <div class="movie-cards-container">
         <!-- Movie cards will be injected here by JavaScript -->
     </div>
+    
 <div class="anime-filter-sidebar">
     <div class="sidebar">
-        <div class="filter">
-            <label data-time="today" class="active">Today</label>
-            <label data-time="week">This Week</label>
-            <label data-time="month">This Month</label>
+        <div class="section-title">
+            <h5>Filter</h5>
+        </div>
+        <div class="product__sidebar__view">
+            <ul class="filter__controls">
+                <li class="active" data-filter="today">Today</li>
+                <li data-filter="week">This Week</li>
+                <li data-filter="month">This Month</li>
+            </ul>
         </div>
     </div>
 </div>
 
-<div class="anime-list">
-    <!-- Anime cards will be injected here by JavaScript -->
-</div>
-<style>.anime-filter-sidebar {
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #333;
+    color: white;
+    margin: 0;
+}
+
+.container {
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
     padding: 20px;
+}
+
+.anime-filter-sidebar {
+    flex: 1 1 100%; /* Full width on mobile */
+    display: flex;
+    justify-content: flex-end;
+    order: 3; /* Move to bottom on mobile */
 }
 
 .sidebar {
     width: 250px;
     background-color: #222;
     padding: 20px;
-    border-radius: 10px;
-    margin-right: 20px;
 }
 
-.filter {
+.section-title h5 {
+    color: #ffffff;
+    font-weight: 600;
+    font-family: "Oswald", sans-serif;
+    line-height: 21px;
+    text-transform: uppercase;
+    padding-left: 20px;
+    position: relative;
+}
+
+.section-title h5:after {
+    position: absolute;
+    left: 0;
+    top: -6px;
+    height: 32px;
+    width: 4px;
+    background: #e53637;
+    content: "";
+}
+
+.product__sidebar__view {
+    position: relative;
     margin-bottom: 20px;
 }
 
-.filter label {
-    cursor: pointer;
-    display: block;
-    padding: 10px 20px;
-    background-color: #555;
-    color: white;
-    border-radius: 20px;
-    transition: background-color 0.3s ease;
-    margin-bottom: 5px;
+.filter__controls {
+    position: absolute;
+    right: 0;
+    top: -5px;
 }
 
-.filter label:hover {
-    background-color: #777;
-}
-
-.filter label.active {
-    background-color: #4CAF50;
-}
-
-.anime-list {
-    flex: 1;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-}
-
-.anime-card {
-    width: calc(33.333% - 20px);
-    background-color: #222;
-    color: white;
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-
-.anime-card:hover {
-    transform: translateY(-5px);
-}
-
-.anime-card img {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
-
-.anime-card h3 {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.anime-card p {
-    font-size: 14px;
-    color: #bbb;
-}
-
-.anime-card a {
+.filter__controls li {
+    list-style: none;
+    font-size: 13px;
+    color: #b7b7b7;
     display: inline-block;
-    margin: 5px;
-    padding: 5px 10px;
-    border-radius: 5px;
-    background-color: #e53637;
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
+    margin-right: 7px;
+    cursor: pointer;
 }
+
+.filter__controls li.active {
+    color: #ffffff;
+}
+
+.filter__controls li:last-child {
+    margin-right: 0;
+}
+
+@media (min-width: 768px) {
+    .anime-filter-sidebar {
+        order: 0; /* Move back to original order on tablets and larger screens */
+        flex: 1 1 20%; /* Adjust width as needed */
+    }
+
+    .carousel, .movie-cards, .anime-list {
+        flex: 1 1 75%; /* Adjust width as needed */
+    }
+
+    .movie-cards {
+        order: 2;
+    }
+
+    .anime-list {
+        order: 3;
+    }
+}
+
 </style>
-    <script>document.addEventListener('DOMContentLoaded', function () {
-    const filterLabels = document.querySelectorAll('.filter label');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    const filterControls = document.querySelectorAll('.filter__controls li');
     const animeList = document.querySelector('.anime-list');
 
+    // Function to fetch and render anime data based on filter
     function fetchAnimeData(timePeriod) {
         fetch('https://aniwatch-api-net.vercel.app/anime/home')
             .then(response => response.json())
@@ -386,7 +398,7 @@
                     card.innerHTML = `
                         <img src="${anime.poster}" alt="${anime.name}">
                         <h3>${anime.name}</h3>
-                        <p>Episodes: ${anime.episodes.sub} (Sub), ${anime.episodes.dub} (Dub)</p>
+                        <p>Episodes: ${anime.episodes.sub} (Sub)</p>
                         <a href="./page2.html?id=${anime.id}" class="details-button">Details</a>
                         <a href="./page2.html?id=${anime.id}" class="watch-button">Watch</a>
                     `;
@@ -400,17 +412,18 @@
     fetchAnimeData('today');
 
     // Event listeners for filter labels
-    filterLabels.forEach(label => {
-        label.addEventListener('click', () => {
-            if (!label.classList.contains('active')) {
-                filterLabels.forEach(l => l.classList.remove('active'));
-                label.classList.add('active');
-                const timePeriod = label.dataset.time;
+    filterControls.forEach(control => {
+        control.addEventListener('click', function () {
+            if (!this.classList.contains('active')) {
+                filterControls.forEach(ctrl => ctrl.classList.remove('active'));
+                this.classList.add('active');
+                const timePeriod = this.getAttribute('data-filter');
                 fetchAnimeData(timePeriod);
             }
         });
     });
 });
+
 </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
