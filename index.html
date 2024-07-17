@@ -266,46 +266,32 @@
     <div class="movie-cards-container">
         <!-- Movie cards will be injected here by JavaScript -->
     </div>
- <style>/* styles.css */
+<div class="anime-filter-sidebar">
+    <div class="sidebar">
+        <div class="filter">
+            <label data-time="today" class="active">Today</label>
+            <label data-time="week">This Week</label>
+            <label data-time="month">This Month</label>
+        </div>
+    </div>
+</div>
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #333;
-    color: white;
-    margin: 0;
-}
-
-.container {
+<div class="anime-list">
+    <!-- Anime cards will be injected here by JavaScript -->
+</div>
+<style>.anime-filter-sidebar {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    justify-content: flex-start;
+    align-items: flex-start;
     padding: 20px;
-}
-
-.carousel {
-    flex: 1 1 70%; /* Adjust as needed */
-    background-color: #444;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-.movie-cards {
-    flex: 1 1 20%; /* Adjust as needed */
-    background-color: #444;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-.anime-filter-sidebar {
-    flex: 1 1 10%; /* Adjust as needed */
-    display: flex;
-    justify-content: flex-end;
 }
 
 .sidebar {
     width: 250px;
     background-color: #222;
     padding: 20px;
+    border-radius: 10px;
+    margin-right: 20px;
 }
 
 .filter {
@@ -332,21 +318,26 @@ body {
 }
 
 .anime-list {
-    flex: 1 1 100%; /* Adjust as needed */
+    flex: 1;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
-    padding: 20px;
 }
 
 .anime-card {
-    width: 200px;
+    width: calc(33.333% - 20px);
     background-color: #222;
     color: white;
     padding: 10px;
     border-radius: 10px;
     text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.anime-card:hover {
+    transform: translateY(-5px);
 }
 
 .anime-card img {
@@ -354,65 +345,73 @@ body {
     border-radius: 10px;
     margin-bottom: 10px;
 }
+
+.anime-card h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.anime-card p {
+    font-size: 14px;
+    color: #bbb;
+}
+
+.anime-card a {
+    display: inline-block;
+    margin: 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #e53637;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
 </style>
-    <div class="anime-filter-sidebar">
-            <div class="sidebar">
-                <div class="filter">
-                    <label data-time="today" class="active">Today</label>
-                    <label data-time="week">This Week</label>
-                    <label data-time="month">This Month</label>
-                </div>
-            </div>
-        </div>
-        
-        <div class="anime-list">
-            <!-- Anime cards will be injected here by JavaScript -->
-        </div>
-    </div>
-    <script>  document.addEventListener('DOMContentLoaded', function () {
-            const filterLabels = document.querySelectorAll('.filter label');
-            const animeList = document.querySelector('.anime-list');
+    <script>document.addEventListener('DOMContentLoaded', function () {
+    const filterLabels = document.querySelectorAll('.filter label');
+    const animeList = document.querySelector('.anime-list');
 
-            function fetchAnimeData(timePeriod) {
-                fetch('https://aniwatch-api-net.vercel.app/anime/home')
-                    .then(response => response.json())
-                    .then(data => {
-                        const animeData = data.top10Animes[timePeriod];
+    function fetchAnimeData(timePeriod) {
+        fetch('https://aniwatch-api-net.vercel.app/anime/home')
+            .then(response => response.json())
+            .then(data => {
+                const animeData = data.top10Animes[timePeriod];
 
-                        animeList.innerHTML = ''; // Clear previous anime cards
+                animeList.innerHTML = ''; // Clear previous anime cards
 
-                        animeData.forEach(anime => {
-                            const card = document.createElement('div');
-                            card.className = 'anime-card';
-                            card.innerHTML = `
-                                <img src="${anime.poster}" alt="${anime.name}">
-                                <h3>${anime.name}</h3>
-                                <p>Episodes: ${anime.episodes.sub} (Sub)</p>
-                                <a href="./page2.html?id=${anime.id}" class="details-button">Details</a>
-                                <a href="./page2.html?id=${anime.id}" class="watch-button">Watch</a>
-                            `;
-                            animeList.appendChild(card);
-                        });
-                    })
-                    .catch(error => console.error('Error fetching anime data:', error));
-            }
-
-            // Initial fetch and render for today's anime
-            fetchAnimeData('today');
-
-            // Event listeners for filter labels
-            filterLabels.forEach(label => {
-                label.addEventListener('click', () => {
-                    if (!label.classList.contains('active')) {
-                        filterLabels.forEach(l => l.classList.remove('active'));
-                        label.classList.add('active');
-                        const timePeriod = label.dataset.time;
-                        fetchAnimeData(timePeriod);
-                    }
+                animeData.forEach(anime => {
+                    const card = document.createElement('div');
+                    card.className = 'anime-card';
+                    card.innerHTML = `
+                        <img src="${anime.poster}" alt="${anime.name}">
+                        <h3>${anime.name}</h3>
+                        <p>Episodes: ${anime.episodes.sub} (Sub), ${anime.episodes.dub} (Dub)</p>
+                        <a href="./page2.html?id=${anime.id}" class="details-button">Details</a>
+                        <a href="./page2.html?id=${anime.id}" class="watch-button">Watch</a>
+                    `;
+                    animeList.appendChild(card);
                 });
-            });
+            })
+            .catch(error => console.error('Error fetching anime data:', error));
+    }
 
-        });</script>
+    // Initial fetch and render for today's anime
+    fetchAnimeData('today');
+
+    // Event listeners for filter labels
+    filterLabels.forEach(label => {
+        label.addEventListener('click', () => {
+            if (!label.classList.contains('active')) {
+                filterLabels.forEach(l => l.classList.remove('active'));
+                label.classList.add('active');
+                const timePeriod = label.dataset.time;
+                fetchAnimeData(timePeriod);
+            }
+        });
+    });
+});
+</script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const slidesContainer = document.getElementById('slider');
