@@ -162,12 +162,11 @@ body {
 .movie-card {
     position: relative;
     width: calc(20% - 20px); /* Adjust card size */
-    background-color: #444;
-    border-radius: 15px; /* Rounded edges */
     overflow: hidden;
     transition: transform 0.3s ease, filter 0.3s ease;
     cursor: pointer;
     margin: 10px;
+    border-radius: 15px; /* Slightly rounded edges */
 }
 
 .movie-card img {
@@ -198,15 +197,10 @@ body {
     opacity: 1;
 }
 
-.card-body {
-    padding: 10px;
-    text-align: center;
-}
-
 .card-title {
     font-size: 16px;
     font-weight: bold;
     margin-top: 10px;
     color: white;
+    text-align: center;
 }
-
