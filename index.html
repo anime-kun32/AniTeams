@@ -2,355 +2,328 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide Carousel with Movie Cards</title>
-    <style>
-        body {
-            background-color: #333;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide Carousel with Movie Cards</title>
+<style>
+body {
+background-color: #333;
+color: white;
+font-family: Arial, sans-serif;
+}
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #333;
-        }
+.header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 10px 20px;
+background-color: #333;
+}
 
-        .logo {
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-        }
+.logo {
+color: white;
+font-size: 24px;
+font-weight: bold;
+}
 
-        .search-form {
-            display: flex;
-            align-items: center;
-        }
+.search-form {
+display: flex;
+align-items: center;
+}
 
-        .search-input {
-            padding: 8px;
-            border: 1px solid white;
-            border-radius: 20px;
-            margin-right: 10px;
-            background-color: transparent;
-            color: white;
-        }
+.search-input {
+padding: 8px;
+border: 1px solid white;
+border-radius: 20px;
+margin-right: 10px;
+background-color: transparent;
+color: white;
+}
 
-        .search-button {
-            background-color: white;
-            color: #333;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-        }
+.search-button {
+background-color: white;
+color: #333;
+padding: 8px 15px;
+border: none;
+border-radius: 20px;
+cursor: pointer;
+}
 
-        #slider {
-            display: flex;
-            overflow: hidden;
-            position: relative;
-            width: 100%;
-        }
+#slider {
+display: flex;
+overflow: hidden;
+position: relative;
+width: 100%;
+}
 
-        .slide {
-            flex: 0 0 100%;
-            transition: transform 0.5s ease;
-            position: relative;
-        }
+.slide {
+flex: 0 0 100%;
+transition: transform 0.5s ease;
+position: relative;
+}
 
-        .slide img {
-            width: 100%;
-            height: auto;
-            opacity: 0.5;
-        }
+.slide img {
+width: 100%;
+height: auto;
+opacity: 0.5;
+}
 
-        .slide-content {
-            position: absolute;
-            bottom: 10%;
-            left: 10%;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        }
+.slide-content {
+position: absolute;
+bottom: 10%;
+left: 10%;
+color: white;
+text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
 
-        .title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+.title {
+font-size: 24px;
+font-weight: bold;
+margin-bottom: 5px;
+}
 
-        .additional-info {
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
+.additional-info {
+font-size: 14px;
+margin-bottom: 10px;
+}
 
-        .description {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
+.description {
+font-size: 16px;
+margin-bottom: 10px;
+}
 
-        .buttons {
-            display: flex;
-        }
+.buttons {
+display: flex;
+}
 
-        .details-button,
-        .watch-button {
-            background-color: white;
-            color: #333;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            margin-right: 10px;
-            cursor: pointer;
-            text-decoration: none;
-        }
+.details-button,
+.watch-button {
+background-color: white;
+color: #333;
+padding: 5px 10px;
+border: none;
+border-radius: 5px;
+margin-right: 10px;
+cursor: pointer;
+text-decoration: none;
+}
 
-        .slider-nav {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
+.slider-nav {
+display: flex;
+justify-content: center;
+margin-top: 10px;
+}
 
-        .slider-dot {
-            width: 10px;
-            height: 10px;
-            background-color: grey;
-            border-radius: 50%;
-            margin: 0 5px;
-            cursor: pointer;
-        }
+.slider-dot {
+width: 10px;
+height: 10px;
+background-color: grey;
+border-radius: 50%;
+margin: 0 5px;
+cursor: pointer;
+}
 
-        .slider-dot.active {
-            background-color: green;
-        }
+.slider-dot.active {
+background-color: green;
+}
 
-        .timer-line {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 5px;
-            background-color: red;
-            animation: slide-timer 10s linear infinite;
-        }
+.timer-line {
+position: absolute;
+bottom: 0;
+left: 0;
+height: 5px;
+background-color: red;
+animation: slide-timer 10s linear infinite;
+}
 
-        @keyframes slide-timer {
-            0% {
-                width: 0;
-            }
+@keyframes slide-timer {
+0% {
+width: 0;
+}
 
-            100% {
-                width: 100%;
-            }
-        }
+100% {
+width: 100%;
+}
+}
 
-        @media only screen and (min-width: 768px) {
-            .timer-line {
-                top: 0;
-                bottom: auto;
-            }
-        }
+@media only screen and (min-width: 768px) {
+.timer-line {
+top: 0;
+bottom: auto;
+}
+}
 
-        @media only screen and (max-width: 767px) {
-            .timer-line {
-                bottom: 0;
-            }
-        }
+@media only screen and (max-width: 767px) {
+.timer-line {
+bottom: 0;
+}
+}
 
-        /* Movie Cards Container */
-        .movie-cards-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            padding: 20px;
-            background-color: #444;
-            margin-top: 20px;
-            justify-content: center;
-        }
+/* Movie Cards */
+.movie-cards-container {
+display: flex;
+flex-wrap: wrap;
+gap: 20px;
+padding: 20px;
+justify-content: center;
+}
 
-        .movie-card {
-            position: relative;
-            width: calc(30% - 20px);
-            background-color: #222;
-            color: white;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-        }
+.movie-card {
+position: relative;
+width: calc(30% - 20px);
+color: white;
+transition: transform 0.3s ease;
+cursor: pointer;
+}
 
-        .movie-card:hover {
-            transform: translateY(-5px);
-        }
+.movie-card:hover {
+transform: translateY(-5px);
+}
 
-        .card-img-top {
-            width: 100%;
-            height: auto;
-            border-radius: 10px 10px 0 0;
-            filter: blur(0);
-            transition: filter 0.3s ease;
-        }
+.card-img-top {
+width: 100%;
+height: auto;
+transition: filter 0.3s ease;
+}
 
-        .movie-card:hover .card-img-top {
-            filter: blur(3px);
-        }
+.card-body {
+padding: 10px 0;
+text-align: center;
+}
 
-        .card-body {
-            padding: 20px;
-        }
+.card-title {
+font-size: 18px;
+font-weight: bold;
+margin-top: 10px;
+}
 
-        .card-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .play-button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            color: white;
-        }
-
-        .movie-card:hover .play-button {
-            opacity: 1;
-        }
-    </style>
- 
+@media only screen and (max-width: 767px) {
+.movie-card {
+width: 100%;
+}
+}
+</style>
 </head>
 
 <body>
-  <div id="progress-bar-container">
-        <div id="progress-bar"></div>
-    </div>
-    <div class="header">
-        <div class="logo">Your Logo</div>
-        <form class="search-form">
-            <input type="text" class="search-input" placeholder="Search...">
-            <button type="submit" class="search-button">Search</button>
-        </form>
-    </div>
+<div id="progress-bar-container">
+<div id="progress-bar"></div>
+</div>
+<div class="header">
+<div class="logo">Your Logo</div>
+<form class="search-form">
+<input type="text" class="search-input" placeholder="Search...">
+<button type="submit" class="search-button">Search</button>
+</form>
+</div>
 
-    <div id="slider">
-        <!-- Slides will be injected here by JavaScript -->
-    </div>
+<div id="slider">
+<!-- Slides will be injected here by JavaScript -->
+</div>
 
-    <div class="slider-nav">
-        <!-- Dots will be injected here by JavaScript -->
-    </div>
+<div class="slider-nav">
+<!-- Dots will be injected here by JavaScript -->
+</div>
 
-    <!-- Movie Cards Container -->
-    <div class="movie-cards-container">
-        <!-- Movie cards will be injected here by JavaScript -->
-    </div>
-    
+<!-- Movie Cards Container -->
+<div class="movie-cards-container">
+<!-- Movie cards will be injected here by JavaScript -->
+</div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+const slidesContainer = document.getElementById('slider');
+const dotsContainer = document.querySelector('.slider-nav');
 
-  
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const slidesContainer = document.getElementById('slider');
-            const dotsContainer = document.querySelector('.slider-nav');
+function truncateDescription(description, wordLimit) {
+const words = description.split(' ');
+if (words.length > wordLimit) {
+return words.slice(0, wordLimit).join(' ') + '...';
+}
+return description;
+}
 
-            function truncateDescription(description, wordLimit) {
-                const words = description.split(' ');
-                if (words.length > wordLimit) {
-                    return words.slice(0, wordLimit).join(' ') + '...';
-                }
-                return description;
-            }
+fetch('https://aniwatch-api-net.vercel.app/anime/home') // Update with the actual API endpoint
+.then(response => response.json())
+.then(data => {
+const spotlightAnimes = data.spotlightAnimes; // Adjust based on the actual structure
+const trendingAnimes = data.trendingAnimes; // Adjust based on the actual structure
 
-            fetch('https://aniwatch-api-net.vercel.app/anime/home') // Update with the actual API endpoint
-                .then(response => response.json())
-                .then(data => {
-                    const spotlightAnimes = data.spotlightAnimes; // Adjust based on the actual structure
-                    const trendingAnimes = data.trendingAnimes; // Adjust based on the actual structure
+// Inject slides
+spotlightAnimes.forEach((anime, index) => {
+const slide = document.createElement('div');
+slide.className = 'slide';
+slide.innerHTML = `
+<img src="${anime.poster}" alt="${anime.name}">
+<div class="slide-content">
+<div class="title">${anime.name}</div>
+<div class="additional-info">${anime.otherInfo.join(' | ')}</div>
+<div class="description">${truncateDescription(anime.description, 10)}</div>
+<div class="buttons">
+<a href="./page2.html?id=${anime.id}" class="details-button">Details</a>
+<a href="./page2.html?id=${anime.id}" class="watch-button">Watch</a>
+</div>
+</div>
+<div class="timer-line"></div>
+`;
+slidesContainer.appendChild(slide);
 
-                    // Inject slides
-                    spotlightAnimes.forEach((anime, index) => {
-                        const slide = document.createElement('div');
-                        slide.className = 'slide';
-                        slide.innerHTML = `
-                            <img src="${anime.poster}" alt="${anime.name}">
-                            <div class="slide-content">
-                                <div class="title">${anime.name}</div>
-                                <div class="additional-info">${anime.otherInfo.join(' | ')}</div>
-                                <div class="description">${truncateDescription(anime.description, 10)}</div>
-                                <div class="buttons">
-                                    <a href="./page2.html?id=${anime.id}" class="details-button">Details</a>
-                                    <a href="./page2.html?id=${anime.id}" class="watch-button">Watch</a>
-                                </div>
-                            </div>
-                            <div class="timer-line"></div>
-                        `;
-                        slidesContainer.appendChild(slide);
+const dot = document.createElement('div');
+dot.className = 'slider-dot' + (index === 0 ? ' active' : '');
+dot.dataset.index = index;
+dotsContainer.appendChild(dot);
+});
 
-                        const dot = document.createElement('div');
-                        dot.className = 'slider-dot' + (index === 0 ? ' active' : '');
-                        dot.dataset.index = index;
-                        dotsContainer.appendChild(dot);
-                    });
+// Inject movie cards
+const movieCardsContainer = document.querySelector('.movie-cards-container');
+trendingAnimes.forEach(anime => {
+const card = document.createElement('div');
+card.className = 'movie-card card';
+card.innerHTML = `
+<img src="${anime.poster}" class="card-img-top" alt="${anime.name}">
+<div class="card-body">
+<h5 class="card-title">${anime.name}</h5>
+</div>
+`;
+// Directly set href attribute for redirection
+card.addEventListener('click', () => {
+window.location.href = `./page2.html?id=${anime.id}`;
+});
 
-                    // Inject movie cards
-                    const movieCardsContainer = document.querySelector('.movie-cards-container');
-                    trendingAnimes.forEach(anime => {
-                        const card = document.createElement('div');
-                        card.className = 'movie-card card';
-                        card.innerHTML = `
-                            <img src="${anime.poster}" class="card-img-top" alt="${anime.name}">
-                            <div class="play-button">
-                                <i class="fas fa-play-circle fa-4x"></i>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">${anime.name}</h5>
-                            </div>
-                        `;
-                        // Directly set href attribute for redirection
-                        card.addEventListener('click', () => {
-                            window.location.href = `./page2.html?id=${anime.id}`;
-                        });
+movieCardsContainer.appendChild(card);
+});
 
-                        movieCardsContainer.appendChild(card);
-                    });
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.slider-dot');
+let currentIndex = 0;
 
-                    const slides = document.querySelectorAll('.slide');
-                    const dots = document.querySelectorAll('.slider-dot');
-                    let currentIndex = 0;
+function showSlide(index) {
+slides.forEach((slide, i) => {
+slide.style.transform = `translateX(-${index * 100}%)`;
+dots[i].classList.toggle('active', i === index);
+});
+}
 
-                    function showSlide(index) {
-                        slides.forEach((slide, i) => {
-                            slide.style.transform = `translateX(-${index * 100}%)`;
-                            dots[i].classList.toggle('active', i === index);
-                        });
-                    }
+function nextSlide() {
+currentIndex = (currentIndex + 1) % slides.length;
+showSlide(currentIndex);
+}
 
-                    function nextSlide() {
-                        currentIndex = (currentIndex + 1) % slides.length;
-                        showSlide(currentIndex);
-                    }
+const timer = setInterval(nextSlide, 10000);
 
-                    const timer = setInterval(nextSlide, 10000);
+dots.forEach(dot => {
+dot.addEventListener('click', () => {
+clearInterval(timer);
+currentIndex = parseInt(dot.dataset.index);
+showSlide(currentIndex);
+});
+});
 
-                    dots.forEach(dot => {
-                        dot.addEventListener('click', () => {
-                            clearInterval(timer);
-                            currentIndex = parseInt(dot.dataset.index);
-                            showSlide(currentIndex);
-                        });
-                    });
-
-                    showSlide(currentIndex);
-                })
-                .catch(error => console.error('Error fetching anime data:', error));
-        });
-    </script>
-
+showSlide(currentIndex);
+})
+.catch(error => console.error('Error fetching anime data:', error));
+});
+</script>
 </body>
 
 </html>
