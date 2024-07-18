@@ -1,4 +1,3 @@
-
 body {
 background-color: #333;
 color: white;
@@ -163,11 +162,11 @@ justify-content: center;
 
 .movie-card {
 position: relative;
-width: calc(30% - 20px);
+width: calc(25% - 20px); /* Reduced size */
 color: white;
 transition: transform 0.3s ease, filter 0.3s ease;
 cursor: pointer;
-border-radius: 15px;
+border-radius: 50%; /* Fully rounded edges */
 overflow: hidden;
 }
 
