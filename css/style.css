@@ -155,34 +155,31 @@ body {
 .movie-cards-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 40px; /* Increased gap between cards */
     padding: 20px;
-    justify-content: center;
+    justify-content: flex-start; /* Align cards to the start */
 }
 
 .movie-card {
     position: relative;
-    width: calc(25% - 20px);
+    width: calc(20% - 40px); /* Reduced size */
     color: white;
     transition: transform 0.3s ease, filter 0.3s ease;
     cursor: pointer;
-    border-radius: 50%;
+    border-radius: 50%; /* Circular edges */
+    overflow: hidden; /* Ensure children are contained within the rounded corners */
 }
 
 .movie-card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s;
-}
-
-.movie-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, filter 0.3s;
 }
 
 .movie-card:hover img {
     transform: scale(1.05);
+    filter: blur(2px); /* Blur effect on hover */
 }
 
 .movie-overlay {
