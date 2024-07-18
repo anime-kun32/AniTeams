@@ -155,18 +155,18 @@ body {
 .movie-cards-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 40px; /* Increased gap between cards */
+    gap: 20px; /* Increased gap between cards */
     padding: 20px;
     justify-content: flex-start; /* Align cards to the start */
 }
 
 .movie-card {
     position: relative;
-    width: calc(20% - 40px); /* Reduced size */
+    width: calc(20% - 20px); /* Reduced size */
     color: white;
     transition: transform 0.3s ease, filter 0.3s ease;
     cursor: pointer;
-    border-radius: 50%; /* Circular edges */
+    border-radius: 20px; /* Rounded edges */
     overflow: hidden; /* Ensure children are contained within the rounded corners */
 }
 
@@ -200,19 +200,17 @@ body {
     height: 50px;
 }
 
-.movie-text {
+.movie-title {
     text-align: center;
-    padding: 10px;
-    background-color: #f9f9f9;
-    margin-top: -5px;
-    transition: color 0.3s;
+    margin-top: 10px;
 }
 
-.movie-text a {
-    color: black;
+.movie-title a {
+    color: white;
     text-decoration: none;
+    font-size: 16px;
 }
 
-.movie-text a:hover {
-    color: #333;
+.movie-title a:hover {
+    color: #ccc; /* Change color on hover */
 }
