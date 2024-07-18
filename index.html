@@ -243,11 +243,11 @@ return words.slice(0, wordLimit).join(' ') + '...';
 return description;
 }
 
-fetch('https://aniwatch-api-net.vercel.app/anime/home') // Update with the actual API endpoint
+fetch('https://aniwatch-api-net.vercel.app/anime/home') 
 .then(response => response.json())
 .then(data => {
-const spotlightAnimes = data.spotlightAnimes; // Adjust based on the actual structure
-const trendingAnimes = data.trendingAnimes; // Adjust based on the actual structure
+const spotlightAnimes = data.spotlightAnimes; 
+const trendingAnimes = data.trendingAnimes; 
 
 // Inject slides
 spotlightAnimes.forEach((anime, index) => {
