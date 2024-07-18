@@ -166,7 +166,7 @@ body {
     overflow: hidden;
     transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
-    border-radius: 15px 15px 0 0; /* Rounded top edges */
+    border-radius: 15px; /* Rounded edges */
     display: flex;
     flex-direction: column;
 }
@@ -174,7 +174,7 @@ body {
 .movie-card img {
     width: 100%;
     height: auto;
-    border-radius: 15px 15px 0 0; /* Rounded top edges */
+    border-radius: 15px; /* Rounded edges */
     transition: filter 0.3s ease;
 }
 
@@ -185,7 +185,11 @@ body {
     transform: translate(-50%, -50%);
     opacity: 0;
     transition: opacity 0.3s ease;
-    z-index: 1; /* Ensure the play button is above the blurred image */
+}
+
+.movie-card .play-button img {
+    width: 50px;
+    height: 50px;
 }
 
 .movie-card:hover img {
@@ -208,7 +212,6 @@ body {
     color: white;
     text-align: center;
 }
-
 /* Media Queries for Mobile Devices */
 @media only screen and (max-width: 767px) {
     .movie-card {
