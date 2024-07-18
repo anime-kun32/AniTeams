@@ -30,7 +30,7 @@ function generateMovieCards(animes) {
         card.innerHTML = `
             <div class="movie-poster">
                 <img src="${anime.poster}" alt="${anime.name}">
-                <img class="play-button" src="path/to/play-button.png" alt="Play button">
+                <img class="play-button" src="play.png" alt="Play button">
             </div>
             <div class="movie-info">
                 <h3>${anime.name}</h3>
