@@ -1,0 +1,143 @@
+/* Basic styles */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Example background color */
+}
+
+#app {
+    padding: 20px;
+}
+
+.filter {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.filter-item {
+    cursor: pointer;
+    padding: 10px;
+    position: relative;
+    color: #333; /* Text color for filter items */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.filter-item::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #000;
+    transition: width 0.3s ease;
+}
+
+.filter-item.active::after {
+    width: 100%;
+}
+
+/* Animation for underlines */
+@keyframes slide {
+    0% {
+        transform: scaleX(0);
+    }
+    100% {
+        transform: scaleX(1);
+    }
+}
+
+/* Styles for movie cards */
+.movie-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around; /* Center align cards with space around */
+}
+
+.movie-card {
+    width: calc(33.33% - 20px); /* Adjust width for three cards per row */
+    text-decoration: none; /* Remove underline from links */
+    color: inherit; /* Inherit text color */
+    position: relative; /* Positioning context for poster */
+    overflow: hidden; /* Hide overflow to prevent text spillover */
+    border-radius: 10px; /* Rounded corners */
+    background-color: #ffffff; /* Card background color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for cards */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Animation on filter */
+    opacity: 1; /* Initially visible */
+}
+
+/* Movie Cards */
+.movie-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    justify-content: flex-start;
+}
+
+.movie-card {
+    position: relative;
+    width: calc(33.33% - 20px); /* Adjust card size */
+    margin: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border-radius: 15px; /* Rounded edges */
+    display: flex;
+    flex-direction: column;
+}
+
+.movie-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 15px; /* Rounded edges */
+    transition: filter 0.3s ease;
+}
+
+.movie-card .play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.movie-card .play-button img {
+    width: 50px;
+    height: 50px;
+}
+
+.movie-card:hover img {
+    filter: blur(4px);
+}
+
+.movie-card:hover .play-button {
+    opacity: 1;
+}
+
+.movie-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: white;
+    text-align: center;
+}
+
+/* Media Queries for Mobile Devices */
+@media only screen and (max-width: 767px) {
+    .movie-card {
+        width: 100%; /* Full width on mobile */
+        margin: 10px 0; /* Adjust margin for spacing */
+    }
+}
