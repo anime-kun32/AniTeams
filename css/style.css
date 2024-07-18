@@ -1,215 +1,221 @@
 body {
-background-color: #333;
-color: white;
-font-family: Arial, sans-serif;
+    background-color: #333;
+    color: white;
+    font-family: Arial, sans-serif;
 }
 
 .header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 10px 20px;
-background-color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
 }
 
 .logo {
-color: white;
-font-size: 24px;
-font-weight: bold;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .search-form {
-display: flex;
-align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .search-input {
-padding: 8px;
-border: 1px solid white;
-border-radius: 20px;
-margin-right: 10px;
-background-color: transparent;
-color: white;
+    padding: 8px;
+    border: 1px solid white;
+    border-radius: 20px;
+    margin-right: 10px;
+    background-color: transparent;
+    color: white;
 }
 
 .search-button {
-background-color: white;
-color: #333;
-padding: 8px 15px;
-border: none;
-border-radius: 20px;
-cursor: pointer;
+    background-color: white;
+    color: #333;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
 #slider {
-display: flex;
-overflow: hidden;
-position: relative;
-width: 100%;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
 }
 
 .slide {
-flex: 0 0 100%;
-transition: transform 0.5s ease;
-position: relative;
+    flex: 0 0 100%;
+    transition: transform 0.5s ease;
+    position: relative;
 }
 
 .slide img {
-width: 100%;
-height: auto;
-opacity: 0.5;
+    width: 100%;
+    height: auto;
+    opacity: 0.5;
 }
 
 .slide-content {
-position: absolute;
-bottom: 10%;
-left: 10%;
-color: white;
-text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    position: absolute;
+    bottom: 10%;
+    left: 10%;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .title {
-font-size: 24px;
-font-weight: bold;
-margin-bottom: 5px;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
 .additional-info {
-font-size: 14px;
-margin-bottom: 10px;
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 
 .description {
-font-size: 16px;
-margin-bottom: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
 }
 
 .buttons {
-display: flex;
+    display: flex;
 }
 
 .details-button,
 .watch-button {
-background-color: white;
-color: #333;
-padding: 5px 10px;
-border: none;
-border-radius: 5px;
-margin-right: 10px;
-cursor: pointer;
-text-decoration: none;
+    background-color: white;
+    color: #333;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .slider-nav {
-display: flex;
-justify-content: center;
-margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
 }
 
 .slider-dot {
-width: 10px;
-height: 10px;
-background-color: grey;
-border-radius: 50%;
-margin: 0 5px;
-cursor: pointer;
+    width: 10px;
+    height: 10px;
+    background-color: grey;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
 }
 
 .slider-dot.active {
-background-color: green;
+    background-color: green;
 }
 
 .timer-line {
-position: absolute;
-bottom: 0;
-left: 0;
-height: 5px;
-background-color: red;
-animation: slide-timer 10s linear infinite;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 5px;
+    background-color: red;
+    animation: slide-timer 10s linear infinite;
 }
 
 @keyframes slide-timer {
-0% {
-width: 0;
-}
+    0% {
+        width: 0;
+    }
 
-100% {
-width: 100%;
-}
+    100% {
+        width: 100%;
+    }
 }
 
 @media only screen and (min-width: 768px) {
-.timer-line {
-top: 0;
-bottom: auto;
-}
+    .timer-line {
+        top: 0;
+        bottom: auto;
+    }
 }
 
 @media only screen and (max-width: 767px) {
-.timer-line {
-bottom: 0;
-}
+    .timer-line {
+        bottom: 0;
+    }
 }
 
 /* Movie Cards */
 .movie-cards-container {
-display: flex;
-flex-wrap: wrap;
-gap: 20px;
-padding: 20px;
-justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    justify-content: center;
 }
 
 .movie-card {
-position: relative;
-width: calc(25% - 20px); /* Reduced size */
-color: white;
-transition: transform 0.3s ease, filter 0.3s ease;
-cursor: pointer;
-border-radius: 50%; /* Fully rounded edges */
-overflow: hidden;
+    position: relative;
+    width: calc(25% - 20px);
+    color: white;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.movie-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
 }
 
 .movie-card:hover {
-transform: translateY(-5px);
+    transform: scale(1.05);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
 }
 
-.card-img-top {
-width: 100%;
-height: auto;
-transition: filter 0.3s ease;
+.movie-card:hover img {
+    transform: scale(1.05);
 }
 
-.movie-card:hover .card-img-top {
-filter: blur(3px);
+.movie-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
-.play-button {
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-opacity: 0;
-transition: opacity 0.3s ease;
+.movie-card:hover .movie-overlay {
+    opacity: 1;
 }
 
-.movie-card:hover .play-button {
-opacity: 1;
+.movie-overlay img {
+    width: 50px;
+    height: 50px;
 }
 
-.card-body {
-padding: 10px 0;
-text-align: center;
+.movie-text {
+    text-align: center;
+    padding: 10px;
+    background-color: #f9f9f9;
+    margin-top: -5px;
+    transition: color 0.3s;
 }
 
-.card-title {
-font-size: 18px;
-font-weight: bold;
-margin-top: 10px;
+.movie-text a {
+    color: black;
+    text-decoration: none;
 }
 
-@media only screen and (max-width: 767px) {
-.movie-card {
-width: 100%;
-}
+.movie-text a:hover {
+    color: #333;
 }
