@@ -156,22 +156,25 @@ body {
     flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .movie-card {
     position: relative;
-    width: calc(20% - 20px); /* Adjust card size */
-    overflow: hidden;
-    transition: transform 0.3s ease, filter 0.3s ease;
-    cursor: pointer;
+    width: 20%; /* Adjust card size */
     margin: 10px;
-    border-radius: 15px; /* Slightly rounded edges */
+    overflow: hidden;
+    transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border-radius: 15px; /* Rounded edges */
+    display: flex;
+    flex-direction: column;
 }
 
 .movie-card img {
     width: 100%;
     height: auto;
+    border-radius: 15px; /* Rounded edges */
     transition: filter 0.3s ease;
 }
 
@@ -195,6 +198,11 @@ body {
 
 .movie-card:hover .play-button {
     opacity: 1;
+}
+
+.movie-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .card-title {
