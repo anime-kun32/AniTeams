@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Slide Carousel with Movie Cards</title>
 <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/filter.css">
 </head>
 
 <body>
@@ -32,8 +33,21 @@
 <div class="movie-cards-container">
 <!-- Movie cards will be injected here by JavaScript -->
 </div>
+  <div id="app">
+    <div class="filter">
+        <span class="filter-item active" data-category="today">Today</span>
+        <span class="filter-item" data-category="week">Week</span>
+        <span class="filter-item" data-category="month">Month</span>
+    </div>
+    <div class="movie-cards">
+        <!-- Movie cards will be dynamically generated here -->
+    </div>
+</div>
+
+
 
 <script src="js/script.js"></script>
+  <script src="js/filter.js"></script>
 </body>
 
 </html>
