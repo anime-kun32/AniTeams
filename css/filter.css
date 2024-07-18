@@ -1,3 +1,4 @@
+
 /* Basic styles */
 body,
 html {
@@ -60,7 +61,8 @@ justify-content: space-around; /* Center align cards with space around */
 }
 
 .movie-card {
-width: calc(33.33% - 20px); /* Adjust width for three cards per row */
+width: 250px; /* Updated width */
+height: 350px; /* Updated height */
 text-decoration: none; /* Remove underline from links */
 color: inherit; /* Inherit text color */
 position: relative; /* Positioning context for poster */
@@ -70,6 +72,7 @@ background-color: #444; /* Updated card background color */
 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for cards */
 transition: transform 0.3s ease, opacity 0.3s ease; /* Animation on filter */
 opacity: 1; /* Initially visible */
+margin: 10px; /* Updated margin */
 }
 
 .movie-cards-container {
@@ -78,18 +81,6 @@ flex-wrap: wrap;
 gap: 20px;
 padding: 20px;
 justify-content: flex-start;
-}
-
-.movie-card {
-position: relative;
-width: calc(33.33% - 20px); /* Adjust card size */
-margin: 10px;
-overflow: hidden;
-transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
-cursor: pointer;
-border-radius: 15px; /* Rounded edges */
-display: flex;
-flex-direction: column;
 }
 
 .movie-card img {
