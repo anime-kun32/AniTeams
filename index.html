@@ -1,53 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Slide Carousel with Movie Cards</title>
-<link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/filter.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime - Placeholder</title> <!-- This will be updated dynamically -->
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-<div id="progress-bar-container">
-<div id="progress-bar"></div>
-</div>
-<div class="header">
-<div class="logo">Your Logo</div>
-<form class="search-form">
-<input type="text" class="search-input" placeholder="Search...">
-<button type="submit" class="search-button">Search</button>
-</form>
-</div>
+    <header>
+        <h1 id="anime-title">Anime Title</h1> <!-- This will be updated dynamically -->
+    </header>
+<style>.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+}
 
-<div id="slider">
-<!-- Slides will be injected here by JavaScript -->
-</div>
+.logo {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
 
-<div class="slider-nav">
-<!-- Dots will be injected here by JavaScript -->
-</div>
+.search-form {
+    display: flex;
+    align-items: center;
+}
 
-<!-- Movie Cards Container -->
-<div class="movie-cards-container">
-<!-- Movie cards will be injected here by JavaScript -->
-</div>
-  <div id="app">
-    <div class="filter">
-        <span class="filter-item active" data-category="today">Today</span>
-        <span class="filter-item" data-category="week">Week</span>
-        <span class="filter-item" data-category="month">Month</span>
-    </div>
-    <div class="movie-cards">
-        <!-- Movie cards will be dynamically generated here -->
-    </div>
-</div>
+.search-input {
+    padding: 8px;
+    border: 1px solid white;
+    border-radius: 20px;
+    margin-right: 10px;
+    background-color: transparent;
+    color: white;
+}
 
+.search-button {
+    background-color: white;
+    color: #333;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}</style>
+    <main class="anime-container">
+        <section class="anime-details">
+            <div class="anime-info">
+                <img id="poster" src="" alt="Anime Poster">
+                <div class="anime-description">
+                    <h2 id="title"></h2>
+                    <p id="description"></p>
+                </div>
+            </div>
 
+            <div class="list-container">
+                <h3>More Info</h3>
+                <ul>
+                    <li>Japanese: <span id="japanese"></span></li>
+                    <li>Synonyms: <span id="synonyms"></span></li>
+                    <li>Aired: <span id="aired"></span></li>
+                    <li>Premiered: <span id="premiered"></span></li>
+                    <li>Duration: <span id="duration"></span></li>
+                    <li>Status: <span id="status"></span></li>
+                    <li>MAL Score: <span id="malscore"></span></li>
+                    <li>Studios: <span id="studios"></span></li>
+                    <li>Producers: <span id="producers"></span></li>
+                </ul>
+            </div>
 
-<script src="js/script.js"></script>
-  <script src="js/filter.js"></script>
+            <div id="cast" class="cast-container">
+                <h3>Voice Actors & Characters</h3>
+            </div>
+
+            <div id="videos" class="videos-container">
+                <h3>Promotional Videos</h3>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
 </body>
-
 </html>
