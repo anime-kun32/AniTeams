@@ -26,7 +26,7 @@ movieCardsContainer.innerHTML = ''; // Clear existing cards
 animes.forEach((anime, index) => {
 const card = document.createElement('a');
 card.classList.add('movie-card');
-card.href = `page2.html?id=${anime.id}`;
+card.href = `details.html?id=${anime.id}`;
 card.style.animation = `appear 0.3s ease forwards ${index * 0.1}s`; // Apply animation delay
 card.innerHTML = `
 <div class="movie-poster">
