@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 `;
                 card.addEventListener('click', () => {
-                    window.location.href = `./page2.html?id=${anime.id}`;
+                    window.location.href = `./details.html?id=${anime.id}`;
                 });
 
                 movieCardsContainer.appendChild(card);
