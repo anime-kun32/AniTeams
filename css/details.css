@@ -1,1 +1,180 @@
-n
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* Anime Card Styles */
+.anime-card {
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.anime-card img {
+    width: 300px;
+    height: 400px;
+    object-fit: cover;
+}
+
+.anime-card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.anime-card-content h2 {
+    margin-top: 0;
+    color: #222;
+}
+
+.anime-card-content p {
+    margin: 10px 0;
+    color: #555;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .anime-card {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .anime-card img {
+        width: 100%;
+        height: auto;
+    }
+
+    .anime-card-content {
+        padding: 10px;
+    }
+}
+
+/* Additional Sections */
+.section-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.list-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.list-container ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 50%;
+}
+
+.list-container li {
+    padding: 5px 0;
+    color: #666;
+}
+
+.cast-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.cast-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.cast-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.video-item {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.video-thumbnail {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 5px;
+}
+
+.video-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.video-container iframe {
+    width: 80%;
+    height: 80%;
+    border: none;
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.close-video {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #f00;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 2;
+}
