@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Fetch anime data from the API
-    fetch(`https://example.com/api/anime/${animeId}`) // Replace with the actual API URL
+    fetch(`https://aniwatch-api-net.vercel.app/anime/info?id=${animeId}`) // Replace with the actual API URL
         .then(response => response.json())
         .then(data => {
             const anime = data.anime;
