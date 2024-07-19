@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Details</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Anime Details</h1>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="movie-card" id="movie-card">
+            <img id="anime-image" src="" alt="Anime Image">
+            <div class="card-title" id="anime-title"></div>
+        </div>
+        <div class="movie-description" id="movie-description">
+            <h2>Description</h2>
+            <p id="anime-description"></p>
+            <a id="watch-link" href="#" target="_blank">Watch Now</a>
+            <div class="additional-info">
+                <h3>More Info</h3>
+                <ul id="more-info-left" class="info-list"></ul>
+                <ul id="more-info-right" class="info-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Promotional Videos Section -->
+    <section class="promotional-videos">
+        <h2>Promotional Videos</h2>
+        <div id="video-banner" class="video-banner">
+            <button id="video-button">Watch Video</button>
+        </div>
+        <div id="video-modal" class="video-modal">
+            <span id="video-close" class="close">&times;</span>
+            <iframe id="video-frame" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </section>
+
+    <!-- Characters and Voice Actors Section -->
+    <section class="characters-voice-actors">
+        <h2>Characters & Voice Actors</h2>
+        <div class="character-cards" id="character-cards">
+            <!-- Character and Voice Actor cards will be inserted here -->
+        </div>
+    </section>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
