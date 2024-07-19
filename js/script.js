@@ -27,8 +27,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="additional-info">${anime.otherInfo.join(' | ')}</div>
                         <div class="description">${truncateDescription(anime.description, 10)}</div>
                         <div class="buttons">
-                            <a href="./page2.html?id=${anime.id}" class="details-button">Details</a>
-                            <a href="./page2.html?id=${anime.id}" class="watch-button">Watch</a>
+                            <a href="./details.html?id=${anime.id}" class="details-button">Details</a>
+                            <a href="./details.html?id=${anime.id}" class="watch-button">Watch</a>
                         </div>
                     </div>
                     <div class="timer-line"></div>
