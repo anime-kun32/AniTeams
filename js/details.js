@@ -1,5 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const apiUrl = 'https://aniwatch-api-net.vercel.app/anime/info?id=attack-on-titan-112'; // Replace with your actual API URL
+    // Get the value of the 'id' parameter from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const animeId = urlParams.get('id');
+
+    // Check if the 'id' parameter is present in the URL
+    if (!animeId) {
+        console.error('Anime ID not provided in the URL');
+        return;
+    }
+
+    const apiUrl = `https://aniwatch-api-net.vercel.app/anime/info?id=${animeId}`;
 
     // Fetch anime details from the API
     fetch(apiUrl)
