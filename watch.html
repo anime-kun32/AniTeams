@@ -169,7 +169,7 @@
     <script src="https://cdn.plyr.io/3.6.8/plyr.polyfilled.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
-     // Function to get URL parameters
+        // Function to get URL parameters
 function getQueryParameter(name) {
 const urlParams = new URLSearchParams(window.location.search);
 return urlParams.get(name);
@@ -215,20 +215,6 @@ return { start, end, text: textLines.join(' ') };
 .catch(error => console.error('Error fetching or parsing VTT file:', error));
 }
 
-// Fetch and process the VTT file, then set as track source
-jsonData.tracks.forEach(track => {
-convertVTTtoJSON(track.file).then(captionsJson => {
-const webVTTString = captionsJson.map(caption => `${caption.start} --> ${caption.end}\n${caption.text}`).join('\n\n');
-const blob = new Blob([webVTTString], { type: 'text/vtt' });
-const trackElement = document.createElement('track');
-trackElement.kind = track.kind; // e.g., "subtitles"
-trackElement.label = track.label; // e.g., "English"
-trackElement.src = URL.createObjectURL(blob);
-trackElement.default = track.default; // e.g., true or false
-document.querySelector('#player').appendChild(trackElement);
-});
-});
-
 // Initialize Plyr
 const player = new Plyr('#player', {
 controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
@@ -248,6 +234,21 @@ player.play();
 player.media.src = jsonData.sources[0].url;
 player.play();
 }
+
+// Fetch and process the VTT file, then set as track source
+jsonData.tracks.forEach(track => {
+convertVTTtoJSON(track.file).then(captionsJson => {
+const webVTTString = captionsJson.map(caption => `${caption.start} --> ${caption.end}\n${caption.text}`).join('\n\n');
+const blob = new Blob([webVTTString], { type: 'text/vtt' });
+const trackElement = document.createElement('track');
+trackElement.kind = track.kind; // e.g., "subtitles"
+trackElement.label = track.label; // e.g., "English"
+trackElement.srclang = track.srclang; // e.g., "en"
+trackElement.src = URL.createObjectURL(blob);
+trackElement.default = track.default; // e.g., true or false
+document.querySelector('#player').appendChild(trackElement);
+});
+});
 
 // Skip intro and outro functionality
 const skipIntroBtn = document.getElementById('skip-intro');
@@ -350,7 +351,6 @@ rewindNotification.classList.remove('animate-in');
 player.on('languagechange', (event) => {
 const selectedLanguage = event.detail.plyr.language;
 category = selectedLanguage === 'sub' ? 'sub' : 'dub';
-player.destroy(); // Destroy the current player instance
 fetchEpisodeData(); // Refetch data with the new category
 });
 
@@ -359,6 +359,8 @@ player.config.settings.language = {
 options: ['sub', 'dub'],
 default: 'sub'
 };
-}  </script>
+}
+
+     </script>
 </body>
 </html>
