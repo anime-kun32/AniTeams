@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('anime-image').src = anime.poster;
             document.getElementById('anime-title').textContent = anime.name;
             document.getElementById('anime-description').textContent = anime.description;
-            document.getElementById('watch-link').href = '#';
+            document.getElementById('watch-link').href = 'watch.html?id=the-rising-of-the-shield-hero-524?ep=10510';
 
             // Populate more info
             const infoLeft = document.getElementById('more-info-left');
