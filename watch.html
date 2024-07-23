@@ -169,7 +169,7 @@
     <script src="https://cdn.plyr.io/3.6.8/plyr.polyfilled.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
-        // Function to get URL parameters
+     // Function to get URL parameters
 function getQueryParameter(name) {
 const urlParams = new URLSearchParams(window.location.search);
 return urlParams.get(name);
@@ -181,7 +181,7 @@ let category = 'sub'; // Default category
 
 function fetchEpisodeData() {
 if (animeId) {
-const episodeUrl = `https://aniwatch-api-net.vercel.app/anime/episode-srcs?id=${animeId}&ep=10509&server=vidstreaming&category=${category}`;
+const episodeUrl = `https://aniwatch-api-net.vercel.app/anime/episode-srcs?id=${animeId}&server=vidstreaming&category=${category}`;
 
 fetch(episodeUrl)
 .then(response => response.json())
@@ -216,15 +216,17 @@ return { start, end, text: textLines.join(' ') };
 }
 
 // Fetch and process the VTT file, then set as track source
-convertVTTtoJSON(jsonData.tracks[0].file).then(captionsJson => {
+jsonData.tracks.forEach(track => {
+convertVTTtoJSON(track.file).then(captionsJson => {
 const webVTTString = captionsJson.map(caption => `${caption.start} --> ${caption.end}\n${caption.text}`).join('\n\n');
 const blob = new Blob([webVTTString], { type: 'text/vtt' });
 const trackElement = document.createElement('track');
-trackElement.kind = jsonData.tracks[0].kind;
-trackElement.label = jsonData.tracks[0].label;
+trackElement.kind = track.kind; // e.g., "subtitles"
+trackElement.label = track.label; // e.g., "English"
 trackElement.src = URL.createObjectURL(blob);
-trackElement.default = jsonData.tracks[0].default;
+trackElement.default = track.default; // e.g., true or false
 document.querySelector('#player').appendChild(trackElement);
+});
 });
 
 // Initialize Plyr
@@ -357,7 +359,6 @@ player.config.settings.language = {
 options: ['sub', 'dub'],
 default: 'sub'
 };
-}
-    </script>
+}  </script>
 </body>
 </html>
