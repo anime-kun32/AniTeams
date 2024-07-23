@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plyr Video Player with Enhanced Features</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
+    <style>
+        body, .plyr {
+            font-family: 'Arial', sans-serif;
+        }
+        .video-container {
+            position: relative;
+            max-width: 100%;
+            height: calc(100vh - 80px);
+        }
+        .plyr--video .plyr__control {
+            color: white !important;
+            background: transparent !important;
+        }
+        .plyr--video .plyr__control:hover,
+        .plyr--video .plyr__control--overlaid:hover {
+            background: red !important;
+            color: white !important;
+        }
+        .plyr__progress--played,
+        .plyr__progress--buffer,
+        .plyr__progress--seek input[type=range] {
+            background: red !important;
+        }
+        .plyr__progress--played input[type=range]::-webkit-slider-thumb,
+        .plyr__progress--buffer input[type=range]::-webkit-slider-thumb {
+            background: red !important;
+        }
+        .plyr__progress--played input[type=range]::-moz-range-thumb,
+        .plyr__progress--buffer input[type=range]::-moz-range-thumb {
+            background: red !important;
+        }
+        .plyr__volume input[type=range] {
+            background: initial !important;
+        }
+        .plyr__volume input[type=range]::-webkit-slider-thumb {
+            background: initial !important;
+        }
+        .plyr__volume input[type=range]::-moz-range-thumb {
+            background: initial !important;
+        }
+        .plyr--video .plyr__menu__container {
+            background: black !important;
+            color: white !important;
+        }
+        .plyr--video .plyr__menu__container [role="menuitem"]:hover {
+            background: red !important;
+            color: white !important;
+        }
+        .plyr--video .plyr__menu__container [role="menuitemradio"][aria-checked="true"]::before {
+            background: red !important;
+        }
+        .skip-button {
+            position: absolute;
+            bottom: 60px;
+            right: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s, color 0.3s;
+        }
+        .skip-button:hover {
+            color: white;
+            animation: fadeInOut 1s infinite;
+        }
+        @keyframes fadeInOut {
+            0%, 100% { color: white; }
+            50% { color: black; }
+        }
+        .feedback {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 5px;
+            display: none;
+            font-size: 16px;
+        }
+        .video-forward-notify,
+        .video-rewind-notify {
+            text-align: center;
+            width: 100%;
+            height: 200%;
+            position: absolute;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            top: -50%;
+            color: rgba(255, 255, 255, 1);
+            display: none;
+        }
+        .video-forward-notify {
+            border-radius: 100% 0 0 100%;
+            right: -50%;
+        }
+        .video-rewind-notify {
+            border-radius: 0 100% 100% 0;
+            left: -50%;
+        }
+        .notification {
+            transition: background 0.8s;
+            background: rgba(200, 200, 200, .4) radial-gradient(circle, transparent 1%, rgba(200, 200, 200, .4) 1%) center/15000%;
+            pointer-events: none;
+        }
+        .animate-in {
+            display: flex;
+            animation: ripple 1s forwards;
+        }
+        .animate-in i {
+            display: block;
+        }
+        @keyframes ripple {
+            0% { 
+                background-color: rgba(200, 200, 200, .4);
+                background-size: 100%;
+                transition: background 0s;
+                opacity: 1;
+            }
+            100% { 
+                transition: background 0.8s;
+                background: rgba(200, 200, 200, .4) radial-gradient(circle, transparent 1%, rgba(200, 200, 200, .4) 1%) center/15000%;
+                display: flex;
+                opacity: 0;
+            }
+        }
+        span {
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-container">
+        <video id="player" playsinline controls>
+            <!-- Caption tracks will be added dynamically -->
+        </video>
+        <div class="video-rewind-notify rewind notification">
+            <div class="rewind-icon icon">
+                <i class="left-triangle triangle">◀◀◀</i>
+                <span class="rewind">10 seconds</span>
+            </div>
+        </div>
+        <div class="video-forward-notify forward notification">
+            <div class="forward-icon icon">
+                <i class="right-triangle triangle">▶▶▶</i>
+                <span class="forward">10 seconds</span>
+            </div>
+        </div>
+        <button id="skip-intro" class="skip-button">Skip Intro</button>
+        <button id="skip-outro" class="skip-button">Skip Outro</button>
+        <div id="feedback" class="feedback"></div>
+    </div>
+
+    <script src="https://cdn.plyr.io/3.6.8/plyr.polyfilled.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        // Function to get URL parameters
+function getQueryParameter(name) {
+const urlParams = new URLSearchParams(window.location.search);
+return urlParams.get(name);
+}
+
+// Fetch data from the API using the id from the URL
+const animeId = getQueryParameter('id'); // Assuming the URL will be like ?id=the-rising-of-the-shield-hero-524
+let category = 'sub'; // Default category
+
+function fetchEpisodeData() {
+if (animeId) {
+const episodeUrl = `https://aniwatch-api-net.vercel.app/anime/episode-srcs?id=${animeId}&server=vidstreaming&category=${category}`;
+
+fetch(episodeUrl)
+.then(response => response.json())
+.then(jsonData => {
+// Process the fetched data
+initializePlayer(jsonData);
+})
+.catch(error => console.error('Error fetching data from API:', error));
+} else {
+console.error('Anime ID not found in URL parameters.');
+}
+}
+
+fetchEpisodeData();
+
+function initializePlayer(jsonData) {
+// Function to convert VTT to JSON
+function convertVTTtoJSON(vttUrl) {
+return fetch(vttUrl)
+.then(response => response.text())
+.then(vttText => {
+return vttText
+.split(/\r?\n\r?\n/)
+.filter(Boolean)
+.map(part => {
+const [time, ...textLines] = part.split('\n');
+const [start, end] = time.split(' --> ');
+return { start, end, text: textLines.join(' ') };
+});
+})
+.catch(error => console.error('Error fetching or parsing VTT file:', error));
+}
+
+// Fetch and process the VTT file, then set as track source
+convertVTTtoJSON(jsonData.tracks[0].file).then(captionsJson => {
+const webVTTString = captionsJson.map(caption => `${caption.start} --> ${caption.end}\n${caption.text}`).join('\n\n');
+const blob = new Blob([webVTTString], { type: 'text/vtt' });
+const trackElement = document.createElement('track');
+trackElement.kind = jsonData.tracks[0].kind;
+trackElement.label = jsonData.tracks[0].label;
+trackElement.src = URL.createObjectURL(blob);
+trackElement.default = jsonData.tracks[0].default;
+document.querySelector('#player').appendChild(trackElement);
+});
+
+// Initialize Plyr
+const player = new Plyr('#player', {
+controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
+disableContextMenu: false,
+settings: ['captions', 'quality', 'speed', 'language']
+});
+
+// HLS support
+if (Hls.isSupported()) {
+const hls = new Hls();
+hls.loadSource(jsonData.sources[0].url);
+hls.attachMedia(player.media);
+hls.on(Hls.Events.MANIFEST_PARSED, () => {
+player.play();
+});
+} else if (player.media.canPlayType('application/vnd.apple.mpegurl')) {
+player.media.src = jsonData.sources[0].url;
+player.play();
+}
+
+// Skip intro and outro functionality
+const skipIntroBtn = document.getElementById('skip-intro');
+const skipOutroBtn = document.getElementById('skip-outro');
+const introEnd = jsonData.intro.end;
+const outroEnd = jsonData.outro.end;
+const feedback = document.getElementById('feedback');
+
+function skipIntro() {
+player.currentTime = introEnd; // Jump to the end of the intro
+showFeedback('Skipped Intro');
+}
+
+function skipOutro() {
+player.currentTime = outroEnd; // Jump to the end of the outro
+showFeedback('Skipped Outro');
+}
+
+skipIntroBtn.addEventListener('click', skipIntro);
+skipOutroBtn.addEventListener('click', skipOutro);
+
+// Update skip buttons visibility based on playback time
+player.on('timeupdate', () => {
+const currentTime = player.currentTime;
+
+skipIntroBtn.style.opacity = (currentTime >= jsonData.intro.start && currentTime <= introEnd) ? 1 : 0;
+skipOutroBtn.style.opacity = (currentTime >= jsonData.outro.start && currentTime <= outroEnd) ? 1 : 0;
+});
+
+// Show feedback function
+function showFeedback(message) {
+feedback.textContent = message;
+feedback.style.display = 'block';
+setTimeout(() => {
+feedback.style.display = 'none';
+}, 2000);
+}
+
+// Double tap seeking
+let lastTap = 0;
+const doubleTapDelay = 300; // ms
+const videoContainer = document.querySelector('.video-container');
+const forwardNotification = document.querySelector('.video-forward-notify');
+const rewindNotification = document.querySelector('.video-rewind-notify');
+
+videoContainer.addEventListener('click', function (e) {
+const now = Date.now();
+const diff = now - lastTap;
+if (diff < doubleTapDelay && diff > 0) {
+// Double tap detected
+const rect = e.target.getBoundingClientRect();
+const x = e.clientX - rect.left;
+const width = rect.width;
+if (x > width / 2) {
+player.currentTime += 10; // Seek forward 10 seconds
+showFeedback('Forward 10s');
+forwardNotification.classList.add('animate-in');
+} else {
+player.currentTime -= 10; // Seek backward 10 seconds
+showFeedback('Backward 10s');
+rewindNotification.classList.add('animate-in');
+}
+lastTap = 0; // Reset lastTap to prevent triple taps
+} else {
+lastTap = now;
+}
+});
+
+// Arrow key seeking with feedback
+document.addEventListener('keydown', (e) => {
+if (e.code === 'ArrowRight') {
+player.currentTime += 10; // Seek forward 10 seconds
+showFeedback('Forward 10s');
+forwardNotification.classList.add('animate-in');
+} else if (e.code === 'ArrowLeft') {
+player.currentTime -= 10; // Seek backward 10 seconds
+showFeedback('Backward 10s');
+rewindNotification.classList.add('animate-in');
+}
+});
+
+// Disable Plyr's default double-click fullscreen
+player.on('ready', () => {
+const plyrContainer = player.elements.container;
+plyrContainer.addEventListener('dblclick', (event) => {
+event.stopPropagation();
+}, true);
+});
+
+// Animation end listeners to remove animate-in class
+forwardNotification.addEventListener('animationend', () => {
+forwardNotification.classList.remove('animate-in');
+});
+
+rewindNotification.addEventListener('animationend', () => {
+rewindNotification.classList.remove('animate-in');
+});
+
+// Add language selection to Plyr's settings menu
+player.on('languagechange', (event) => {
+const selectedLanguage = event.detail.plyr.language;
+category = selectedLanguage === 'sub' ? 'sub' : 'dub';
+player.destroy(); // Destroy the current player instance
+fetchEpisodeData(); // Refetch data with the new category
+});
+
+// Add language options to Plyr's settings
+player.config.settings.language = {
+options: ['sub', 'dub'],
+default: 'sub'
+};
+}
+
+    </script>
+</body>
+</html>
