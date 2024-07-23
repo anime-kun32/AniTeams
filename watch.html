@@ -179,7 +179,7 @@ let category = 'sub'; // Default category
 
 function fetchEpisodeData() {
 if (animeId) {
-const episodeUrl = `https://aniwatch-api-net.vercel.app/anime/episode-srcs?id=${animeId}&server=vidstreaming&category=${category}`;
+const episodeUrl = `https://aniwatch-api-net.vercel.app/anime/episode-srcs?id=${animeId}&ep=10509&server=vidstreaming&category=${category}`;
 
 fetch(episodeUrl)
 .then(response => response.json())
@@ -356,7 +356,6 @@ options: ['sub', 'dub'],
 default: 'sub'
 };
 }
-
     </script>
 </body>
 </html>
