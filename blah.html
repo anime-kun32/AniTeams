@@ -10,12 +10,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArtPlayer Demo</title>
   <link rel="stylesheet" href="styles.css">
-  <style>.artplayer-app {
-  width: 1230px;
-  height: 605px;
-  position: relative;
-  background: #000;
+  <style>html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
+
+artplayer-app {
+  width: 100vw; /* 100% of the viewport width */
+  height: 100vh; /* 100% of the viewport height */
+  position: absolute; /* Absolute positioning to cover the entire viewport */
+  background: #000; /* Background color */
+}
+
 
 /* Hide controls initially */
 .artplayer-controls {
