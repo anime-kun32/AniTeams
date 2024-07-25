@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anime Streaming</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .player-container {
+      width: 80%;
+      max-width: 1200px; /* Container size: Max width 1200px */
+      background: #000; /* Background color for container */
+      border-radius: 10px; /* Rounded corners */
+      overflow: hidden; /* Ensures content doesn't overflow the container */
+      position: relative; /* To position the Play button absolutely */
+    }
+
+    .video-player-wrapper {
+      display: none; /* Initially hide the video player wrapper */
+      width: 100%;
+      height: auto;
+    }
+
+    #playButton {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #444;
+      border: none;
+      color: #fff;
+      padding: 20px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+
+    #playButton:hover {
+      background: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="player-container">
+    <!-- Play Button -->
+    <button id="playButton">Play</button>
+
+    <!-- Video Player Wrapper -->
+    <div class="video-player-wrapper">
+      <!-- Your existing video player code goes here -->
+      <div id="videoPlayer">
+        <!-- Existing video player code. Replace this comment with your player setup. -->
+<div class="artplayer-app"></div>
+  <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-chromecast/dist/artplayer-plugin-chromecast.js"></script>
+  <script src="scripts.js"></script>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const playButton = document.getElementById('playButton');
+      const videoPlayerWrapper = document.querySelector('.video-player-wrapper');
+
+      playButton.addEventListener('click', () => {
+        playButton.style.display = 'none'; // Hide the Play button
+        videoPlayerWrapper.style.display = 'block'; // Show the video player wrapper
+
+        // Initialize or configure your video player here if needed
+        // For example, if your player requires a specific setup:
+        // initializeVideoPlayer();
+      });
+    });
+
+    // Optional: Function to initialize or configure the video player
+    function initializeVideoPlayer() {
+      // Example: Add any necessary initialization code for your video player here
+      // For instance, if you're using Artplayer or another player that needs setup:
+      // if (typeof Artplayer !== 'undefined') {
+      //   const art = new Artplayer({
+      //     container: '#videoPlayer',
+      //     url: 'https://path/to/your/video.m3u8',
+      //     type: 'm3u8',
+      //     autoplay: true,
+      //     // other options...
+      //   });
+      // }
+    }
+  </script>
+<style>.artplayer-app {
+  width: 928x;
+  height: 528;
+  position: relative;
+  background: #000;
+}
+
+/* Hide controls initially */
+.artplayer-controls {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.artplayer-app:hover .artplayer-controls {
+  opacity: 1;
+  visibility: visible;
+}
+</style>
+</head>
+<body>
+  <div class="artplayer-app"></div>
+  <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-chromecast/dist/artplayer-plugin-chromecast.js"></script>
+  <script src="scripts.js"></script>
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const baseApiUrl = 'https://aniwatch-api-net.vercel.app/anime/episode-srcs'; // Base URL for the API
+  let category = 'sub'; // Default category
+  let art = null; // Variable to store the Artplayer instance
+
+  // Function to extract query parameters from the URL
+  const getQueryParam = (param) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  };
+
+  // Get the ID from the URL
+  const id = getQueryParam('id');
+  if (!id) {
+    console.error('No ID provided in URL');
+    return;
+  }
+
+  // Fetch video data from the API based on the selected category and ID
+  const fetchVideoData = (category) => {
+    const apiUrl = `${baseApiUrl}?id=${id}&server=vidstreaming&category=${category}`;
+    console.log(`Fetching video data from: ${apiUrl}`); // Debug log
+    return fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .catch(error => {
+        console.error('Error fetching API data:', error);
+      });
+  };
+
+  // Initialize or reinitialize the player with the new data
+  const initializePlayer = (data) => {
+    if (!data || !data.sources) {
+      console.error('Invalid data received from API:', data); // Debug log
+      return;
+    }
+
+    const videoSource = data.sources[0].url;
+    const subtitleTracks = data.tracks.filter(track => track.kind === 'captions');
+
+    // Destroy the existing player if it exists
+    if (art) {
+      art.destroy();
+    }
+
+    art = new Artplayer({
+      container: '.artplayer-app',
+      url: videoSource,
+      type: 'm3u8',
+      screenshot: true,
+      setting: true,
+      autoplay: true,
+      fullscreen: true,
+      fullscreenWeb: true,
+      airplay: true,
+      playsInline: true,
+      plugins: [
+        artplayerPluginChromecast({}),
+      ],
+      settings: [
+        {
+          html: 'Speed',
+          selector: [
+            { html: '1.0x', playbackRate: 1.0, default: true },
+            { html: '1.5x', playbackRate: 1.5 },
+            { html: '2.0x', playbackRate: 2.0 },
+          ],
+          onSelect: function (item) {
+            art.playbackRate = item.playbackRate;
+            return item.html;
+          },
+        },
+        {
+          html: 'Subtitles',
+          selector: subtitleTracks.map(track => ({
+            html: track.label,
+            url: track.file,
+            default: track.default || false,
+          })),
+          onSelect: function (item) {
+            art.subtitle.switch(item.url, item.html);
+            return item.html;
+          },
+        },
+        {
+          html: 'Audio',
+          selector: [
+            { html: 'Sub', category: 'sub', default: category === 'sub' },
+            { html: 'Dub', category: 'dub', default: category === 'dub' },
+          ],
+          onSelect: function (item) {
+            category = item.category;
+            fetchVideoData(category).then(data => {
+              initializePlayer(data);
+            });
+            return item.html;
+          },
+        },
+      ],
+      customType: {
+        m3u8: function (video, url) {
+          if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(url);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+              video.play();
+            });
+          } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = url;
+            video.addEventListener('loadedmetadata', () => {
+              video.play();
+            });
+          } else {
+            art.notice.show('Does not support playback of m3u8');
+          }
+        }
+      },
+      moreVideoAttr: {
+        'webkit-playsinline': true,
+        'playsinline': true,
+      },
+    });
+
+    // Hide controls when not hovering over player
+    const playerContainer = document.querySelector('.artplayer-app');
+    playerContainer.addEventListener('mousemove', () => {
+      playerContainer.querySelector('.artplayer-controls').style.opacity = '1';
+      playerContainer.querySelector('.artplayer-controls').style.visibility = 'visible';
+    });
+
+    playerContainer.addEventListener('mouseleave', () => {
+      playerContainer.querySelector('.artplayer-controls').style.opacity = '0';
+      playerContainer.querySelector('.artplayer-controls').style.visibility = 'hidden';
+    });
+  };
+
+  // Fetch the initial video data and initialize the player
+  fetchVideoData(category).then(initializePlayer);
+});
+</script>
+</body>
+</html>
