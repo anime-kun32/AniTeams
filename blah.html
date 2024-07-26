@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       controls: [
         {
-          position: 'top-left',
+          position: 'top',
           html: '<button class="back-button">← Back</button>',
           style: {
             'margin-left': '10px',
@@ -205,7 +205,11 @@ document.addEventListener('DOMContentLoaded', () => {
             'color': 'white',
             'background': 'transparent',
             'border': 'none',
-            'cursor': 'pointer'
+            'cursor': 'pointer',
+            'position': 'absolute',
+            'top': '10px',
+            'left': '10px',
+            'z-index': '9999'
           },
           click: function() {
             window.history.back();
