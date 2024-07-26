@@ -30,6 +30,8 @@
             border-bottom: 1px solid #555;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            text-decoration: none; /* Remove underline */
+            color: #fff; /* Ensure text is readable */
         }
 
         .episode:last-child {
@@ -60,13 +62,8 @@
         }
 
         .episode-link {
-            text-decoration: none;
-            color: #1e90ff; /* Link color */
-            font-weight: bold;
-        }
-
-        .episode-link:hover {
-            text-decoration: underline;
+            text-decoration: none; /* Remove underline */
+            color: inherit; /* Inherit color from parent */
         }
     </style>
 </head>
@@ -113,8 +110,9 @@
                 episodesContainer.innerHTML = ''; // Clear previous content
 
                 episodes.forEach(episode => {
-                    const episodeElement = document.createElement('div');
+                    const episodeElement = document.createElement('a');
                     episodeElement.className = 'episode';
+                    episodeElement.href = `watch.html?id=${episode.episodeId}`;
                     episodeElement.innerHTML = `
                         <div>
                             <div class="episode-title">${episode.title}</div>
@@ -123,7 +121,6 @@
                                 ${episode.isFiller ? 'Filler' : 'Canon'}
                             </div>
                         </div>
-                        <a href="watch.html?id=${episode.episodeId}" class="episode-link">Watch</a>
                     `;
 
                     episodesContainer.appendChild(episodeElement);
