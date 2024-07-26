@@ -14,6 +14,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            overflow: hidden; /* Prevent scrollbars on the body */
         }
 
         .search-container {
@@ -44,6 +45,25 @@
             z-index: 10;
             max-height: 400px;
             overflow-y: auto;
+            overflow-x: hidden;
+            display: none; /* Hidden by default */
+        }
+
+        .suggestions::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .suggestions::-webkit-scrollbar-track {
+            background: #333;
+        }
+
+        .suggestions::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 5px;
+        }
+
+        .suggestions::-webkit-scrollbar-thumb:hover {
+            background: #666;
         }
 
         .suggestion-item {
@@ -116,6 +136,7 @@
                 params.set('query', query);
                 window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
                 fetchSuggestions(query);
+                suggestionsContainer.style.display = query ? 'block' : 'none'; // Show suggestions if there's a query
             });
 
             function fetchSuggestions(query) {
@@ -148,7 +169,7 @@
                             `;
 
                             suggestionItem.addEventListener('click', () => {
-                                window.location.href = `https://google.com/${suggestion.id}`;
+                                window.location.href = `details.html?id=${suggestion.id}`;
                             });
 
                             suggestionsContainer.appendChild(suggestionItem);
@@ -158,6 +179,12 @@
                         console.error('Error fetching data:', error);
                     });
             }
+
+            document.addEventListener('click', function(event) {
+                if (!searchBar.contains(event.target) && !suggestionsContainer.contains(event.target)) {
+                    suggestionsContainer.style.display = 'none'; // Hide suggestions if clicked outside
+                }
+            });
         });
     </script>
 </body>
