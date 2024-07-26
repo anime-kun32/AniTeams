@@ -14,9 +14,23 @@
             overflow-y: scroll; /* Ensure the body is scrollable */
         }
 
+        .progress-container {
+            width: 100%;
+            background-color: #555;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .progress-bar {
+            width: 0;
+            height: 5px;
+            background-color: #4caf50;
+        }
+
         .episodes-container {
             max-width: 800px;
-            margin: 0 auto; /* Center the container */
+            margin: 60px auto 0; /* Center the container and add margin for progress bar */
             padding: 20px;
             background-color: #444;
             border-radius: 5px;
@@ -68,6 +82,10 @@
     </style>
 </head>
 <body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
     <div class="episodes-container" id="episodes-container">
         <!-- Episodes will be inserted here by JavaScript -->
     </div>
@@ -75,6 +93,12 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const episodesContainer = document.getElementById('episodes-container');
+            const progressBar = document.getElementById('progress-bar');
+
+            // Function to update progress bar
+            function updateProgressBar(value) {
+                progressBar.style.width = value + '%';
+            }
 
             // Function to get query parameter by name
             function getQueryParam(name) {
@@ -90,19 +114,29 @@
                 }
 
                 const apiUrl = `https://aniwatch-api-net.vercel.app/anime/episodes/${id}`;
+                
+                // Show progress as 0% when starting
+                updateProgressBar(0);
 
                 fetch(apiUrl)
-                    .then(response => response.json())
+                    .then(response => {
+                        updateProgressBar(30); // Update progress to 30% after receiving response
+                        return response.json();
+                    })
                     .then(data => {
+                        updateProgressBar(60); // Update progress to 60% after parsing JSON
                         if (data.episodes && data.episodes.length > 0) {
                             renderEpisodes(data.episodes);
+                            updateProgressBar(100); // Update progress to 100% when done
                         } else {
                             episodesContainer.innerHTML = '<p>No episodes found</p>';
+                            updateProgressBar(100); // Update progress to 100% when done
                         }
                     })
                     .catch(error => {
                         console.error('Error fetching data:', error);
                         episodesContainer.innerHTML = '<p>Error loading episodes</p>';
+                        updateProgressBar(100); // Update progress to 100% in case of error
                     });
             }
 
