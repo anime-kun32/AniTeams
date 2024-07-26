@@ -1,15 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Get the value of the 'id' parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
-    const animeId = urlParams.get('id');
+    const animeIdFromUrl = urlParams.get('id');
 
     // Check if the 'id' parameter is present in the URL
-    if (!animeId) {
+    if (!animeIdFromUrl) {
         console.error('Anime ID not provided in the URL');
         return;
     }
 
-    const apiUrl = `https://aniwatch-api-net.vercel.app/anime/info?id=${animeId}`;
+    const apiUrl = `https://aniwatch-api-net.vercel.app/anime/info?id=${animeIdFromUrl}`;
 
     // Fetch anime details from the API
     fetch(apiUrl)
@@ -22,7 +22,10 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('anime-image').src = anime.poster;
             document.getElementById('anime-title').textContent = anime.name;
             document.getElementById('anime-description').textContent = anime.description;
-            document.getElementById('watch-link').href ='google.com';
+
+            // Set the watch link using anime.id from the response
+            const watchLink = document.getElementById('watch-link');
+            watchLink.href = `episodes.html?id=${anime.id}`;
 
             // Populate more info
             const infoLeft = document.getElementById('more-info-left');
@@ -57,8 +60,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const videoClose = document.getElementById('video-close');
 
             videoButton.addEventListener('click', () => {
-                videoFrame.src = anime.promotionalVideos[0].source; // Load the first video by default
-                videoModal.style.display = 'flex';
+                if (anime.promotionalVideos.length > 0) {
+                    videoFrame.src = anime.promotionalVideos[0].source; // Load the first video by default
+                    videoModal.style.display = 'flex';
+                }
             });
 
             videoClose.addEventListener('click', () => {
