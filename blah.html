@@ -194,32 +194,29 @@ document.addEventListener('DOMContentLoaded', () => {
         'webkit-playsinline': true,
         'playsinline': true,
       },
-      controls: [
-        {
-          position: 'top',
-          html: '<button class="back-button">← Back</button>',
-          style: {
-            'margin-left': '10px',
-            'margin-top': '10px',
-            'font-size': '16px',
-            'color': 'white',
-            'background': 'transparent',
-            'border': 'none',
-            'cursor': 'pointer',
-            'position': 'absolute',
-            'top': '10px',
-            'left': '10px',
-            'z-index': '9999'
-          },
-          click: function() {
-            window.history.back();
-          },
-        },
-      ],
     });
 
-    // Hide controls when not hovering over player
+    // Create and style the back button
+    const backButton = document.createElement('div');
+    backButton.innerHTML = '&lt;'; // HTML entity for "<"
+    backButton.style.position = 'absolute';
+    backButton.style.top = '10px';
+    backButton.style.left = '10px';
+    backButton.style.fontSize = '24px';
+    backButton.style.color = 'white';
+    backButton.style.cursor = 'pointer';
+    backButton.style.zIndex = '9999';
+
+    // Add click event to the back button
+    backButton.addEventListener('click', () => {
+      window.history.back();
+    });
+
+    // Append the back button to the player container
     const playerContainer = document.querySelector('.artplayer-app');
+    playerContainer.appendChild(backButton);
+
+    // Hide controls when not hovering over player
     playerContainer.addEventListener('mousemove', () => {
       playerContainer.querySelector('.artplayer-controls').style.opacity = '1';
       playerContainer.querySelector('.artplayer-controls').style.visibility = 'visible';
@@ -234,6 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fetch the initial video data and initialize the player
   fetchVideoData(category).then(initializePlayer);
 });
+
 
 </script>
 </body>
