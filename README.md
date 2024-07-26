@@ -2,7 +2,7 @@
 AniTeams
 ## Description
 
-An anime streaming website that uses  [Aniwatch Api ](https://github.com/ghoshRitesh12/aniwatch-api).
+An anime streaming website that uses  [Aniwatch Api ](https://github.com/ghoshRitesh12/aniwatch-api). Made with HTML , CSS and JS only.
 
 ## Features
 
