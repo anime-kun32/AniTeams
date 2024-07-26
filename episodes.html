@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Episodes</title>
+    <style>
+        body {
+            background-color: #333;
+            color: #fff; /* Ensure text is readable on dark background */
+            margin: 0;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            overflow-y: scroll; /* Ensure the body is scrollable */
+        }
+
+        .episodes-container {
+            max-width: 800px;
+            margin: 0 auto; /* Center the container */
+            padding: 20px;
+            background-color: #444;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .episode {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #555;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .episode:last-child {
+            border-bottom: none;
+        }
+
+        .episode:hover {
+            background-color: #555;
+        }
+
+        .episode-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .episode-number {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .episode-filler {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .filler {
+            color: #e74c3c; /* Red color for fillers */
+        }
+
+        .episode-link {
+            text-decoration: none;
+            color: #1e90ff; /* Link color */
+            font-weight: bold;
+        }
+
+        .episode-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="episodes-container" id="episodes-container">
+        <!-- Episodes will be inserted here by JavaScript -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const episodesContainer = document.getElementById('episodes-container');
+
+            // Function to get query parameter by name
+            function getQueryParam(name) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(name);
+            }
+
+            // Fetch episodes based on the id from the query parameter
+            function fetchEpisodes(id) {
+                if (!id) {
+                    episodesContainer.innerHTML = '<p>No ID provided</p>';
+                    return;
+                }
+
+                const apiUrl = `https://aniwatch-api-net.vercel.app/anime/episodes/${id}`;
+
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.episodes && data.episodes.length > 0) {
+                            renderEpisodes(data.episodes);
+                        } else {
+                            episodesContainer.innerHTML = '<p>No episodes found</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        episodesContainer.innerHTML = '<p>Error loading episodes</p>';
+                    });
+            }
+
+            function renderEpisodes(episodes) {
+                episodesContainer.innerHTML = ''; // Clear previous content
+
+                episodes.forEach(episode => {
+                    const episodeElement = document.createElement('div');
+                    episodeElement.className = 'episode';
+                    episodeElement.innerHTML = `
+                        <div>
+                            <div class="episode-title">${episode.title}</div>
+                            <div class="episode-number">Episode ${episode.number}</div>
+                            <div class="episode-filler ${episode.isFiller ? 'filler' : ''}">
+                                ${episode.isFiller ? 'Filler' : 'Canon'}
+                            </div>
+                        </div>
+                        <a href="watch.html?id=${episode.episodeId}" class="episode-link">Watch</a>
+                    `;
+
+                    episodesContainer.appendChild(episodeElement);
+                });
+            }
+
+            // Get the ID from query parameters and fetch episodes
+            const episodeId = getQueryParam('id');
+            fetchEpisodes(episodeId);
+        });
+    </script>
+</body>
+</html>
