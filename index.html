@@ -35,8 +35,44 @@
         <!-- Movie cards will be dynamically generated here -->
     </div>
 </div>
-    <!-- Menu Styles -->
+  
+<!-- Bottom Menu -->
+<div class="bottom-menu">
+    <a href="index.html">
+        <button onclick="vibrateDevice()">
+            <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 20V14H14V20H19V12H22L12 3L2 12H5V20H10Z" fill="currentColor"/>
+            </svg>
+            <span class="menu-label">Home</span>
+        </button>
+    </a>
+    <a href="search.html">
+        <button onclick="vibrateDevice()">
+            <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="currentColor"/>
+            </svg>
+            <span class="menu-label">Search</span>
+        </button>
+    </a>
+    <a href="quick-search.html">
+        <button onclick="vibrateDevice()">
+            <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="currentColor"/>
+            </svg>
+            <span class="menu-label">Quick Search</span>
+        </button>
+    </a>
+</div>
+
+<!-- Menu Styles -->
 <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        padding-bottom: 70px; /* Adjust this value if needed */
+    }
+
     .bottom-menu {
         position: fixed;
         bottom: 0;
@@ -47,8 +83,9 @@
         background-color: #1c1c1c;
         border-top: 2px solid #e50914;
         padding: 10px 0;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.15);
     }
-    
+
     .bottom-menu a {
         text-decoration: none;
     }
@@ -81,32 +118,15 @@
     }
 </style>
 
-<!-- Bottom Menue -->
-<div class="bottom-menu">
-    <a href="index.html">
-        <button>
-            <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 20V14H14V20H19V12H22L12 3L2 12H5V20H10Z" fill="currentColor"/>
-            </svg>
-            <span class="menu-label">Home</span>
-        </button>
-    </a>
-    <a href="search.html">
-        <button>
-            <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="currentColor"/>
-        </svg>
-        <span class="menu-label">Search</span>
-        </button>
-        <a href="quick-search.html">
-        <button>
-            <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="currentColor"/>
-        </svg>
-        <span class="menu-label">Quick Search </span>
-        </button>
-    </a>
-</div>
+<!-- JavaScript for Vibration -->
+<script>
+    function vibrateDevice() {
+        if (navigator.vibrate) {
+            navigator.vibrate(200); // Vibrate for 200 milliseconds
+        }
+    }
+</script>
+
 
 
     <!-- Include your JavaScript file here -->
