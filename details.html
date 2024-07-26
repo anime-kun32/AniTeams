@@ -94,18 +94,28 @@
 
    <!-- Menu Styles -->
 <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .content {
+        min-height: 100vh; /* Ensure content takes full height of the viewport */
+    }
+
     .bottom-menu {
-        position: fixed;
-        bottom: 0;
-        left: 0;
         width: 100%;
         display: flex;
         justify-content: space-around;
         background-color: #1c1c1c;
         border-top: 2px solid #e50914;
         padding: 10px 0;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.15);
+        position: relative; /* Make it behave like a footer */
+        bottom: 0;
     }
-    
+
     .bottom-menu a {
         text-decoration: none;
     }
@@ -138,6 +148,14 @@
     }
 </style>
 
+<!-- JavaScript for Vibration -->
+<script>
+    function vibrateDevice() {
+        if (navigator.vibrate) {
+            navigator.vibrate(200); // Vibrate for 200 milliseconds
+        }
+    }
+</script>
 <!-- Bottom Menue -->
 <div class="bottom-menu">
     <a href="index.html">
