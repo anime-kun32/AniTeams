@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anime Search Results</title>
     <style>
-        body {
+       body {
     background-color: #333;
-    color: #fff; /* Optional: Ensure text is readable on dark background */
+    color: #fff; /* Ensure text is readable on dark background */
     margin: 0;
     font-family: Arial, sans-serif;
 }
@@ -21,7 +21,6 @@
 
 .movie-card {
     width: 250px; /* Updated width */
-    height: 350px; /* Updated height */
     text-decoration: none; /* Remove underline from links */
     color: inherit; /* Inherit text color */
     position: relative; /* Positioning context for poster */
@@ -33,8 +32,9 @@
     opacity: 1; /* Initially visible */
     margin: 10px; /* Updated margin */
     display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Ensure title is at the bottom */
+    flex-direction: column; /* Stack image and title vertically */
+    justify-content: flex-start; /* Ensure content starts from the top */
+    height: auto; /* Allow card to expand based on content */
 }
 
 .movie-cards-container {
@@ -85,7 +85,6 @@
     text-align: center;
     padding: 10px;
     background-color: #333; /* Same as the body background color */
-    margin-top: -5px;
     transition: color 0.3s ease; /* Add transition for text color change on hover */
 }
 
