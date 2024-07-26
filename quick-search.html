@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Search</title>
+    <style>
+        body {
+            background-color: #333;
+            color: #fff; /* Ensure text is readable on dark background */
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 15px;
+            box-sizing: border-box;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #444;
+            border: 1px solid #555;
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .suggestion-item:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <input type="text" id="search-bar" class="search-bar" placeholder="Search for an anime...">
+        <div id="suggestions" class="suggestions"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchBar = document.getElementById('search-bar');
+            const suggestionsContainer = document.getElementById('suggestions');
+
+            const params = new URLSearchParams(window.location.search);
+            const query = params.get('query');
+            if (query) {
+                searchBar.value = query;
+                fetchSuggestions(query);
+            }
+
+            searchBar.addEventListener('input', function() {
+                const query = searchBar.value;
+                params.set('query', query);
+                window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
+                fetchSuggestions(query);
+            });
+
+            function fetchSuggestions(query) {
+                if (!query) {
+                    suggestionsContainer.innerHTML = '';
+                    return;
+                }
+
+                // Replace with your actual API URL and append the query parameter
+                const apiUrl = `https://aniwatch-api-net.vercel.app/anime/search?q=${query}`;
+
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        suggestionsContainer.innerHTML = ''; // Clear previous suggestions
+
+                        data.animes.forEach(anime => {
+                            const suggestionItem = document.createElement('div');
+                            suggestionItem.className = 'suggestion-item';
+                            suggestionItem.textContent = anime.name;
+
+                            suggestionItem.addEventListener('click', () => {
+                                window.location.href = `https://google.com/${anime.id}`;
+                            });
+
+                            suggestionsContainer.appendChild(suggestionItem);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                    });
+            }
+        });
+    </script>
+  <!-- Bottom Menue -->
+<div class="bottom-menu">
+    <a href="index.html">
+        <button>
+            <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 20V14H14V20H19V12H22L12 3L2 12H5V20H10Z" fill="currentColor"/>
+            </svg>
+            <span class="menu-label">Home</span>
+        </button>
+    </a>
+    <a href="search.html">
+        <button>
+            <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="currentColor"/>
+        </svg>
+        <span class="menu-label">Search</span>
+        </button>
+        <a href="quick-search.html">
+        <button>
+            <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="currentColor"/>
+        </svg>
+        <span class="menu-label">Quick Search </span>
+        </button>
+    </a>
+</div>
+</body>
+</html>
