@@ -5,90 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anime Search Results</title>
     <style>
-        .movie-cards {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px; /* Increased gap between cards */
-            justify-content: flex-start; /* Align cards to the start */
-        }
+        body {
+    background-color: #333;
+    color: #fff; /* Optional: Ensure text is readable on dark background */
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
 
-        .movie-card {
-            width: 250px; /* Updated width */
-            height: 350px; /* Updated height */
-            text-decoration: none; /* Remove underline from links */
-            color: inherit; /* Inherit text color */
-            position: relative; /* Positioning context for poster */
-            overflow: hidden; /* Hide overflow to prevent text spillover */
-            border-radius: 10px; /* Rounded corners */
-            background-color: #444; /* Updated card background color */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for cards */
-            transition: transform 0.3s ease, opacity 0.3s ease; /* Animation on filter */
-            opacity: 1; /* Initially visible */
-            margin: 10px; /* Updated margin */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between; /* Ensure title is at the bottom */
-        }
+.movie-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px; /* Increased gap between cards */
+    justify-content: flex-start; /* Align cards to the start */
+}
 
-        .movie-cards-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px; /* Increased gap between cards */
-            padding: 20px;
-            justify-content: flex-start;
-        }
+.movie-card {
+    width: 250px; /* Updated width */
+    height: 350px; /* Updated height */
+    text-decoration: none; /* Remove underline from links */
+    color: inherit; /* Inherit text color */
+    position: relative; /* Positioning context for poster */
+    overflow: hidden; /* Hide overflow to prevent text spillover */
+    border-radius: 10px; /* Rounded corners */
+    background-color: #444; /* Updated card background color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for cards */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Animation on filter */
+    opacity: 1; /* Initially visible */
+    margin: 10px; /* Updated margin */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensure title is at the bottom */
+}
 
-        .movie-card img {
-            width: 100%;
-            height: auto;
-            border-radius: 15px; /* Rounded edges */
-            transition: filter 0.3s ease;
-        }
+.movie-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px; /* Increased gap between cards */
+    padding: 20px;
+    justify-content: flex-start;
+}
 
-        .movie-card .play-button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+.movie-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px 10px 0 0; /* Rounded top edges */
+    transition: filter 0.3s ease;
+}
 
-        .movie-card .play-button img {
-            width: 50px;
-            height: 50px;
-        }
+.movie-card .play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
 
-        .movie-card:hover img {
-            filter: blur(4px);
-        }
+.movie-card .play-button img {
+    width: 50px;
+    height: 50px;
+}
 
-        .movie-card:hover .play-button {
-            opacity: 1;
-        }
+.movie-card:hover img {
+    filter: blur(4px);
+}
 
-        .movie-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+.movie-card:hover .play-button {
+    opacity: 1;
+}
 
-        .card-title {
-            font-size: 16px;
-            font-weight: bold;
-            text-align: center;
-            padding: 10px;
-            background-color: #333;
-            margin-top: -5px;
-            transition: color 0.3s ease; /* Add transition for text color change on hover */
-        }
+.movie-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
-        /* Media Queries for Mobile Devices */
-        @media only screen and (max-width: 767px) {
-            .movie-card {
-                width: 100%; /* Full width on mobile */
-                margin: 10px 0; /* Adjust margin for spacing */
-            }
-        } 
+.card-title {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    background-color: #333; /* Same as the body background color */
+    margin-top: -5px;
+    transition: color 0.3s ease; /* Add transition for text color change on hover */
+}
+
+/* Media Queries for Mobile Devices */
+@media only screen and (max-width: 767px) {
+    .movie-card {
+        width: 100%; /* Full width on mobile */
+        margin: 10px 0; /* Adjust margin for spacing */
+    }
+}
+
     </style>
 </head>
 <body>
