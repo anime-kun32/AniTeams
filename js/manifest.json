@@ -1,0 +1,20 @@
+{
+    "name": "AniTeams",
+    "short_name": "AniTeams",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#333",
+    "icons": [
+        {
+            "src": "https://aniteams.vercel.app/aniteams.ico",
+            "sizes": "192x192",
+            "type": "image/x-icon"
+        },
+        {
+            "src": "https://aniteams.vercel.app/aniteams.ico",
+            "sizes": "512x512",
+            "type": "image/x-icon"
+        }
+    ]
+}
