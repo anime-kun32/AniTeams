@@ -19,7 +19,7 @@
         .search-container {
             position: relative;
             width: 100%;
-            max-width: 600px;
+            max-width: 800px;
         }
 
         .search-bar {
@@ -42,18 +42,54 @@
             border-radius: 0 0 5px 5px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             z-index: 10;
-            max-height: 200px;
+            max-height: 400px;
             overflow-y: auto;
         }
 
         .suggestion-item {
+            display: flex;
             padding: 10px;
+            border-bottom: 1px solid #555;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         .suggestion-item:hover {
             background-color: #555;
+        }
+
+        .suggestion-item img {
+            width: 80px;
+            height: auto;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .suggestion-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: calc(100% - 95px); /* Adjust width to fit image and details */
+        }
+
+        .suggestion-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .suggestion-jname {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .suggestion-info {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .diamond-bullet {
+            margin: 0 5px;
         }
     </style>
 </head>
@@ -89,20 +125,30 @@
                 }
 
                 // Replace with your actual API URL and append the query parameter
-                const apiUrl = `https://aniwatch-api-net.vercel.app/anime/search?q=${query}`;
+                const apiUrl = `https://aniwatch-api-net.vercel.app/anime/search/suggest?q=${query}`;
 
                 fetch(apiUrl)
                     .then(response => response.json())
                     .then(data => {
                         suggestionsContainer.innerHTML = ''; // Clear previous suggestions
 
-                        data.animes.forEach(anime => {
+                        data.suggestions.forEach(suggestion => {
                             const suggestionItem = document.createElement('div');
                             suggestionItem.className = 'suggestion-item';
-                            suggestionItem.textContent = anime.name;
+
+                            suggestionItem.innerHTML = `
+                                <img src="${suggestion.poster}" alt="${suggestion.name}">
+                                <div class="suggestion-details">
+                                    <div class="suggestion-title">${suggestion.name}</div>
+                                    <div class="suggestion-jname">${suggestion.jname}</div>
+                                    <div class="suggestion-info">
+                                        ${suggestion.moreInfo.join(' <span class="diamond-bullet">♦</span> ')}
+                                    </div>
+                                </div>
+                            `;
 
                             suggestionItem.addEventListener('click', () => {
-                                window.location.href = `https://google.com/${anime.id}`;
+                                window.location.href = `https://google.com/${suggestion.id}`;
                             });
 
                             suggestionsContainer.appendChild(suggestionItem);
@@ -114,31 +160,5 @@
             }
         });
     </script>
-  <!-- Bottom Menue -->
-<div class="bottom-menu">
-    <a href="index.html">
-        <button>
-            <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 20V14H14V20H19V12H22L12 3L2 12H5V20H10Z" fill="currentColor"/>
-            </svg>
-            <span class="menu-label">Home</span>
-        </button>
-    </a>
-    <a href="search.html">
-        <button>
-            <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="currentColor"/>
-        </svg>
-        <span class="menu-label">Search</span>
-        </button>
-        <a href="quick-search.html">
-        <button>
-            <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="currentColor"/>
-        </svg>
-        <span class="menu-label">Quick Search </span>
-        </button>
-    </a>
-</div>
 </body>
 </html>
