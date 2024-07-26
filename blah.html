@@ -194,6 +194,24 @@ document.addEventListener('DOMContentLoaded', () => {
         'webkit-playsinline': true,
         'playsinline': true,
       },
+      controls: [
+        {
+          position: 'top-left',
+          html: '<button class="back-button">← Back</button>',
+          style: {
+            'margin-left': '10px',
+            'margin-top': '10px',
+            'font-size': '16px',
+            'color': 'white',
+            'background': 'transparent',
+            'border': 'none',
+            'cursor': 'pointer'
+          },
+          click: function() {
+            window.history.back();
+          },
+        },
+      ],
     });
 
     // Hide controls when not hovering over player
@@ -212,6 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fetch the initial video data and initialize the player
   fetchVideoData(category).then(initializePlayer);
 });
+
 </script>
 </body>
 </html>
