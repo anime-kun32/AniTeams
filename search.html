@@ -11,16 +11,24 @@
             margin: 0;
             font-family: Arial, sans-serif;
         }
+.search-bar {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    font-size: 18px;
+    border: 1px solid #ccc; /* Default border color */
+    border-radius: 5px;
+    background-color: #fff; /* Default background color */
+    color: #000; /* Default text color */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for color changes */
+}
 
-        .search-bar {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            margin-bottom: 20px;
-            font-size: 18px;
-            border: none;
-            border-radius: 5px;
-        }
+.search-bar.has-text {
+    background-color: #333; /* Background color when text is input */
+    color: #fff; /* Text color when text is input */
+    border-color: #333; /* Optional: change border color when text is input */
+}
 
         .movie-cards {
             display: flex;
