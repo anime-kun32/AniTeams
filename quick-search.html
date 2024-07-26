@@ -10,14 +10,17 @@
             color: #fff; /* Ensure text is readable on dark background */
             margin: 0;
             font-family: Arial, sans-serif;
-            overflow-y: scroll; /* Ensure the body is scrollable */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* Prevent scrollbars on the body */
         }
 
         .search-container {
             position: relative;
             width: 100%;
             max-width: 800px;
-            margin: 20px auto; /* Center the search container */
         }
 
         .search-bar {
