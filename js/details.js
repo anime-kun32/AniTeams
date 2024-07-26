@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('anime-image').src = anime.poster;
             document.getElementById('anime-title').textContent = anime.name;
             document.getElementById('anime-description').textContent = anime.description;
-            document.getElementById('watch-link').href = `episodes.html?id=${anime.id};
+            document.getElementById('watch-link').href = `episodes.html?id=${anime.id}`;
 
             // Populate more info
             const infoLeft = document.getElementById('more-info-left');
