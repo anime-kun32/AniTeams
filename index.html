@@ -7,6 +7,7 @@
     <title>Slide Carousel with Movie Cards</title>
     <!-- Include your CSS file here -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="js/manifest.json">
 <link rel="stylesheet" href="css/filter.css">
 </head>
 
@@ -64,7 +65,7 @@
         </button>
     </a>
 </div>
-
+<button id="installButton" style="display:none;">Install App</button>
 <!-- Menu Styles -->
 <style>
     body {
@@ -131,7 +132,45 @@
 </script>
 
 
+<script>// script.js
 
+// Check if the browser supports service workers
+if ('serviceWorker' in navigator) {
+    // Wait for the window to load
+    window.addEventListener('load', () => {
+        // Register the service worker
+        navigator.serviceWorker.register('js/service-worker.js')
+            .then(registration => {
+                console.log('ServiceWorker registered with scope:', registration.scope);
+            }).catch(error => {
+                console.log('ServiceWorker registration failed:', error);
+            });
+    });
+}
+
+// Handle the "beforeinstallprompt" event to show the install prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault(); // Prevent the default prompt
+    deferredPrompt = e; // Save the event for later use
+    document.getElementById('installButton').style.display = 'block'; // Show the install button
+});
+
+// Handle the install button click
+document.getElementById('installButton').addEventListener('click', () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt(); // Show the install prompt
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            } else {
+                console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null; // Clear the saved prompt
+        });
+    }
+});
+</script>
 
     <!-- Include your JavaScript file here -->
     <script src="js/script.js"></script>
