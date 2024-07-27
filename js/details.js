@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const anime = data.anime.info;
             const moreInfo = data.anime.moreInfo;
 
+            // Update the <h1> tag with the anime name
+            document.getElementById('anime-header').textContent = anime.name;
+
             // Populate main anime details
             document.getElementById('anime-image').src = anime.poster;
             document.getElementById('anime-title').textContent = anime.name;
