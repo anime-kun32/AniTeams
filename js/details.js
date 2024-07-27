@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Update the <h1> tag with the anime name
             document.getElementById('anime-header').textContent = anime.name;
 
+            // Set the document title to the anime name
+            document.title = anime.name;
+
             // Populate main anime details
             document.getElementById('anime-image').src = anime.poster;
             document.getElementById('anime-title').textContent = anime.name;
