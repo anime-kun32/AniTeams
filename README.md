@@ -7,7 +7,7 @@ An anime streaming website that uses  [Aniwatch Api ](https://github.com/ghoshRi
 ## Features
 
 - Feature 1: Uses the Artplayer.js 
-- Feature 2: the player include chromecast screenshot for desktop devices , and audio (sub or dub)
+- Feature 2: the player include chromecast,  screenshot for desktop devices , and audio (sub or dub)
 
 
 ## Contact
