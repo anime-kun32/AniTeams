@@ -130,6 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
       playsInline: true,
       plugins: [
         artplayerPluginChromecast({}),
+        artplayerPluginJump({
+          getRecord: () => localStorage.getItem(`video_${id}_record`) || 0,
+          setRecord: (time) => localStorage.setItem(`video_${id}_record`, time),
+        }),
       ],
       settings: [
         {
@@ -231,6 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fetch the initial video data and initialize the player
   fetchVideoData(category).then(initializePlayer);
 });
+
 
 
 </script>
