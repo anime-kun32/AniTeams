@@ -1,122 +1,71 @@
+/* General styles */
 body {
-    background-color: #333;
-    color: white;
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #333;
-}
-
-.logo {
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.search-form {
-    display: flex;
-    align-items: center;
-}
-
-.search-input {
-    padding: 8px;
-    border: 1px solid white;
-    border-radius: 20px;
-    margin-right: 10px;
-    background-color: transparent;
-    color: white;
-}
-
-.search-button {
-    background-color: white;
-    color: #333;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-}
-
+/* Slider styles */
 #slider {
-    display: flex;
-    overflow: hidden;
     position: relative;
     width: 100%;
+    overflow: hidden;
 }
 
 .slide {
-    flex: 0 0 100%;
+    position: absolute;
+    width: 100%;
     transition: transform 0.5s ease;
-    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .slide img {
     width: 100%;
     height: auto;
-    opacity: 0.5;
 }
 
 .slide-content {
     position: absolute;
-    bottom: 10%;
-    left: 10%;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.7);
     color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 5px;
 }
 
-.title {
+.slide .title {
     font-size: 24px;
     font-weight: bold;
-    margin-bottom: 5px;
 }
 
-.additional-info {
+.slide .additional-info {
     font-size: 14px;
-    margin-bottom: 10px;
+    margin-top: 5px;
 }
 
-.description {
+.slide .description {
     font-size: 16px;
-    margin-bottom: 10px;
-}
-
-.buttons {
-    display: flex;
-}
-
-.details-button,
-.watch-button {
-    background-color: white;
-    color: #333;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    margin-right: 10px;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.slider-nav {
-    display: flex;
-    justify-content: center;
     margin-top: 10px;
 }
 
-.slider-dot {
-    width: 10px;
-    height: 10px;
-    background-color: grey;
-    border-radius: 50%;
-    margin: 0 5px;
-    cursor: pointer;
+.slide .buttons {
+    margin-top: 10px;
 }
 
-.slider-dot.active {
-    background-color: green;
+.slide .buttons a {
+    color: white;
+    text-decoration: none;
+    background: #007bff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background 0.3s;
+}
+
+.slide .buttons a:hover {
+    background: #0056b3;
 }
 
 .timer-line {
@@ -124,98 +73,88 @@ body {
     bottom: 0;
     left: 0;
     height: 5px;
-    background-color: red;
-    animation: slide-timer 10s linear infinite;
+    background: #007bff;
+    animation: timer 10s linear infinite;
 }
 
-@keyframes slide-timer {
-    0% {
-        width: 0;
-    }
-    100% {
+@keyframes timer {
+    from {
         width: 100%;
     }
-}
-
-@media only screen and (min-width: 768px) {
-    .timer-line {
-        top: 0;
-        bottom: auto;
+    to {
+        width: 0;
     }
 }
 
-@media only screen and (max-width: 767px) {
-    .timer-line {
-        bottom: 0;
-    }
+/* Slider navigation dots */
+.slider-nav {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
 }
 
-/* Movie Cards */
+.slider-dot {
+    width: 10px;
+    height: 10px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.slider-dot.active {
+    background: #007bff;
+}
+
+/* Movie card styles */
 .movie-cards-container {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
+    justify-content: center;
     padding: 20px;
-    justify-content: flex-start;
 }
 
 .movie-card {
     position: relative;
-    width: 20%; /* Adjust card size */
-    margin: 10px;
+    width: 200px;
     overflow: hidden;
-    transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-    border-radius: 15px; /* Rounded edges */
-    display: flex;
-    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: transform 0.3s;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
 }
 
 .movie-card img {
     width: 100%;
     height: auto;
-    border-radius: 15px; /* Rounded edges */
-    transition: filter 0.3s ease;
+    display: block;
 }
 
-.movie-card .play-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.movie-card .play-button img {
-    width: 50px;
-    height: 50px;
-}
-
-.movie-card:hover img {
-    filter: blur(4px);
-}
-
-.movie-card:hover .play-button {
-    opacity: 1;
-}
-
-.movie-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.card-title {
-    font-size: 16px;
-    font-weight: bold;
-    margin-top: 10px;
-    color: white;
+.movie-card .card-body {
+    padding: 10px;
     text-align: center;
 }
-/* Media Queries for Mobile Devices */
-@media only screen and (max-width: 767px) {
-    .movie-card {
-        width: 100%; /* Full width on mobile */
-        margin: 10px 0; /* Adjust margin for spacing */
-    }
+
+.movie-card .card-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.movie-card:hover .card-title {
+    opacity: 1;
 }
