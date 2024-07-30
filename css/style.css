@@ -5,6 +5,175 @@ body {
     padding: 0;
 }
 
+/* Slider container */
+#slider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 400px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: transform 0.5s ease-in-out;
+    opacity: 0;
+    z-index: 0;
+}
+
+.slide.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.slide img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.slide-content {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.slide-content .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.slide-content .additional-info {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.slide-content .description {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.slide-content .buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.slide-content .buttons a {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    transition: background-color 0.3s ease;
+}
+
+.slide-content .buttons a:hover {
+    background-color: #0056b3;
+}
+
+.timer-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 5px;
+    background-color: #007bff;
+    animation: timer 10s linear infinite;
+}
+
+@keyframes timer {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+/* Slider navigation dots */
+.slider-nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.slider-dot {
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.slider-dot.active,
+.slider-dot:hover {
+    background-color: #007bff;
+}
+
+/* Movie cards */
+.movie-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.movie-card {
+    position: relative;
+    width: 200px;
+    transition: transform 0.3s ease;
+}
+
+.movie-card:hover {
+    transform: translateY(-10px);
+}
+
+.movie-card .card-img-top {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.movie-card .play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+.movie-card:hover .play-button {
+    display: block;
+}
+
+.movie-card .card-body {
+    text-align: center;
+    background-color: #fff;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.movie-card .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
 
 /* Movie card styles */
 .movie-cards-container {
