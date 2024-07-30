@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Inject slides
             spotlightAnimes.forEach((anime, index) => {
                 const slide = document.createElement('div');
-                slide.className = 'slide';
+                slide.className = 'slide' + (index === 0 ? ' active' : '');
                 slide.innerHTML = `
                     <img src="${anime.poster}" alt="${anime.name}">
                     <div class="slide-content">
@@ -48,6 +48,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 card.className = 'movie-card card';
                 card.innerHTML = `
                     <img src="${anime.poster}" class="card-img-top" alt="${anime.name}">
+                    <div class="play-button">
+                        <img src="play.png" alt="Play">
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title">${anime.name}</h5>
                     </div>
@@ -66,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
             function showSlide(index) {
                 slides.forEach((slide, i) => {
                     slide.style.transform = `translateX(-${index * 100}%)`;
+                    slide.classList.toggle('active', i === index);
                     dots[i].classList.toggle('active', i === index);
                 });
             }
