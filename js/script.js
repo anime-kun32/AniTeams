@@ -68,7 +68,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             function showSlide(index) {
                 slides.forEach((slide, i) => {
-                    slide.style.transform = `translateX(-${index * 100}%)`;
                     slide.classList.toggle('active', i === index);
                     dots[i].classList.toggle('active', i === index);
                 });
