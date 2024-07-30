@@ -9,14 +9,17 @@
 
 .slide {
     position: absolute;
+    top: 0;
+    left: 100%;
     width: 100%;
     height: 100%;
-    transition: opacity 0.5s ease-in-out;
+    transition: left 0.5s ease-in-out;
     opacity: 0;
     z-index: 0;
 }
 
 .slide.active {
+    left: 0;
     opacity: 1;
     z-index: 1;
 }
@@ -107,12 +110,6 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-
-.slider-dot.active,
-.slider-dot:hover {
-    background-color: #007bff;
-}
-
 /* Movie cards */
 .movie-cards-container {
     display: flex;
