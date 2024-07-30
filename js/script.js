@@ -48,9 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 card.className = 'movie-card card';
                 card.innerHTML = `
                     <img src="${anime.poster}" class="card-img-top" alt="${anime.name}">
-                    <div class="play-button">
-                        <img src="play.png" alt="Play">
-                    </div>
                     <div class="card-body">
                         <h5 class="card-title">${anime.name}</h5>
                     </div>
