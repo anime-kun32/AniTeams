@@ -6,10 +6,9 @@ const CACHE = "cacheV1";
 let urlsToCache = [
     "/",
     "/index.html",
-    "/components",
-    "",
-    "/components/images/favicon.png", 
-    "/components/images/clock-face.png",
+    "/search.html",
+    "/details.html",
+    "/watch.html",
     "/js/script.js",
     "/js/filter.js", 
     "/js/details.js
