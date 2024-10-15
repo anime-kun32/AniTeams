@@ -1,16 +1,14 @@
-
 {
-    "name": "Clock",
+    "name": "AniTeams",
     "start_url": "/",
     "display": "standalone",
     "theme_color": "#0d085c",
     "icons": [
         {
-            "src": "",
-            "type": "image/png",
+            "src": "/aniteams.ico",  
+            "type": "image/x-icon",
             "sizes": "512x512",
             "purpose": "any maskable"
         }
     ]
 }
-
