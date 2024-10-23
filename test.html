@@ -63,7 +63,8 @@
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-chromecast/dist/artplayer-plugin-chromecast.js"></script>
   <script src="scripts.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', () => {
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
   const baseApiUrl = 'https://aniwatch-api-net.vercel.app/anime/episode-srcs'; // Base URL for the API
   let category = 'sub'; // Default category
   let art = null; // Variable to store the Artplayer instance
@@ -147,8 +148,7 @@
             default: track.default || false,
           })),
           onSelect: function (item) {
-            // Allow HTML tags in subtitles for proper rendering
-            art.subtitle.switch(item.url, item.html, { html: true });
+            art.subtitle.switch(item.url, item.html);
             return item.html;
           },
         },
@@ -222,9 +222,21 @@
       playerContainer.querySelector('.artplayer-controls').style.opacity = '0';
       playerContainer.querySelector('.artplayer-controls').style.visibility = 'hidden';
     });
+
+    // Handle rendering subtitles with HTML formatting
+    art.subtitle.on('change', (track) => {
+      const subtitles = track.cues.map(cue => {
+        // Return the cue text directly; it will render with HTML formatting
+        return cue.text; 
+      }).join('<br>'); // Join with <br> for line breaks
+      art.subtitle.render(subtitles); // Render subtitles in the player
+    });
   };
 
   // Fetch the initial video data and initialize the player
   fetchVideoData(category).then(initializePlayer);
 });
+
+  
+
   </script>
