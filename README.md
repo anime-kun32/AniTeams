@@ -1,3 +1,6 @@
+# Update 
+This project is down and being reconstructed  due to update from the api .It will be back in a week or so . You can use the alternative one [here ](https://github.com/anime-kun32/AniTeams-amvstrm). 
+
 # Project Title
 AniTeams
 ## Description
