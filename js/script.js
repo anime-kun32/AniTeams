@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return description;
     }
 
-    fetch('https://aniwatch-api-net.vercel.app/anime/home')
+    fetch('https://aniwatch-api-net.vercel.app/api/v2/hianime/home')
         .then(response => response.json())
         .then(data => {
             const spotlightAnimes = data.spotlightAnimes;
