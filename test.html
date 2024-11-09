@@ -84,7 +84,7 @@
 
   // Fetch video data from the API based on the selected category and ID
   const fetchVideoData = (category) => {
-    const apiUrl = `${baseApiUrl}?animeEpisodeId=${id}&server=vidstreaming&category=${category}`;
+    const apiUrl = `${baseApiUrl}?animeEpisodeId=${id}&server=hd-1&category=${category}`;
     console.log(`Fetching video data from: ${apiUrl}`); // Debug log
     return fetch(apiUrl)
       .then(response => {
