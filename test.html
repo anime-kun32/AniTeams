@@ -65,7 +65,7 @@
   <script src="scripts.js"></script>
   <script>
   document.addEventListener('DOMContentLoaded', () => {
-  const baseApiUrl = 'https://aniwatch-api-net.vercel.app/anime/episode-srcs'; // Base URL for the API
+  const baseApiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/sources'; // Base URL for the API
   let category = 'sub'; // Default category
   let art = null; // Variable to store the Artplayer instance
 
@@ -84,7 +84,7 @@
 
   // Fetch video data from the API based on the selected category and ID
   const fetchVideoData = (category) => {
-    const apiUrl = `${baseApiUrl}?id=${id}&server=vidstreaming&category=${category}`;
+    const apiUrl = `${baseApiUrl}?animeEpisodeId=${id}&server=vidstreaming&category=${category}`;
     console.log(`Fetching video data from: ${apiUrl}`); // Debug log
     return fetch(apiUrl)
       .then(response => {
@@ -240,3 +240,5 @@
   
 
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
