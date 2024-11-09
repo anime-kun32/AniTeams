@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,6 +91,13 @@
           throw new Error('Network response was not ok');
         }
         return response.json();
+      })
+      .then(data => {
+        // Extract sources and tracks from the new API response structure
+        return {
+          sources: data.data.sources, // Adjust according to new response
+          tracks: data.data.tracks // Adjust according to new response
+        };
       })
       .catch(error => {
         console.error('Error fetching API data:', error);
@@ -226,10 +232,9 @@
     // Handle rendering subtitles with HTML formatting
     art.subtitle.on('change', (track) => {
       const subtitles = track.cues.map(cue => {
-        // Return the cue text directly; it will render with HTML formatting
         return cue.text; 
-      }).join('<br>'); // Join with <br> for line breaks
-      art.subtitle.render(subtitles); // Render subtitles in the player
+      }).join('<br>');
+      art.subtitle.render(subtitles);
     });
   };
 
@@ -237,8 +242,8 @@
   fetchVideoData(category).then(initializePlayer);
 });
 
-  
-
   </script>
   <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
+</body>
+</html>
