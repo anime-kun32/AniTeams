@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Get the value of the 'id' parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const animeIdFromUrl = urlParams.get('id');
@@ -9,14 +9,19 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    const apiUrl = `https://aniwatch-api-net.vercel.app/anime/info?id=${animeIdFromUrl}`;
+    const apiUrl = `https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeIdFromUrl}`;
 
     // Fetch anime details from the API
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            const anime = data.anime.info;
-            const moreInfo = data.anime.moreInfo;
+            if (!data.success) {
+                console.error('Failed to fetch anime details');
+                return;
+            }
+
+            const anime = data.data.anime.info;
+            const moreInfo = data.data.anime.moreInfo;
 
             // Update the <h1> tag with the anime name
             document.getElementById('anime-header').textContent = anime.name;
@@ -92,3 +97,4 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Error fetching anime details:', error));
 });
+
