@@ -1,7 +1,7 @@
 const app = document.getElementById('app');
 const movieCardsContainer = app.querySelector('.movie-cards');
 const filterItems = app.querySelectorAll('.filter-item');
-const apiUrl = 'https://aniwatch-api-net.vercel.app/api/api/v2/hianime/home'; 
+const apiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/home'; 
 
 // Function to fetch anime data from API
 async function fetchAnimeData() {
