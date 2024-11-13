@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   AniTeams Slider
+  </title>
+  <link href="stylesheet.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&amp;display=swap" rel="stylesheet"/>
+ </head>
+ <body>
+  <!-- Header Section -->
+  <header>
+   <!-- Navigation Bar -->
+   <nav class="navbar">
+    <!-- Toggle Button for Sidebar -->
+    <div class="bars" onclick="toggleMenu()">
+     <div class="bar1">
+     </div>
+     <div class="bar2">
+     </div>
+     <div class="bar3">
+     </div>
+    </div>
+   </nav>
+   <!-- Magnifying Glass Icon and Login Button -->
+   <div class="header-extras">
+    <div class="css-icon-search">
+    </div>
+   </div>
+  </header>
+  <!-- Sidebar / Side Menu -->
+  <aside class="side-menu" id="sideMenu">
+   <!-- Close Button for Sidebar -->
+   <div class="close-button" onclick="toggleMenu()">
+    Close
+   </div>
+   <!-- Sidebar Items -->
+   <ul class="nav-list">
+    <li class="item">
+     Home
+    </li>
+    <li class="item">
+     About
+    </li>
+    <li class="item">
+     Contact
+    </li>
+    <li class="item">
+     Bookmarks
+    </li>
+    <li class="item">
+     Genres
+    </li>
+    <div class="genre-list" id="genreList">
+     <!-- Genres will be populated here by JavaScript -->
+    </div>
+   </ul>
+  </aside>
+  <script>
+   // JavaScript to Toggle Sidebar
+        function toggleMenu() {
+            document.getElementById("sideMenu").classList.toggle("open");
+            document.querySelector(".bars").classList.toggle("open");
+        }
+
+        // Fetch Genres from API and Populate Sidebar
+        async function fetchGenres() {
+            try {
+                const response = await fetch('https://aniwatch-api-net.vercel.app/api/v2/hianime/home'); // Replace with your API URL
+                const result = await response.json();
+                
+                if (result.success && result.data.genres) {
+                    const genreList = document.getElementById('genreList');
+                    genreList.innerHTML = ''; // Clear any existing content
+
+                    result.data.genres.forEach((genre) => {
+                        const genreItem = document.createElement('div');
+                        genreItem.classList.add('genre-item');
+                        genreItem.textContent = genre;
+                        genreList.appendChild(genreItem);
+                    });
+                } else {
+                    console.error("Error: Unable to load genres");
+                }
+            } catch (error) {
+                console.error("Error fetching genres:", error);
+            }
+        }
+
+        // Load genres on page load
+        window.onload = fetchGenres;
+  </script>
+  <div class="slider-container" id="slider-container">
+   <!-- Slides will be populated here dynamically -->
+  </div>
+<div class="animecarddiv class="cardhead">
+        <div class="bar"></div>
+        
+    </div>
+    <div class="cardcontainer" id="cardContainer"></div>
+</div>
+
+<div class="animecard">
+    <div class="cardhead">
+        <div class="bar"></div>
+        <h2 class="headtitle">Trending Anime</h2>
+    </div>
+    <div class="cardcontainer" id="cardContainer"></div>
+</div>
+<script>
+// The trending anime API URL
+const apiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/home'; // Replace with actual API URL
+
+async function fetchTrendingAnimes() {
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        
+        // Assume the trending anime data is within `data.trendingAnimes`
+        const trendingAnimes = data.data.trendingAnimes;
+
+        // Select the card container element
+        const cardContainer = document.getElementById('cardContainer');
+        
+        // Loop through each anime and create card elements
+        trendingAnimes.forEach(anime => {
+            // Create a card item element
+            const cardItem = document.createElement('div');
+            cardItem.classList.add('carditem');
+            
+            // Create an image container and image element
+            const imgContainer = document.createElement('div');
+            imgContainer.classList.add('cardimgcontainer');
+            
+            const img = document.createElement('img');
+            img.classList.add('cardimage');
+            img.src = anime.poster;
+            img.alt = anime.name;
+            
+            // Append the image to the container
+            imgContainer.appendChild(img);
+
+            // Create the title element
+            const title = document.createElement('p');
+            title.classList.add('cardtitle');
+            title.textContent = anime.name;
+
+            // Append the image container and title to the card item
+            cardItem.appendChild(imgContainer);
+            cardItem.appendChild(title);
+            
+            // Append the card item to the card container
+            cardContainer.appendChild(cardItem);
+        });
+    } catch (error) {
+        console.error('Error fetching trending animes:', error);
+    }
+}
+
+// Call the function to fetch and display the animes
+fetchTrendingAnimes();
+
+</script>
+  <p>
+   <span class="trending">
+    Latest Episodes
+   </span>
+  </p>
+  <div class="card-container">
+  </div>
+  <script>
+   async function fetchAnimeData() {
+            const apiUrl = "https://aniwatch-api-net.vercel.app/api/v2/hianime/home"; // Replace with your actual API URL
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.success) {
+                    const cardContainer = document.querySelector('.card-container');
+                    cardContainer.innerHTML = ''; // Clear previous content
+
+                    data.data.latestEpisodeAnimes.forEach(anime => {
+                        const cardHTML = `
+                            <div class="card">
+                                <div class="poster">
+                                    <img src="${anime.poster}" alt="${anime.name} Poster" class="image"/>
+                                    <a href="details.html?id=${anime.id}" class="overlay">
+                                        <img src="play-buttton.png" alt="Play" class="play-button"/>
+                                    </a>
+                                    <div class="info-left">
+                                        <div class="btn">SUB ${anime.episodes.sub}</div>
+                                    </div>
+                                    <div class="info-right">
+                                        <div class="btn-episode">Ep ${anime.episodes.sub}</div>
+                                    </div>
+                                </div>
+                                <div class="details">
+                                    <h3 class="name">${anime.name}</h3>
+                                    <p class="jname">${anime.jname}</p>
+                                </div>
+                            </div>
+                        `;
+                        cardContainer.insertAdjacentHTML('beforeend', cardHTML);
+                    });
+                } else {
+                    console.error("Failed to fetch anime data:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        fetchAnimeData();
+  </script>
+ <style>.animecard {
+    display: flex;
+    flex-direction: column;
+    margin: 0px auto;
+    scroll-behavior: smooth;
+}
+.cardhead{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.bar{
+    width: 0.3rem;
+    height: 2rem;
+    border-radius: 0.375rem;
+    background-color: white;
+}
+.headtitle {
+    font-size: 24px;
+    font-weight: 500;
+    margin: 15px 0;
+    color: white;
+}
+
+.animeitems{
+    position: relative;
+}
+
+.leftarrow{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 97%;
+    z-index: 9;
+    background: linear-gradient(to right,#000000,rgba(0, 0, 0, 0.02));
+    transition: all 300ms ease-out!important;
+    cursor: pointer;
+}
+.notactive{
+    opacity: 0.5;
+}
+
+.rightarrow{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 98%;
+    right: -0.6px;
+    z-index: 9;
+    background: linear-gradient(to left,#000000,rgba(0, 0, 0, 0.02));
+    transition: all 300ms ease-out!important;
+    cursor: pointer;
+}
+
+.cardcontainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    overflow: scroll;
+    overflow-y: none;
+    gap: 10px;
+}
+
+.cardcontainer::-webkit-scrollbar {
+    display: none;
+}
+
+.carditem {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    width: 175px;
+    margin: 0 3px 0 0;
+    /* border: 1px solid white; */
+    /* align-items: center; */
+}
+
+.carditem:hover .cardinfo {
+    opacity: 1;
+}
+
+.cardimgcontainer {
+    width: inherit;
+    height: 250px;
+    background-color: #1e1e24;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.pulse {
+    animation: pulse 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation-delay: 1.5s;
+}
+
+.pulseodd {
+    animation: pulse 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation-delay: 0.5s;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.cardimage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 300ms ease;
+}
+
+.cardimgcontainer:hover .cardimage{
+    transform: scale(1.03);
+    object-fit: cover;
+}
+
+.cardtitle {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    color: #d1d7e0;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0 6px;
+    margin: 5px 1px 0px 1px;
+    cursor: pointer;
+    /* border: 1px solid white; */
+}
+
+@media(max-width:1280px){
+    .cardcontainer{
+        padding:0 0 0 0.75rem;
+    }
+    .leftarrow svg{
+        margin:0 5px;
+    }
+    .cardhead{
+        padding:0 0.75rem;
+    }
+    .headtitle{
+        font-size: 21px;
+    }
+    .carditem{
+        width: 155px;
+        height: 280px;
+    }
+    .cardimgcontainer{
+        height: 230px;
+    }
+}
+@media(max-width:768px) {
+    .cardimgcontainer {
+        height: 190px;
+        margin: 0 3px 0 0;
+    }
+
+    .leftarrow{
+        width: 10px;
+    }
+
+    .leftarrow svg{
+        display: none;
+    }
+
+    .carditem {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 240px;
+        width: 135px;
+        /* align-items: center; */
+        /* border: 1px solid white; */
+    }
+    .animecard{
+        margin: 5px auto;
+    }
+    .headtitle{
+        margin: 8px 0;
+    }
+    .bar{
+        width: 0.35rem;
+        height: 1.5rem;
+        border-radius: 0.375rem;
+        background-color: white;
+    }
+    .cardtitle{
+        padding: 0 3px;
+    }
+}
+
+@media(max-width:600px) {
+    .cardcontainer {
+        gap: 8px;
+    }
+
+    .cardimgcontainer {
+        height: 160px;
+        margin:0 0 0 0px;
+    }
+
+    .carditem {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 205px;
+        width: 105px;
+        /* align-items: center; */
+        /* border: 1px solid white; */
+    }
+
+    .rightarrow{
+        height: 90%;
+        right: 0px;
+    }
+
+    .rightarrow svg{
+        width: 25px;
+        height: 25px;
+    }
+    .cardtitle {
+        font-size: 12px;
+        padding: 0 3px;
+        margin: 3px 0;
+    }
+    .headtitle{
+        font-size: 19px;
+    }
+}</style>
+  <script src="Index.js">
+  </script>
+ </body>
+</html>
