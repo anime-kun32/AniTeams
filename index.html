@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Detection</title>
+    <style>
+        /* Dark background and loading text styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+        }
+        #loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #ffffff;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        #loadingText {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        #content {
+            display: none;
+        }
+        /* Styling for the circular animation */
+        .circle {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #ffffff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <!-- Anime.js Library from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+</head>
+<body>
+    <div id="loading">
+        <div class="circle"></div>
+        <div id="loadingText">Detecting your device…</div>
+    </div>
+    <div id="content"></div>
+
+    <script>
+
+                document.addEventListener("DOMContentLoaded", function () {
+    // Create loading screen
+    const loadingDiv = document.createElement("div");
+    loadingDiv.id = "loading";
+    loadingDiv.style.cssText = `
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        color: #ffffff;
+        background-color: #1a1a1a;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    `;
+
+    const loadingText = document.createElement("div");
+    loadingText.textContent = "Detecting your device…";
+    loadingText.style.fontSize = "1.5em";
+    loadingText.style.marginTop = "20px";
+
+    const circle = document.createElement("div");
+    circle.className = "circle";
+    circle.style.cssText = `
+        border: 4px solid rgba(255, 255, 255, 0.2);
+        border-top: 4px solid #ffffff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+    `;
+
+    loadingDiv.appendChild(circle);
+    loadingDiv.appendChild(loadingText);
+    document.body.appendChild(loadingDiv);
+
+    // Add keyframes for the spinning animation
+    const styleSheet = document.createElement("style");
+    styleSheet.textContent = `
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(styleSheet);
+
+    // Function to load device-specific content with all styles and scripts
+    async function loadDeviceSpecificContent() {
+        const isMobile = window.innerWidth <= 768;
+        const contentUrl = isMobile 
+            ? './mobile.html' 
+            : './desktop.html';
+
+        try {
+            // Fetch the HTML content based on device
+            const response = await fetch(contentUrl);
+            if (!response.ok) throw new Error("Network response was not ok");
+
+            const htmlText = await response.text();
+
+            // Replace entire document's HTML with the fetched HTML content
+            document.open();
+            document.write(htmlText);
+            document.close();
+        } catch (err) {
+            // Handle errors and show error message on loading screen
+            loadingText.textContent = "Error loading content.";
+            console.error("Failed to load HTML:", err);
+        }
+    }
+
+    // Trigger content loading after the page loads
+    window.onload = loadDeviceSpecificContent;
+});
+
+    </script>
+</body>
+</html>
