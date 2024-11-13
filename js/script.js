@@ -13,8 +13,12 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch('https://aniwatch-api-net.vercel.app/api/v2/hianime/home')
         .then(response => response.json())
         .then(data => {
-            const spotlightAnimes = data.spotlightAnimes;
-            const trendingAnimes = data.trendingAnimes;
+            if (!data.success || !data.data) {
+                throw new Error('Invalid data format');
+            }
+            
+            const spotlightAnimes = data.data.spotlightAnimes || [];
+            const trendingAnimes = data.data.trendingAnimes || [];
 
             // Inject slides
             spotlightAnimes.forEach((anime, index) => {

@@ -1,5 +1,5 @@
 # Update 
-This project is down and being reconstructed  due to update from the api .It will be back in a week or so . You can use the alternative one [here ](https://github.com/anime-kun32/AniTeams-amvstrm). 
+The website is now available it's up and running but please note that on Wednesday there will be a new branch added because I have have a completely new layout. If you have forked this repo make sure to sync it to update and then deploy your own version of the aniwatch API. I have set cors on the api this website is using . 
 
 # Project Title
 AniTeams

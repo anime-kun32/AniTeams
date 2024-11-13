@@ -83,7 +83,7 @@
 
   // Fetch video data from the API based on the selected category and ID
   const fetchVideoData = (category) => {
-    const apiUrl = `${baseApiUrl}?animeEpisodeId=${id}&server=hd-1&category=${category}`;
+    const apiUrl = `${baseApiUrl}?animeEpisodeId=${id}&server=hd-2&category=${category}`;
     console.log(`Fetching video data from: ${apiUrl}`); // Debug log
     return fetch(apiUrl)
       .then(response => {
@@ -243,7 +243,6 @@
 });
 
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
+  
 </body>
-</html>
+  </html>
