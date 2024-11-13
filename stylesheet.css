@@ -159,6 +159,17 @@ header {
     cursor: pointer;
 }
 
+/* Link Styling */
+.nav-list .item a {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Maintain the item's original color */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.nav-list .item a:hover {
+    color: #f0f0f0; /* Hover effect for a slight lightening */
+}
+
 /* Sidebar List Styling */
 .nav-list {
     display: flex;
@@ -178,6 +189,13 @@ header {
     font-weight: 600;
     color: #fff;
 }
+
+/* Sidebar Item Hover Effect */
+.item:hover {
+    background255, 255, 255, 0.1); /* Add a subtle background color on hover */
+    border-radius: 8px;
+}
+
 
 /* Genre List */
 .genre-list {
