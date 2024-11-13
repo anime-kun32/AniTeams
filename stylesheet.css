@@ -1,0 +1,643 @@
+/* General Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: transparent;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Header Styling */
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    background-color: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+}
+
+/* Navbar (contains sidebar toggle) */
+.navbar {
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+}
+
+/* Sidebar Toggle (Hamburger) */
+.bars {
+    margin-left: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 101; /* Ensure it’s on top */
+    display: flex;
+    flex-direction: column;
+}
+
+.bar1, .bar2, .bar3 {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0;
+    transition: 0.4s;
+}
+
+/* Bars transform to X when open */
+.bars.open .bar1 {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.bars.open .bar2 {
+    opacity: 0;
+}
+
+.bars.open .bar3 {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Header Extras (Magnifying Glass & Login Button) */
+.header-extras {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: absolute;
+    top: 1em;
+    right: 1em;
+}
+
+/* Magnifying Glass Icon */
+.css-icon-search {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid white;
+    position: relative;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.css-icon-search::before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    right: -7px;
+    bottom: -3px;
+    background: white;
+    width: 10px;
+    height: 2px;
+    transform: rotate(45deg);
+}
+
+/* Login Button */
+.login {
+    background-color: blue;
+    padding: 12px 20px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    transition: opacity 0.3s ease;
+}
+
+.login:hover {
+    opacity: 0.8;
+}
+
+.login:active {
+    opacity: 0.4;
+}
+
+/* Sidebar / Side Menu */
+.side-menu {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 260px;
+    background-color: #2a2c31;
+    transform: translateX(-350px); /* Default: hidden */
+    overflow-y: auto;
+    gap: 1em;
+    z-index: 5;
+    transition: transform 500ms ease;
+    padding: 1em;
+}
+
+.side-menu.open {
+    transform: translateX(0); /* Visible when open */
+}
+
+@media only screen and (max-width: 860px) {
+    .side-menu {
+        width: 300px;
+    }
+}
+
+/* Close Button */
+.close-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #4a4b51;
+    border-radius: 20px;
+    width: 110px;
+    padding: 0.8em 0;
+    margin: 2em 0 0 1em;
+    line-height: 12px;
+    color: #fff;
+    font-weight: 500;
+    gap: 0.3em;
+    cursor: pointer;
+}
+
+/* Sidebar List Styling */
+.nav-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    padding: 1em;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Genre List */
+.genre-list {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 12px;
+}
+
+.genre-item {
+    padding: 6px 15px;
+    width: 49%;
+    margin-right: 1%;
+    cursor: pointer;
+}
+
+.genre-item:nth-of-type(7n + 1) { color: #d0e6a5; }
+.genre-item:nth-of-type(7n + 2) { color: #ffdd95; }
+.genre-item:nth-of-type(7n + 3) { color: #fc887b; }
+.genre-item:nth-of-type(7n + 4) { color: #ccabda; }
+.genre-item:nth-of-type(7n + 5) { color: #abccd8; }
+.genre-item:nth-of-type(7n + 6) { color: #d8b2ab; }
+.genre-item:nth-of-type(7n) { color: #86e3ce; }
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .nav-links, .login {
+        display: none;
+    }
+
+    /* Hide search bar in mobile */
+    #search-bar {
+        display: none;
+    }
+
+    /* Sidebar Menu on Mobile */
+    .menu {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 250px;
+        background-color: rgba(0, 0, 0, 0.9);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 2rem;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 100;
+    }
+
+    .menu.show {
+        transform: translateX(0);
+    }
+    
+    .menu a,
+    .menu .login {
+        padding: 10px 0;
+        font-size: 20px;
+        color: white;
+        text-align: left;
+    }
+    
+    .menu a:hover {
+        color: lightblue;
+    }
+}
+
+
+/*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/* -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/* Slide section beign */
+ {
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: "Poppins";
+    background-color: #121212;
+    color: #FFBADE;
+    overflow-y: auto;
+}
+
+.slider-container {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 600px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+/* Responsive height for slider */
+@media screen and (max-width: 1400px) {
+    .slider-container {
+        height: 570px;
+    }
+}
+@media screen and (max-width: 759px) {
+    .slider-container {
+        height: 350px;
+    }
+}
+
+/* Slide styling */
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* Hide with opacity */
+    transition: opacity 1s ease-in-out;
+}
+
+
+/* Overlay */
+.img-overlay::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, #202125 0%, rgba(32,33,37,0.6) 40%, rgba(32,33,37,0) 60%, rgba(32,33,37,0) 80%, #202125 100%);
+    z-index: 1;
+}
+
+/* Image */
+.slider-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+}
+
+/* Content area */
+.content {
+    position: absolute;
+    bottom: 2em;
+    left: 2em;
+    color: #cae962;
+    z-index: 2;
+}
+
+/* Title */
+.title {
+    font-family: "Ubuntu", sans-serif;
+    color: #fff;
+    font-size: 50px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+@media screen and (max-width: 480px) {
+    .title {
+        font-size: 8vw; /* Adjust for smaller screens */
+    }
+}
+
+/* Description */
+.description {
+    color: #fff;
+    font-size: 16px;
+    font-family: "Poppins", sans-serif;
+    margin: 1em 0;
+}
+
+/* Buttons */
+.watch-button, .details-button {
+    padding: 0.7rem 1em;
+    border-radius: 30px;
+    font-family: "Ubuntu", sans-serif;
+    font-size: 18px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.watch-button {
+    background-color: #7354e7;
+    color: #111;
+    text-decoration: none;
+}
+
+.watch-button:hover {
+    color: white;
+    background-color: black;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.watch-button:active {
+    background-color: rgb(255, 24, 24);
+    color: white;
+}
+
+.details-button {
+    background-color: #4a4b51;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.details-button:hover {
+    background-color: black;
+    transition: background-color 0.3s ease;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.details-button:active {
+    background-color: green;
+}
+
+/* Responsive adjustments for buttons */
+@media screen and (max-width: 480px) {
+    .description {
+        font-size: 13px;
+    }
+    .watch-button, .details-button {
+        font-size: 12px;
+    }
+}
+/* Slide section end */
+/*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/* Trending */ 
+
+.trending {
+    display: inline-block;
+    font-size: 30px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bolder;
+}
+
+/* Trending cards */
+/* General Styles for the Trending Section */
+.card-section {
+    width: 100%;
+    overflow-x: auto; /* Allow horizontal scrolling */
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    padding: 20px 0; /* Adjust padding as needed */
+}
+
+/* Anime Cards Container */
+.anime-cards {
+    display: flex;
+    width: max-content; /* Allow the width to grow with content */
+    gap: 20px; /* Space between cards */
+    scroll-behavior: smooth; /* Smooth scrolling */
+    flex-wrap: nowrap; /* Prevent wrapping of cards */
+    justify-content: flex-start; /* Align cards to the start */
+    position: relative; /* Ensure correct positioning */
+}
+
+/* Individual Card Styling */
+.anime-card {
+    background-color: #202125; /* Card background color */
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden; /* Prevent overflow of content */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Card shadow */
+    transition: transform 0.3s ease; /* Transition effect on hover */
+    width: 200px; /* Fixed width of each card */
+    flex-shrink: 0; /* Prevent cards from shrinking */
+    position: relative; /* Relative positioning for inner elements */
+    text-align: center; /* Center text in card */
+}
+
+/* Hover Effect for Cards */
+.anime-card:hover {
+    transform: scale(1.05); /* Scale up on hover */
+}
+
+/* Card Image Styling */
+.anime-card img {
+    width: 100%; /* Full width image */
+    border-bottom: 2px solid #7354e7; /* Bottom border for the image */
+}
+
+/* Description Text Styling */
+.description-text {
+    color: #FFBADE; /* Description text color */
+    font-family: "Poppins", sans-serif; /* Font family */
+    font-size: 16px; /* Font size */
+    margin: 10px 0; /* Margin above and below text */
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 480px) {
+    .anime-cards {
+        flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        justify-content: center; /* Center cards */
+        gap: 10px; /* Reduce the gap between cards */
+    }
+
+    .anime-card {
+        width: 40%; /* Make cards smaller on mobile */
+        margin-bottom: 10px; /* Margin below each card */
+    }
+
+    .description-text {
+        font-size: 14px; /* Slightly smaller font for descriptions */
+    }
+}
+
+/* Scrollbar Styling */
+.card-section::-webkit-scrollbar {
+    height: 8px; /* Height of the scrollbar */
+}
+
+.card-section::-webkit-scrollbar-thumb {
+    background-color: #7354e7; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Rounded edges for the thumb */
+}
+
+.card-section::-webkit-scrollbar-track {
+    background: #121212; /* Color of the scrollbar track */
+}
+
+/* Firefox Scrollbar Styling */
+.card-section {
+    scrollbar-width: thin; /* For Firefox, make scrollbar thin */
+    scrollbar-color: #7354e7 #121212; /* Thumb color and track color */
+}
+
+/*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/* Latest Episodes */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.card {
+    width: calc(16.66% - 14px);
+    margin: 0 7px 14px;
+    background: #2a2c31;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.poster {
+    position: relative;
+    width: 100%;
+    padding-bottom: 130%;
+    overflow: hidden;
+}
+
+.image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.poster:hover .overlay {
+    opacity: 1;
+}
+
+.info-left, .info-right {
+    position: absolute;
+    bottom: 10px;
+    z-index: 3;
+}
+
+.info-left {
+    left: 10px;
+}
+
+.info-right {
+    right: 10px;
+}
+
+.btn, .btn-episode {
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 5px;
+    background: #fff;
+    color: #111;
+    margin-right: 4px;
+    transition: background 0.3s;
+}
+
+.btn:hover, .btn-episode:hover {
+    background: #e0e0e0;
+}
+
+.btn-episode {
+    background: #7bfcfc;
+}
+
+.details {
+    color: #aaa;
+    font-size: 12px;
+    padding: 10px;
+    border-radius: 0 0 10px 10px;
+}
+
+.name {
+    color: #fff;
+    font-size: 14px;
+    margin: 0;
+    font-weight: 500;
+    margin-bottom: 8px;
+    line-height: 1.3em;
+}
+
+/* Play button styling */
+.play-button {
+    position: absolute;
+    width: 40px; /* Adjust size as needed */
+    height: 40px; /* Adjust size as needed */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0; /* Hide initially */
+    transition: opacity 0.5s;
+}
+
+.overlay:hover .play-button {
+    opacity: 1; /* Show on hover */
+}
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+    .card {
+        width: calc(25% - 14px);
+    }
+}
+
+@media (max-width: 760px) {
+    .card {
+        width: calc(33% - 14px);
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: calc(50% - 6px);
+        margin: 0 3px 6px;
+    }
+}
