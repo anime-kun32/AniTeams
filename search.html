@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="search.css">
+    <title>Aniteams-Filter</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+        </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+         <div class="container">
+             <i class="fa-solid fa-bars fa-2x bars"></i>
+             <h2><span>Aniteams</span></h2>
+             <input type="search" name="Search" id="search-bar" placeholder="Search">
+             <a class="nav-links" href="animeindex.html">Home</a>
+             <a class="nav-links" href="">Subbed Anime</a>
+             <a class="nav-links" href="">Dubbed Anime</a>
+             <button class="login">Login</button>
+         </div>
+
+         <div class="menu" id="menu">
+            <ul class="sidebar">
+            <button class="closemenu" id="closemenu"> <i class="fa-solid fa-angle-left" fa--1x close></i> Close Menu </button>
+            <li><a href="animeindex.html">Home</a></li>
+            <li><a href="">Subbed Anime</a></li>
+            <li><a href="">Dubbed Anime</a></li>
+            <li><a href="">Most Popular</a></li>
+            <li><a href="">TV Series</a></li>
+            <li><a href="">Specials</a></li>
+            <li><a href="">Movies</a></li>
+            <li><a href=""">Top Rated</a></li>
+        </ul>
+        </div>
+     </nav>
+     <main>
+        <section> <!-- Filter box Sectiom-->
+            <div class="category-filter">
+                <form method="get" id="filter-form"> <!--Used method "get" and ID so u can add javascript-->
+                    <input type="hidden" name="keyword" value="">
+                    
+                    <div>
+                        <p>Filter</p>
+                        <div class="filter-options">
+                            <div class="filter-item">
+                                <label for="type">Type</label>
+                                <select id="type" name="type">
+                                    <option value="all">All</option>
+                                    <option value="Movie">Movie</option>
+                                    <option value="TV">TV</option>
+                                    <option value="ONA">ONA</option>
+                                    <option value="OVA">OVA</option>
+                                    <option value="Specials">Specials</option>
+                                    <option value="Season">Season</option>
+                                    <!-- Other options -->
+                                </select>
+                            </div>
+                            <div class="filter-item">
+                                <label for="status">Status</label>
+                                <select id="status" name="status">
+                                    <option value="all">All</option>
+                                    <option value="Current Airing">Current Airing</option>
+                                    <option value="Finished Airing">Finished Airing</option>
+                                    <option value="Not Yet Aired">Not Yet Aired</option>
+                                    <!-- Other options -->
+                                </select>
+                            </div>
+                            <div class="filter-item">
+                                <label for="Rated">Rated</label>
+                                <select id="Rated" name="Rated">
+                                    <option value="all">All</option>
+                                    <option value="G">G</option>
+                                    <option value="PG">PG</option>
+                                    <option value="R">R</option>
+                                    <option value="R+">R+</option>
+                                    <option value="Rx">Rx</option>
+                                    <!-- Other options -->
+                                </select>
+                        </div>
+                        <div class="filter-item">
+                            <label for="Season">Season</label>
+                            <select id="Season" name="Season">
+                                <option value="all">All</option>
+                                <option value="Spring">Spring</option>
+                                <option value="Summer">Summer</option>
+                                <option value="Fall">Fall</option>
+                                <option value="Winter">Winter</option>
+                                <option value=""></option>
+                            </select>
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label for="Score">Score</label>
+                        <select id="Score" name="Score">
+                            <option value="all">All</option>
+                            <option value="(1)">(1) Disgusting</option>
+                            <option value="(2)">(2) Horrible</option>
+                            <option value="(3)">(3) Very Bad</option>
+                            <option value="(4)">(4) Bad</option>
+                            <option value="(5)">(5) Mid</option>
+                            <option value="(6)">(6) Fine</option>
+                            <option value="(7)">(7) Good</option>
+                            <option value="(8)">(8) Very Good</option>
+                            <option value="(9)">(9) Great</option>
+                            <option value="(10)">(10) Goated</option>
+                        </select>
+                </div>
+
+                <div class="filter-item">
+                    <label for="Language">Language</label>
+                    <select id="Language" name="Language">
+                        <option value="all">All</option>
+                        <option value="SUB">SUB</option>
+                        <option value="DUB">DUB</option>
+                        <option value="SUB & DUB">SUB & DUB</option>
+                    </select>
+            </div>
+            <div class="filter-item">
+                <label for="start-date">Start Date</label>
+                <select class="start-year" name="Start-date-year">
+                    <option value="Year">Year</option>
+                </select>
+                <select class="start-month" name="Start-date-month">
+                    <option value="Month">Month</option>
+                </select>
+                <select class="start-day" name="Start-date-day">
+                    <option value="Day">Day</option>
+                </select>
+            </div>
+
+            <div class="filter-item">
+                <label for="end-date">End Date</label>
+                <select class="start-year-2" name="Start-date-year">
+                    <option value="Year">Year</option>
+                </select>
+                <select class="start-month-2" name="Start-date-month">
+                    <option value="Month">Month</option>
+                </select>
+                <select class="start-day-2" name="Start-date-day">
+                    <option value="Day">Day</option>
+                </select>
+            </div>
+            
+            <div class="filter-item">
+                <label for="sort">Sort</label>
+                <select id="sort" name="sort">
+                    <option value=">Default">Default</option>
+                    <option value="Recently Updated">Recently Updated</option>
+                    <option value="Recently Added">Recently Added</option>
+                    <option value="Score">Score</option>
+                    <option value="Named A-Z">Named A-Z</option>
+                    <option value=">Relaease Date">Relaease Date</option>
+                    <option value="Most Watched">Most Watched</option>
+                </select>
+                </div>
+            
+                <div class="genre-filter">
+                    <p>Genre</p>
+                    </div>
+                    <div class="ni-list">
+                        <input type="hidden" id="genre-ids" name="genres" value="1">
+                        
+                            <div class="f-genre-item active" data-id="1">Action</div>
+                        
+                            <div class="f-genre-item " data-id="2">Adventure</div>
+
+                            <div class="f-genre-item " data-id="3">Cars</div>
+
+                            <div class="f-genre-item " data-id="4">Comedy</div>
+
+                            <div class="f-genre-item " data-id="5">Dementia</div>
+
+                            <div class="f-genre-item " data-id="6">Demons</div>
+
+                            <div class="f-genre-item " data-id="8">Drama</div>
+
+                            <div class="f-genre-item " data-id="9">Ecchi</div>
+
+                            <div class="f-genre-item " data-id="10">Fantasy</div>
+
+                            <div class="f-genre-item " data-id="11">Game</div>
+
+                            <div class="f-genre-item " data-id="35">Harem</div>
+
+                            <div class="f-genre-item " data-id="13">Historical</div>
+
+                            <div class="f-genre-item " data-id="14">Horror</div>
+
+                            <div class="f-genre-item " data-id="44">Isekai</div>
+
+                            <div class="f-genre-item " data-id="43">Josei</div>
+                        
+                            <div class="f-genre-item " data-id="15">Kids</div>
+                        
+                            <div class="f-genre-item " data-id="16">Magic</div>
+                        
+                            <div class="f-genre-item " data-id="17">Martial Arts</div>
+                        
+                            <div class="f-genre-item " data-id="18">Mecha</div>
+                        
+                            <div class="f-genre-item " data-id="38">Military</div>
+                        
+                            <div class="f-genre-item " data-id="19">Music</div>
+                        
+                            <div class="f-genre-item " data-id="7">Mystery</div>
+                        
+                            <div class="f-genre-item " data-id="20">Parody</div>
+                        
+                            <div class="f-genre-item " data-id="39">Police</div>
+                        
+                            <div class="f-genre-item " data-id="40">Psychological</div>
+                        
+                            <div class="f-genre-item " data-id="22">Romance</div>
+                        
+                            <div class="f-genre-item " data-id="21">Samurai</div>
+                        
+                            <div class="f-genre-item " data-id="23">School</div>
+                        
+                            <div class="f-genre-item " data-id="24">Sci-Fi</div>
+                        
+                            <div class="f-genre-item " data-id="42">Seinen</div>
+                        
+                            <div class="f-genre-item " data-id="25">Shoujo</div>
+                        
+                            <div class="f-genre-item " data-id="26">Shoujo Ai</div>
+                        
+                            <div class="f-genre-item " data-id="27">Shounen</div>
+                        
+                            <div class="f-genre-item " data-id="28">Shounen Ai</div>
+                        
+                            <div class="f-genre-item " data-id="36">Slice of Life</div>
+                        
+                            <div class="f-genre-item " data-id="29">Space</div>
+                        
+                            <div class="f-genre-item " data-id="30">Sports</div>
+                        
+                            <div class="f-genre-item " data-id="31">Super Power</div>
+                        
+                            <div class="f-genre-item " data-id="37">Supernatural</div>
+                        
+                            <div class="f-genre-item " data-id="41">Thriller</div>
+                        
+                            <div class="f-genre-item " data-id="32">Vampire</div>
+                        
+                        <div></div>
+                        <div class="filter-button-con">
+                            <button class="filter-button">
+                                Filter
+                            </button>
+                        </div>
+                    </div>
+        </form>
+            </div>
+        
+        </section>
+    </main>
+  <div class="card-container" id="card-container">
+    <!-- Anime cards will be inserted here -->
+  </div>
+
+  <script>
+    function buildApiUrl() {
+      const baseUrl = "https://aniwatch-api-net.vercel.app/api/v2/hianime/search?q=";
+      const query = document.querySelector("#query").value || "";
+      const type = document.querySelector("#type").value !== "all" ? `&type=${document.querySelector("#type").value}` : "";
+      const status = document.querySelector("#status").value !== "all" ? `&status=${document.querySelector("#status").value}` : "";
+      const rated = document.querySelector("#Rated").value !== "all" ? `&rated=${document.querySelector("#Rated").value}` : "";
+      const season = document.querySelector("#Season").value !== "all" ? `&season=${document.querySelector("#Season").value.toLowerCase()}` : "";
+      const language = document.querySelector("#Language").value !== "all" ? `&language=${document.querySelector("#Language").value.toLowerCase()}` : "";
+      const score = document.querySelector("#Score").value !== "all" ? `&score=${document.querySelector("#Score").value}` : "";
+      
+      const genreElements = document.querySelectorAll(".f-genre-item.active");
+      const genres = Array.from(genreElements).map(el => el.dataset.id).join(",");
+      const genreParam = genres ? `&genres=${genres}` : "";
+
+      const startDate = `${document.querySelector(".start-year").value}-${document.querySelector(".document.querySelector(".start-day").value}`;
+      const startParam = startDate !== "Year-Month-Day" ? `&start_date=${startDate.replace(/Year|Month|Day/g, "0")}` : "";
+
+      const endDate = `${document.querySelector(".start-year-2").value}-${document.querySelector(".start-month-2").value}-${document.querySelector(".start-day-2").value}`;
+      const endParam = endDate !== "Year-Month-Day" ? `&end_date=${endDate.replace(/Year|Month|Day/g, "0")}` : "";
+
+      const sort = document.querySelector("#sort").value !== ">Default" ? `&sort=${document.querySelector("#sort").value.toLowerCase().replace(/ /g, "-")}` : "";
+
+      return `${baseUrl}${query}${type}${status}${rated}${season}${language}${score}${genreParam}${startParam}${endParam}${sort}`;
+    }
+
+    async function fetchAnimeResults() {
+      const apiUrl = buildApiUrl();
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        
+        if (data.success) {
+          displayAnimeResults(data.data.animes);
+        } else {
+          console.error("No results found");
+        }
+      } catch (error) {
+        console.error("Error fetching anime results:", error);
+      }
+    }
+
+    function displayAnimeResults(animes) {
+      const container = document.getElementById("card-container");
+      container.innerHTML = "";
+      
+      animes.forEach(anime => {
+        const animeCard = document.createElement("div");
+        animeCard.classList.add("card");
+
+        animeCard.innerHTML = `
+          <div class="poster">
+            <img src="${anime.poster}" class="image" alt="${anime.name}">
+            <div class="overlay">
+              <button <i class="fas fa-play"></i>
+              </button>
+            </div>
+          </div>
+          <div class="details">
+            <p class="name">${anime.name}</p>
+            <div class="info-left">
+              <span class="btn">${anime.type}</span>
+              <span class="btn">${anime.rating}</span>
+            </div>
+            <div class="info-right">
+              <span class="btn-episode">Sub: ${anime.episodes.sub}</span>
+              <span class="btn-episode">Dub: ${anime.episodes.dub}</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(animeCard);
+      });
+    }
+
+    document.getElementById("filter-button").addEventListener("click", (event) => {
+      event.preventDefault();
+      fetchAnimeResults();
+    });
+
+    document.querySelectorAll(".f-genre-item").forEach(item => {
+      item.addEventListener("click", () => {
+        item.classList.toggle("active");
+      });
+    });
+  </script>
+</body>
+</html>
