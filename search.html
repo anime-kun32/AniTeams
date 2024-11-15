@@ -56,7 +56,7 @@
                                     <option value="OVA">OVA</option>
                                     <option value="Specials">Specials</option>
                                     <option value="Season">Season</option>
-                                    <!-- Other options -->
+                                    
                                 </select>
                             </div>
                             <div class="filter-item">
@@ -157,6 +157,61 @@
                     <option value="Most Watched">Most Watched</option>
                 </select>
                 </div>
+                 <script>// Wait for DOM to load
+document.addEventListener('DOMContentLoaded', () => {
+    const filterButton = document.querySelector('.filter-button'); // Select the filter button
+    const form = document.getElementById('filter-form'); 
+
+    // First Event Listener: Capture form data and update URL
+    filterButton.addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent form submission
+
+        const formData = new FormData(form); // Collect form data
+        const queryParams = new URLSearchParams();
+
+        // Loop through form data and append to query params
+        for (const [key, value] of formData.entries()) {
+            queryParams.append(key, value);
+        }
+
+        // Update the URL with the selected filters
+       .origin + window.location.pathname;
+        window.location.href = `${baseUrl}?${queryParams.toString()}`;
+    });
+
+    // Second Event Listener: Log analytics (example)
+    filterButton.addEventListener('click', () => {
+        console.log('Filter button clicked - Logging analytics');
+        // Add your analytics or tracking logic here
+    });
+
+    // Third Event Listener: UI feedback
+    filterButton.addEventListener('click', () => {
+        console.log('Filter button clicked - Updating UI');
+        // Example: Show a loading spinner
+        filterButton.textContent = 'Applying filters...';
+        setTimeout(() => {
+            filterButton.textContent = 'Filter'; // Reset after 2 seconds
+        }, 2000);
+    });
+
+    // Function: Pre-fill form values from URL on page load
+    function prefillFormFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Loop through each form element and set the value
+        for (const [key, value] of urlParams.entries()) {
+            const formElement = form.querySelector(`[name="${key}"]`);
+            if (formElement) {
+                formElement.value = value; // Set the value from the URL
+            }
+        }
+    }
+
+    // Pre-fill form values on page load
+    prefillFormFromURL();
+});
+</script>           
             
                 <div class="genre-filter">
                     <p>Genre</p>
