@@ -179,20 +179,17 @@
                 </select>
                 </div>
                  <script>
-                     // Wait for DOM to load
+                     
 document.addEventListener('DOMContentLoaded', () => {
-    const filterButton = document.querySelector('.filter-button'); // Select the filter button
     const form = document.getElementById('filter-form'); // Form element
 
-    if (!filterButton || !form) {
-        console.error('Filter button or form not found in DOM.');
+    if (!form) {
+        console.error('Form not found in DOM.');
         return;
     }
 
-    // First Event Listener: Capture form data and update URL
-    filterButton.addEventListener('click', (event) => {
-        event.preventDefault(); // Prevent default form submission
-
+    // Event Listener: Update URL parameters whenever a form field changes
+    form.addEventListener('input', () => {
         const formData = new FormData(form); // Collect form data
         const queryParams = new URLSearchParams();
 
@@ -204,17 +201,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        if (queryParams.toString()) {
-            // Update the URL with the selected filters
-            const baseUrl = window.location.origin + window.location.pathname;
-            console.log(`Redirecting to: ${baseUrl}?${queryParams.toString()}`); // Debug log
-            window.location.href = `${baseUrl}?${queryParams.toString()}`;
-        } else {
-            console.warn('No filters selected to update URL.');
-        }
+        // Update the URL without refreshing the page
+        const baseUrl = window.location.origin + window.location.pathname;
+        const newUrl = queryParams.toString() 
+            ? `${baseUrl}?${queryParams.toString()}`
+            : baseUrl;
+        window.history.replaceState({}, '', newUrl); // Update URL
+        console.log(`Updated URL to: ${newUrl}`); // Debug log
     });
 
-    // Second Event Listener: Pre-fill form values from URL on page load
+    // Function: Pre-fill form values from URL on page load
     function prefillFormFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
 
@@ -235,6 +231,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Execute pre-filling on page load
     prefillFormFromURL();
 });
+                    
+
 
 </script>           
             
