@@ -16,33 +16,25 @@
          <div class="container">
              <i class="fa-solid fa-bars fa-2x bars"></i>
              <h2><span>Aniteams</span></h2>
-            <form onsubmit="logQuery(event)">
-        <input type="search" name="Search" id="search-bar" placeholder="Search">
-        <button type="submit">Search</button>
-    </form>
-
+             <input type="search" name="Search" id="search-bar" placeholder="Search">
              <a class="nav-links" href="animeindex.html">Home</a>
              <a class="nav-links" href="">Subbed Anime</a>
              <a class="nav-links" href="">Dubbed Anime</a>
              <button class="login">Login</button>
          </div>
 <script>
-    // for the search bar.
-        function logQuery(event) {
-            event.preventDefault(); // Prevent form submission
-            const searchBar = document.getElementById('search-bar');
-            const query = searchBar.value;
-            console.log(`Search query: ${query}`);
-            
-            // Optional: You can also encode the query parameters here
-            const encodedQuery = encodeURIComponent(query);
-            console.log(`Encoded Search Query: ${encodedQuery}`);
-            
-            // If you want to redirect to a new URL with the query
-            // Uncomment the line below and replace `yourURL` with the actual URL.
-            // window.location.href = `yourURL?search=${encodedQuery}`;
+    document.getElementById('search-bar').addEventListener('keypress', function(event) {
+        // Check if the Enter key is pressed
+        if (event.key === 'Enter') {
+            // Get the current value of the search input
+            const query = encodeURIComponent(this.value);
+            // Update the URL with the query parameter
+            const newUrl = `${window.location.origin}${window.location.pathname}?search=${query}`;
+            window.history.pushState({ path: newUrl }, '', newUrl);
         }
-    </script>
+    });
+</script>
+
          <div class="menu" id="menu">
             <ul class="sidebar">
             <button class="closemenu" id="closemenu"> <i class="fa-solid fa-angle-left" fa--1x close></i> Close Menu </button>
