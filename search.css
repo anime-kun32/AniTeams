@@ -232,24 +232,17 @@ body, html {
     }
 }
 
-.category-filter{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    flex-direction: row;
-    background-color: #FFFFFF1A;
-    margin-top: 50px;
-    height: 85vh;
-    width: 70em;
-    padding-left: 30px;
-    padding-top: 25px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    translate: -50%-50%;
-    border-radius: 10px;
-    box-shadow: 3px 15px 35px rgba(0, 0n, 0, 0.35);
+
+.category-filter {
+    display: block; /* Ensures it occupies the full width and aligns vertically */
+    margin-bottom: 20px; /* Adds space below the filter */
+    position: relative; /* Ensures it stays in the natural document flow */
+    width: 100%; /* Makes the filter take up the full width of its container */
+    height: auto; /* Allows the height to adjust automatically based on content */
+    top: auto; /* Removes any top alignment (if previously set) */
+    translate: none; /* Removes translate positioning (if previously set) */
 }
+
 
 
 select{
