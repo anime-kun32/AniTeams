@@ -377,7 +377,7 @@ option {
     background-color: #3c3b51;
     color: white;
     font-size: 15px;
-    top: 80%;
+    top: -10px;
     margin-right: 50em;
     cursor: pointer;
 }
