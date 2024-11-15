@@ -160,92 +160,41 @@
                 <div class="genre-filter">
                     <p>Genre</p>
                     </div>
-                    <div class="ni-list">
-                        <input type="hidden" id="genre-ids" name="genres" value="1">
-                        
-                            <div class="f-genre-item active" data-id="1">Action</div>
-                        
-                            <div class="f-genre-item " data-id="2">Adventure</div>
+                    <div class="ni-list" id="genre-list">
+    <input type="hidden" id="genre-ids" name="genres" value="1">
+    <!-- Genre items will be populated here dynamically -->
+</div>
+<script>// Define the API URL
+const apiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/home'; // Replace with your actual API URL
 
-                            <div class="f-genre-item " data-id="3">Cars</div>
+// Fetch the genres data from the API
+fetch(apiUrl)
+  .then(response => response.json())
+  .then(data => {
+    if (data.success && data.data && data.data.genres) {
+      const genres = data.data.genres; // Extract the genres array
 
-                            <div class="f-genre-item " data-id="4">Comedy</div>
+      // Get the genre list container
+      const genreList = document.getElementById('genre-list');
 
-                            <div class="f-genre-item " data-id="5">Dementia</div>
+      // Loop through the genres and create genre items dynamically
+      genres.forEach((genre) => {
+        const genreItem = document.createElement('div');
+        genreItem.classList.add('f-genre-item');
+        genreItem.setAttribute('data-id', genre);
+        genreItem.textContent = genre;
 
-                            <div class="f-genre-item " data-id="6">Demons</div>
-
-                            <div class="f-genre-item " data-id="8">Drama</div>
-
-                            <div class="f-genre-item " data-id="9">Ecchi</div>
-
-                            <div class="f-genre-item " data-id="10">Fantasy</div>
-
-                            <div class="f-genre-item " data-id="11">Game</div>
-
-                            <div class="f-genre-item " data-id="35">Harem</div>
-
-                            <div class="f-genre-item " data-id="13">Historical</div>
-
-                            <div class="f-genre-item " data-id="14">Horror</div>
-
-                            <div class="f-genre-item " data-id="44">Isekai</div>
-
-                            <div class="f-genre-item " data-id="43">Josei</div>
-                        
-                            <div class="f-genre-item " data-id="15">Kids</div>
-                        
-                            <div class="f-genre-item " data-id="16">Magic</div>
-                        
-                            <div class="f-genre-item " data-id="17">Martial Arts</div>
-                        
-                            <div class="f-genre-item " data-id="18">Mecha</div>
-                        
-                            <div class="f-genre-item " data-id="38">Military</div>
-                        
-                            <div class="f-genre-item " data-id="19">Music</div>
-                        
-                            <div class="f-genre-item " data-id="7">Mystery</div>
-                        
-                            <div class="f-genre-item " data-id="20">Parody</div>
-                        
-                            <div class="f-genre-item " data-id="39">Police</div>
-                        
-                            <div class="f-genre-item " data-id="40">Psychological</div>
-                        
-                            <div class="f-genre-item " data-id="22">Romance</div>
-                        
-                            <div class="f-genre-item " data-id="21">Samurai</div>
-                        
-                            <div class="f-genre-item " data-id="23">School</div>
-                        
-                            <div class="f-genre-item " data-id="24">Sci-Fi</div>
-                        
-                            <div class="f-genre-item " data-id="42">Seinen</div>
-                        
-                            <div class="f-genre-item " data-id="25">Shoujo</div>
-                        
-                            <div class="f-genre-item " data-id="26">Shoujo Ai</div>
-                        
-                            <div class="f-genre-item " data-id="27">Shounen</div>
-                        
-                            <div class="f-genre-item " data-id="28">Shounen Ai</div>
-                        
-                            <div class="f-genre-item " data-id="36">Slice of Life</div>
-                        
-                            <div class="f-genre-item " data-id="29">Space</div>
-                        
-                            <div class="f-genre-item " data-id="30">Sports</div>
-                        
-                            <div class="f-genre-item " data-id="31">Super Power</div>
-                        
-                            <div class="f-genre-item " data-id="37">Supernatural</div>
-                        
-                            <div class="f-genre-item " data-id="41">Thriller</div>
-                        
-                            <div class="f-genre-item " data-id="32">Vampire</div>
-                        
-                        <div></div>
+        // Add the genre item to the list
+        genreList.appendChild(genreItem);
+      });
+    } else {
+      console.error('Invalid API response');
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
+</script>
                         <div class="filter-button-con">
                             <button class="filter-button">
                                 Filter
@@ -253,116 +202,71 @@
                         </div>
                     </div>
         </form>
+                         
+
             </div>
         
         </section>
     </main>
-  
-                 <div id="selected-genres" class="genre-summary">Selected Genres: None</div>   
-        <div class="card-container">
-    <div class="card">
-        <div class="poster">
-            <img src="https://example.com/anime-poster.jpg" alt="Anime Name Poster" class="image" />
-            <a href="details.html?id=123" class="overlay">
-                <img src="play-button.png" alt="Play" class="play-button" />
-            </a>
-            <div class="info-left">
-                <div class="btn">SUB 12</div>
-            </div>
-            <div class="info-right">
-                <div class="btn-episode">Ep 12</div>
-            </div>
-        </div>
-        <div class="details">
-            <h3 class="name">Anime Name</h3>
-            <p class="jname">日本のアニメ名</p>
-        </div>
-    </div>
-</div>
-  <script>
-    function buildApiUrl() {
-      const baseUrl = "https://aniwatch-api-net.vercel.app/api/v2/hianime/search?q=";
-      const query = document.querySelector("#query").value || "";
-      const type = document.querySelector("#type").value !== "all" ? `&type=${document.querySelector("#type").value}` : "";
-      const status = document.querySelector("#status").value !== "all" ? `&status=${document.querySelector("#status").value}` : "";
-      const rated = document.querySelector("#Rated").value !== "all" ? `&rated=${document.querySelector("#Rated").value}` : "";
-      const season = document.querySelector("#Season").value !== "all" ? `&season=${document.querySelector("#Season").value.toLowerCase()}` : "";
-      const language = document.querySelector("#Language").value !== "all" ? `&language=${document.querySelector("#Language").value.toLowerCase()}` : "";
-      const score = document.querySelector("#Score").value !== "all" ? `&score=${document.querySelector("#Score").value}` : "";
-      
-      const genreElements = document.querySelectorAll(".f-genre-item.active");
-      const genres = Array.from(genreElements).map(el => el.dataset.id).join(",");
-      const genreParam = genres ? `&genres=${genres}` : "";
-
-      const startDate = `${document.querySelector(".start-year").value}-${document.querySelector(".document.querySelector(".start-day").value}`;
-      const startParam = startDate !== "Year-Month-Day" ? `&start_date=${startDate.replace(/Year|Month|Day/g, "0")}` : "";
-
-      const endDate = `${document.querySelector(".start-year-2").value}-${document.querySelector(".start-month-2").value}-${document.querySelector(".start-day-2").value}`;
-      const endParam = endDate !== "Year-Month-Day" ? `&end_date=${endDate.replace(/Year|Month|Day/g, "0")}` : "";
-
-      const sort = document.querySelector("#sort").value !== ">Default" ? `&sort=${document.querySelector("#sort").value.toLowerCase().replace(/ /g, "-")}` : "";
-
-      return `${baseUrl}${query}${type}${status}${rated}${season}${language}${score}${genreParam}${startParam}${endParam}${sort}`;
-    }
-
-    async function fetchAnimeResults() {
-      const apiUrl = buildApiUrl();
-      try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
         
-        if (data.success) {
-          displayAnimeResults(data.data.animes);
-        } else {
-          console.error("No results found");
-        }
-      } catch (error) {
-        console.error("Error fetching anime results:", error);
-      }
+                           <div id="selected-genres" class="genre-summary">Selected Genres: None</div>
+        <script>
+        const bars = document.querySelector('.bars');
+document.getElementById("closemenu").onclick = function(){
+    document.getElementById("menu").style.display = "none";
+}
+
+// Toggle menu and icon animation
+bars.onclick = function(){
+    document.getElementById("menu").style.display = "flex";
+}
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("menu").style.display = "none";
+});
+// Select all elements with the given class names
+const startYearSelects = document.querySelectorAll('.start-year, .start-year-2');
+startYearSelects.forEach(startYearSelect => {
+    for (let year = 2024; year >= 1917; year--) {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        startYearSelect.appendChild(option);
     }
-
-    function displayAnimeResults(animes) {
-      const container = document.getElementById("card-container");
-      container.innerHTML = "";
-      
-      animes.forEach(anime => {
-        const animeCard = document.createElement("div");
-        animeCard.classList.add("card");
-
-        animeCard.innerHTML = `
-          <div class="poster">
-            <img src="${anime.poster}" class="image" alt="${anime.name}">
-            <div class="overlay">
-              <button <i class="fas fa-play"></i>
-              </button>
-            </div>
-          </div>
-          <div class="details">
-            <p class="name">${anime.name}</p>
-            <div class="info-left">
-              <span class="btn">${anime.type}</span>
-              <span class="btn">${anime.rating}</span>
-            </div>
-            <div class="info-right">
-              <span class="btn-episode">Sub: ${anime.episodes.sub}</span>
-              <span class="btn-episode">Dub: ${anime.episodes.dub}</span>
-            </div>
-          </div>
-        `;
-        container.appendChild(animeCard);
-      });
+});
+// Month dropdown menu javascript for the filter search
+const startMonthSelects = document.querySelectorAll('.start-month, .start-month-2');
+const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+];
+startMonthSelects.forEach(startMonthSelect => {
+    for (let month = 0; month < months.length; month++) {
+        const option = document.createElement('option');
+        option.value = month + 1;  // Month as numeric value (1-12)
+        option.textContent = months[month]; // Month name as text
+        startMonthSelect.appendChild(option);
     }
+});
 
-    document.getElementById("filter-button").addEventListener("click", (event) => {
-      event.preventDefault();
-      fetchAnimeResults();
-    });
+const startDaySelects = document.querySelectorAll('.start-day, .start-day-2');
+const days = [
+    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21',
+    '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'
+];
+startDaySelects.forEach(startDaySelect => {
+    for (let day = 0; day < days.length; day++) {
+        const option = document.createElement('option');
+        option.value = days[day];  // Use the day directly
+        option.textContent = days[day]; // Display day as text
+        startDaySelect.appendChild(option);
+    }
+});
 
-    document.querySelectorAll(".f-genre-item").forEach(item => {
-      item.addEventListener("click", () => {
-        item.classList.toggle("active");
-      });
-    });
-  </script>
+
+     </script>
+   
+     <script src="https://kit.fontawesome.com/54a003e4f7.js" crossorigin="anonymous"></script>
+                        <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
 </body>
 </html>
