@@ -241,6 +241,7 @@ body, html {
     height: auto; /* Allows the height to adjust automatically based on content */
     top: auto; /* Removes any top alignment (if previously set) */
     translate: none; /* Removes translate positioning (if previously set) */
+    z-index: 2;
 }
 
 
