@@ -164,9 +164,9 @@
     <input type="hidden" id="genre-ids" name="genres" value="1">
     <!-- Genre items will be populated here dynamically -->
 </div>
-    <script>
+   <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const apiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/home';
+        const apiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/home'; // Ensure this is correct
         const selectedGenres = new Set();
         const genreList = document.getElementById('genre-list');
 
@@ -181,7 +181,7 @@
             .then(data => {
                 console.log("API Response:", data); // Log the API response for debugging
                 if (data.success && data.data && data.data.genres) {
-                    genres = data.data.genres; // Extract the genres array
+                    const genres = data.data.genres; // Extract the genres array
 
                     genres.forEach((genre) => {
                         const genreItem = document.createElement('div');
@@ -192,7 +192,7 @@
                         genreList.appendChild(genreItem);
                     });
 
-                    // Add click listeners after genres are loaded
+                    // Add click listeners after genre are loaded
                     addGenreClickListeners();
                 } else {
                     console.error('Invalid API response structure', data);
@@ -221,7 +221,7 @@
                 item.addEventListener('click', () => {
                     const genre = item.getAttribute('data-id');
 
-                    if (selected.has(genre)) {
+                    if (selectedGenres.has(genre)) {
                         selectedGenres.delete(genre);
                         item.classList.remove('selected');
                     } else {
@@ -236,8 +236,8 @@
 
         function updateUrlParams(genresSet) {
             const url = new URL(window.location.href);
-            if (genresSet.size > 0) {
-                url.searchParams.set('genre', Array.from(genresSet).join(','));
+            if (genresSet.si > 0) {
+                url.searchParams.set('genre', Array.from(genresSet).join(',')); // Use join ',' to separate
             } else {
                 url.searchParams.delete('genre');
             }
@@ -245,6 +245,7 @@
         }
     });
 </script>
+
                             
                         <div class="filter-button-con">
                             <button class="filter-button">
