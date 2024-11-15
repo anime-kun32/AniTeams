@@ -403,3 +403,9 @@ option {
 .filter-button:active{
     opacity: 0.4;
 }
+.f-genre-item.selected {
+    background-color: #e100ff; /* Persistent highlight color */
+    color: white; /* Ensure text remains visible */
+    border-color: #e100ff; /* Optional: Update border color */
+}
+
