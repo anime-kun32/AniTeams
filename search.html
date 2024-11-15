@@ -166,7 +166,7 @@
 </div>
    <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const apiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/home'; // Ensure this is correct
+        const apiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/home';
         const selectedGenres = new Set();
         const genreList = document.getElementById('genre-list');
 
@@ -179,18 +179,20 @@
                 return response.json();
             })
             .then(data => {
-                console.log("API Response:", data); // Log the API response for debugging
+                console.log("API Response:", data);
                 if (data.success && data.data && data.data.genres) {
-                    const genres = data.data.genres; // Extract the genres array
+                    const genres = data.data.genres;
 
                     genres.forEach((genre) => {
                         const genreItem = document.createElement('div');
                         genreItem.classList.add('f-genre-item');
                         genreItem.setAttribute('data-id', genre);
                         genreItem.textContent = genre;
-
                         genreList.appendChild(genreItem);
                     });
+
+                    // Load selected genres from URL on page load
+                    loadSelectedGenresFromUrl();
 
                     // Add click listeners after genre are loaded
                     addGenreClickListeners();
@@ -200,7 +202,6 @@
             })
             .catch(error => {
                 console.error('Error during fetch:', error);
-                // Optional fallback data for testing
                 console.log('Using fallback genres for testing');
                 const fallbackGenres = ['Action', 'Comedy', 'Drama', 'Fantasy'];
                 fallbackGenres.forEach((genre) => {
@@ -208,9 +209,11 @@
                     genreItem.classList.add('f-genre-item');
                     genreItem.setAttribute('data-id', genre);
                     genreItem.textContent = genre;
-
                     genreList.appendChild(genreItem);
                 });
+
+                // Load selected genres from URL on page load
+                loadSelectedGenresFromUrl();
 
                 addGenreClickListeners();
             });
@@ -232,16 +235,43 @@
                     updateUrlParams(selectedGenres);
                 });
             });
+
+        // Add click listener for the Filter button
+            const filterButton = document.querySelector('.filter-button');
+            filterButton.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent the default form submission
+                updateUrlParams(selectedGenres); // Ensure genres are updated in URL
+                // Optionally: Submit form or trigger search logic
+                // This can be adapted based on your specific needs
+            });
         }
 
         function updateUrlParams(genresSet) {
             const url = new URL(window.location.href);
-            if (genresSet.si > 0) {
-                url.searchParams.set('genre', Array.from(genresSet).join(',')); // Use join ',' to separate
+            if (genresSet.size > 0) {
+                url.searchParams.set('genres', Array.from(genresSet).join(',')); // Use join ',' to separate
             } else {
-                url.searchParams.delete('genre');
+                url.searchParams.delete('genres');
             }
             window.history.replaceState(null, '', url);
+        }
+
+        function loadSelectedGenresFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const genresFromUrl = urlParams.get('genres');
+
+            if (genresFromUrl) {
+                const genresArray = genresFromUrl.split(',');
+                genresArray.forEach(genre => {
+                    selectedGenres.add(genre.trim());
+
+                    // Highlight the genres in the UI
+                    const genreItem = Array.from(genreList.children).find(item => item.getAttribute('data-id') === genre.trim());
+                    if (genreItem) {
+                        genreItem.classList.add('selected');
+                    }
+                });
+            }
         }
     });
 </script>
