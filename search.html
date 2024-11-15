@@ -164,37 +164,77 @@
     <input type="hidden" id="genre-ids" name="genres" value="1">
     <!-- Genre items will be populated here dynamically -->
 </div>
-<script>// Define the API URL
-const apiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/home'; // Replace with your actual API URL
+                        <script>
+                            
+document.addEventListener("DOMContentLoaded", () => {
+    const apiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/home'; // Replace with your actual API URL
+    const selectedGenres = new Set(); // Track selected genres
+    const genreList = document.getElementById('genre-list'); // Genre list container
 
-// Fetch the genres data from the API
-fetch(apiUrl)
-  .then(response => response.json())
-  .then(data => {
-    if (data.success && data.data && data.data.genres) {
-      const genres = data.data.genres; // Extract the genres array
+    // Fetch genres from the API
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.data && data.data.genres) {
+                const genres = data.data.genres; // Extract the genres array
 
-      // Get the genre list container
-      const genreList = document.getElementById('genre-list');
+                // Populate genres dynamically
+                genres.forEach((genre) => {
+                    const genreItem = document.createElement('div');
+                    genreItem.classList.add('f-genre-item');
+                    genreItem.setAttribute('data-id', genre);
+                    genreItem Append the genre item to the list
+                    genreList.appendChild(genreItem);
+                });
 
-      // Loop through the genres and create genre items dynamically
-      genres.forEach((genre) => {
-        const genreItem = document.createElement('div');
-        genreItem.classList.add('f-genre-item');
-        genreItem.setAttribute('data-id', genre);
-        genreItem.textContent = genre;
+                // Apply event listeners to dynamically created items
+                addGenreClickListeners();
+            } else {
+                console.error('Invalid API response');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
 
-        // Add the genre item to the list
-        genreList.appendChild(genreItem);
-      });
-    } else {
-      console.error('Invalid API response');
+    // Function to add click listeners to genre items
+    function addGenreClickListeners() {
+        const genreItems = document.querySelectorAll('.f-genre-item');
+        genreItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const genre = item.getAttribute('data-id');
+
+                if (selectedGenres.has(genre)) {
+                    // Remove from selected genres and toggle class
+                    selectedGenres.delete(genre);
+                    item.classList.remove('selected');
+                } else {
+                    // Add to selected genres and toggle class
+                    selectedGenres.add(genre);
+                    item.classList.add('selected');
+                }
+
+                // Update the URL parameters
+                updateUrlParams(selectedGenres);
+            });
+        });
     }
-  })
-  .catch(error => {
-    console.error('Error fetching data:', error);
-  });
-</script>
+
+    // Function to update URL parameters
+    function updateUrlParams(genresSet) {
+        const url = new URL(window.location.href);
+        if (genresSet.size > 0) {
+            // Add genres as a comma-separated list
+            url.searchParams.set('genre', Array.from(genresSet).join(','));
+        } else {
+            // Remove the genre parameter if no genres are selected
+            url.searchParams.delete('genre');
+        }
+        window.history.replaceState(null, '', url);
+    }
+});
+                        </script>
+                            
                         <div class="filter-button-con">
                             <button class="filter-button">
                                 Filter
@@ -265,42 +305,7 @@ startDaySelects.forEach(startDaySelect => {
 
      </script>
         
-   <script>
-      document.addEventListener("DOMContentLoaded", () => {
-    const genreItems = document.querySelectorAll(".f-genre-item");
-    const selectedGenres = new Set();
-
-    genreItems.forEach(item => {
-        item.addEventListener("click", () => {
-            const genre = item.getAttribute("data-id");
-
-            if (selectedGenres.has(genre)) {
-                // Remove the genre from the set and remove the selected class
-                selectedGenres.delete(genre);
-                item.classList.remove("selected");
-            } else {
-                // Add the genre to the set and add the selected class
-                selectedGenres.add(genre);
-                item.classList.add("selected");
-            }
-
-            // Update the URL parameters
-            updateUrlParams(selectedGenres);
-        });
-    });
-
-Params(genresSet) {
-        const url = new URL(window.location.href);
-        if (genresSet.size > 0) {
-            url.searchParams.set("genre", Array.from(genresSet).join(","));
-        } else {
-            url.searchParams.delete("genre");
-        }
-        window.history.replaceState(null, "", url);
-    }
-});
-
-</script>
+  
      <script src="https://kit.fontawesome.com/54a003e4f7.js" crossorigin="anonymous"></script>
                         <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
