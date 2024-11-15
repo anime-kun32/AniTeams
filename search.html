@@ -266,7 +266,7 @@ startDaySelects.forEach(startDaySelect => {
      </script>
         
    <script>
-       document.addEventListener("DOMContentLoaded", () => {
+      document.addEventListener("DOMContentLoaded", () => {
     const genreItems = document.querySelectorAll(".f-genre-item");
     const selectedGenres = new Set();
 
@@ -275,15 +275,13 @@ startDaySelects.forEach(startDaySelect => {
             const genre = item.getAttribute("data-id");
 
             if (selectedGenres.has(genre)) {
-                // Remove genre from the set and reset styling
+                // Remove the genre from the set and remove the selected class
                 selectedGenres.delete(genre);
-                item.style.backgroundColor = ""; // Reset to default
-                item.style.color = ""; // Reset text color
+                item.classList.remove("selected");
             } else {
-                // Add genre to the set and update styling
+                // Add the genre to the set and add the selected class
                 selectedGenres.add(genre);
-                item.style.backgroundColor = "#e100ff"; // Highlight selected
-                item.style.color = "white"; // Ensure text is visible
+                item.classList.add("selected");
             }
 
             // Update the URL parameters
@@ -291,7 +289,7 @@ startDaySelects.forEach(startDaySelect => {
         });
     });
 
-    function updateUrlParams(genresSet) {
+Params(genresSet) {
         const url = new URL(window.location.href);
         if (genresSet.size > 0) {
             url.searchParams.set("genre", Array.from(genresSet).join(","));
@@ -301,6 +299,7 @@ startDaySelects.forEach(startDaySelect => {
         window.history.replaceState(null, "", url);
     }
 });
+
 </script>
      <script src="https://kit.fontawesome.com/54a003e4f7.js" crossorigin="anonymous"></script>
                         <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
