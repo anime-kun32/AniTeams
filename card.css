@@ -1,8 +1,8 @@
 .card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-top: 20px; /* Adjust as needed for spacing */
+    margin-top: 20px; /* Add separation from the filter */
+    display: flex; /* Keep flex layout for cards */
+    flex-wrap: wrap; /* Ensure cards wrap respons-content: flex-start; /* Align cards to the left */
+    position: relative; /* Prevent overlap or positioning issues */
 }
 .card {
     width: calc(16.66% - 14px);
