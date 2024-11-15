@@ -359,9 +359,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             
                         <div class="filter-button-con">
-                            <button class="filter-button" onclick="onFetchAnimeButtonClick()">
-                                Filter
-                            </button>
+                           button class="filter-button" onclick="onFetchAnimeButtonClick(event)">
+    Filter
+</button>
+
+<script>
+function onFetchAnimeButtonClick(event) {
+    // Prevent the default action
+    event.preventDefault();
+
+    console.log("Fetch anime button clicked");
+}
+</script>
                         </div>
                     </div>
         </form>
