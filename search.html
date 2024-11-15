@@ -22,27 +22,7 @@
              <a class="nav-links" href="">Dubbed Anime</a>
              <button class="login">Login</button>
          </div>
-<script>
-  document.getElementById('search-bar').addEventListener('keypress', function(event) {
-            // Check if the Enter key is pressed
-            if (event.key === 'Enter') {
-                // Get the current value of the search input
-                const query = encodeURIComponent(this.value);
-                
-                // Create a new URL object based on the current URL
-                const url = new URL(window.location.href);
-                
-                // Update or add the query parameter
-                url.searchParams.set('query', query);
-                
-                // Update the URL without reloading the page
-                window.history.pushState({ path: url.href }, '', url.href);
-                
-                // Optionally clear the search bar
-                // this.value = '';
-            }
-        });
-</script>
+
 
          <div class="menu" id="menu">
             <ul class="sidebar">
@@ -354,63 +334,45 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 </script>
-
-                            
-                        <div class="filter-button-con">
-                            
-                           <button type="button" class="filter-button" onclick="onFetchAnimeButtonClick()">
-    Filter
-</button>
-                            
-<div class="new-filter-container">
-    <button type="button" class="new-filter-button" onclick="onFetchAnimeButtonClick()">Get results</button>
+<div class="filter-button-con">
+    <button type="button" class="filter-button" onclick="onFilterButtonClick()">Filter</button>
 </div>
                             
-                            
-   <style>
-       .new-filter-container {
-    display: inline-flex;
-}
-.new-filter-button {
-    padding: 15px 15px 15px 15px;
-    border-radius: 6px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    border: none;
-    background-color: #3c3b51;
-    color: white;
-    font-size: 15px;
-    top: -10px;
-    margin-right: 50em;
-    cursor: pointer;
-}
-.new-filter-button::after {
-    content: "";
-    border: none;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(to bottom right, rgb(126, 27, 218), #e100ff);
-    border-radius: 6px;
-    z-index: -1;
-}
-.new-filter-button:hover {
-    z-index: 0;
-}
-.new-filter-button:active {
-    opacity: 0.4;
-}
-   </style>                         
-<script>
-function onFetchAnimeButtonClick(event) {
-    // Prevent the default action
-    event.preventDefault();
+            <script>document.getElementById('search-bar').addEventListener('keypress', function(event) {
+    // Check if the Enter key is pressed
+    if (event.key === 'Enter') {
+        updateQueryParam(this.value); // Update the query parameter in the URL
+    }
+});
 
-    console.log("Fetch anime button clicked");
+function updateQueryParam(query) {
+    // Get the current value of the search input
+    const encodedQuery = encodeURIComponent(query);
+    
+    // Create a new URL object based on the current URL
+    const url = new URL(window.location.href);
+    
+    // Update or add the query parameter
+    url.searchParams.set('query', encodedQuery);
+    
+    // Update the URL without reloading the page
+    window.history.pushState({ path: url.href }, '', url.href);
 }
-</script>
+
+function onFilterButtonClick() {
+    // Get the value from the search bar
+    const searchBar = document.getElementById('search-bar');
+    if (searchBar) {
+        updateQueryParam(searchBar.value); // Update the query parameter
+    }
+
+    // Call the existing script
+    onFetchAnimeButtonClick();
+}
+</script>                
+                            
+                                                 
+
                         </div>
                     </div>
         </form>
