@@ -164,26 +164,46 @@
     <input type="hidden" id="genre-ids" name="genres" value="1">
     <!-- Genre items will be populated here dynamically -->
 </div>
-                        <script>
-                            
-document.addEventListener("DOMContentLoaded", () =>https://aniwatch-api-net.vercel.app/api/v2/hianime/home'; // Ensure this is correct
-    const selectedGenres = new Set();
-    const genreList = document.getElementById('genre-list');
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const apiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/home';
+        const selectedGenres = new Set();
+        const genreList = document.getElementById('genre-list');
 
-    // Fetch genres from the API
-    fetch(apiUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("API Response:", data); // Log the API response for debugging
-            if (data.success && data.data && data.data.genres) {
-                const genres = data.data.genres; // Extract the genres array
+        // Fetch genres from the API
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("API Response:", data); // Log the API response for debugging
+                if (data.success && data.data && data.data.genres) {
+                    genres = data.data.genres; // Extract the genres array
 
-                genres.forEach((genre) => {
+                    genres.forEach((genre) => {
+                        const genreItem = document.createElement('div');
+                        genreItem.classList.add('f-genre-item');
+                        genreItem.setAttribute('data-id', genre);
+                        genreItem.textContent = genre;
+
+                        genreList.appendChild(genreItem);
+                    });
+
+                    // Add click listeners after genres are loaded
+                    addGenreClickListeners();
+                } else {
+                    console.error('Invalid API response structure', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error during fetch:', error);
+                // Optional fallback data for testing
+                console.log('Using fallback genres for testing');
+                const fallbackGenres = ['Action', 'Comedy', 'Drama', 'Fantasy'];
+                fallbackGenres.forEach((genre) => {
                     const genreItem = document.createElement('div');
                     genreItem.classList.add('f-genre-item');
                     genreItem.setAttribute('data-id', genre);
@@ -192,58 +212,39 @@ document.addEventListener("DOMContentLoaded", () =>https://aniwatch-api-net.verc
                     genreList.appendChild(genreItem);
                 });
 
-                // Add click listeners after genres are loaded
                 addGenreClickListeners();
-            } else {
-                console.error('Invalid API response structure', data);
-            }
-        })
-        .catch(error => {
-            console.error('Error during fetch:', error);
-            // Optional fallback data for testing
-            console.log('Using fallback genres for testing');
-            const fallbackGenres = ['Action', 'Comedy', 'Drama', 'Fantasy'];
-            fallbackGenres.forEach((genre) => {
-                const genreItem = document.createElement('div');
-                genreItem.classList.add('f-genre-item');
-                genreItem.setAttribute                genreItem.textContent = genre;
-
-                genreList.appendChild(genreItem);
             });
 
-            addGenreClickListeners();
-        });
+        function addGenreClickListeners() {
+            const genreItems = document.querySelectorAll('.f-genre-item');
+            genreItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const genre = item.getAttribute('data-id');
 
-    function addGenreClickListeners() {
-        const genreItems = document.querySelectorAll('.f-genre-item');
-        genreItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const genre = item.getAttribute('data-id');
+                    if (selected.has(genre)) {
+                        selectedGenres.delete(genre);
+                        item.classList.remove('selected');
+                    } else {
+                        selectedGenres.add(genre);
+                        item.classList.add('selected');
+                    }
 
-                if (selectedGenres.has(genre)) {
-                    selectedGenres.delete(genre);
-                    item.classList.remove('selected');
-                } else {
-                    selectedGenres.add(genre);
-                    item.classList.add('selected');
-                }
-
-                updateUrlParams(selectedGenres);
+                    updateUrlParams(selectedGenres);
+                });
             });
-        });
-    }
-
-    function updateUrlParams(genresSet) {
-        const url = new URL(window.location.href);
-        if (genresSet.size > 0) {
-            url.searchParams.set('genre', Array.from(genresSet).join(','));
-        } else {
-            url.searchParams.delete('genre');
         }
-        window.history.replaceState(null, '', url);
-    }
-});
-      </script>
+
+        function updateUrlParams(genresSet) {
+            const url = new URL(window.location.href);
+            if (genresSet.size > 0) {
+                url.searchParams.set('genre', Array.from(genresSet).join(','));
+            } else {
+                url.searchParams.delete('genre');
+            }
+            window.history.replaceState(null, '', url);
+        }
+    });
+</script>
                             
                         <div class="filter-button-con">
                             <button class="filter-button">
