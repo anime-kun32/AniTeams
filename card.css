@@ -3,7 +3,10 @@
     display: flex; /* Keep flex layout for cards */
     flex-wrap: wrap; /* Ensure cards wrap respons-content: flex-start; /* Align cards to the left */
     position: relative; /* Prevent overlap or positioning issues */
+    z-index: 1;
 }
+
+
 .card {
     width: calc(16.66% - 14px);
     margin: 0 7px 14px;
