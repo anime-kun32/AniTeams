@@ -40,7 +40,7 @@
      <main>
         <section> <!-- Filter box Sectiom-->
             <div class="category-filter">
-                <form method="get" id="filter-form"> <!--Used method "get" and ID so u can add javascript-->
+                <form method="get" id="filter-form"> 
                     <input type="hidden" name="keyword" value="">
                     
                     <div>
@@ -349,26 +349,92 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         
         </section>
-         
-        <div class="card-container">
-    <div class="card">
-        <div class="poster">
-            <img src="https://example.com/poster1.jpg" alt="Attack on Titan Poster" class="image" />
-            <a href="details.html?id=101" class="overlay">
-                <img src="play-button.png" alt="Play" class="play-button" />
-            </a>
-            <div class="info-left">
-                <div class="btn">SUB 87</div>
-            </div>
-            <div class="info-right">
-                <div class="btn-episode">Ep 87</div>
-            </div>
-        </div>
-        <div class="details">
-            <h3 class="name">Attack on Titan</h3>
-            <p class="jname">進撃の巨人</p>
-        </div>
-    </div>
+       <div id="loader" class="loading">Loading</div>
+    <div id="anime-list" class="card-container"></div>
+<!------ styles for the loading animations -------!> 
+         <style>  
+         .loading {
+            font-size: 1.5em;
+            animation: dots 1s steps(5, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            20% { content: '.'; }
+            40% { content: '..'; }
+            60% { content: '...'; }
+            80%, 100% { content: ''; }
+        }</style>
+    <script>
+        apiUrl = "https://aniwatch-api-net.vercel.app/api/v2/hianime/search";
+
+        const fetchParamsFromUrl = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            return {
+                query: urlParams.get('query') || '',
+                page: urlParams.get('page') || 1,
+                genres: urlParams.get('genres') || '',
+                type: urlParams.get('type') || '',
+                sort: urlParams.get('sort') || '',
+                season: urlParams.get('season') || '',
+                sub_or_dub: urlParams.get('language') || 'sub',
+                status: urlParams.get('status') || '',
+                rating: urlParams.get('rated') || '',
+                score: urlParams.get('score') || '',
+                start_date: `${urlParams.get('start-date-year')}-${urlParams.get('start-date-month')}-${urlParams.get('start-date-day')}`
+            };
+        }
+
+        const fetchAnimeData = async () => {
+            const params = fetchParamsFromUrl();
+            const url = `${apiUrl}?q=${params.query}&page=${params.page}&genres=${params.genres}&type=${params.type}&sort=${params.sort}&season=${params.season}&language=${params.sub_or_dub}&status=${params.status}&rated=${params.rating}&score=${params.score}&start_date=${params.start_date}`;
+            
+            const loader = document.getElementById('loader');
+            const animeList = document.getElementById('anime-list');
+            loader.style.display = 'block';
+            animeList.innerHTML = ''; // Clear previous results
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                loader.style.display = 'none';
+
+                if (data.success && data.data.animes.length > 0) {
+                    data.data.animes.forEach(anime => {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+                        card.innerHTML = `
+                            <div class="poster">
+                                <img src="${anime.poster}" alt="${anime.name} Poster" class="image" />
+                                <a href="details.html?id=${anime.id}" class="overlay">
+                                    <img src="play-button.png" alt="Play" class="play-button" />
+                                </a>
+                                <div class="info-left">
+                                    <div class="btn">SUB ${anime.episodes.sub}</div>
+                                </div>
+                                <div class="info-right">
+                                    <div class="btn-episode">DUB ${anime.episodes.dub}</div>
+                                </div>
+                            </div>
+                            <div class="details">
+                                <h3 class="name">${anime.name}</h3>
+                                <p class="jname">${anime.jname}</p>
+                            </div>
+                        `;
+                        animeList.appendChild(card);
+                    });
+                } else {
+                    animeList.innerHTML = '<p>No results found.</p>';
+                }
+            } catch (error) {
+ loader.style.display = 'none';
+                animeList.innerHTML = '<p>Error fetching data.</p>';
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Call the fetch function when the page loads
+        window.onload = fetchAnimeData;
+    </script>
 </div>
     </main>
         
