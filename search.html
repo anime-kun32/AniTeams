@@ -209,7 +209,7 @@ fetch(apiUrl)
         </section>
     </main>
         
-                           <div id="selected-genres" class="genre-summary">Selected Genres: None</div>
+                      
         <script>
         const bars = document.querySelector('.bars');
 document.getElementById("closemenu").onclick = function(){
@@ -264,7 +264,44 @@ startDaySelects.forEach(startDaySelect => {
 
 
      </script>
-   
+        
+   <script>
+       document.addEventListener("DOMContentLoaded", () => {
+    const genreItems = document.querySelectorAll(".f-genre-item");
+    const selectedGenres = new Set();
+
+    genreItems.forEach(item => {
+        item.addEventListener("click", () => {
+            const genre = item.getAttribute("data-id");
+
+            if (selectedGenres.has(genre)) {
+                // Remove genre from the set and reset styling
+                selectedGenres.delete(genre);
+                item.style.backgroundColor = ""; // Reset to default
+                item.style.color = ""; // Reset text color
+            } else {
+                // Add genre to the set and update styling
+                selectedGenres.add(genre);
+                item.style.backgroundColor = "#e100ff"; // Highlight selected
+                item.style.color = "white"; // Ensure text is visible
+            }
+
+            // Update the URL parameters
+            updateUrlParams(selectedGenres);
+        });
+    });
+
+    function updateUrlParams(genresSet) {
+        const url = new URL(window.location.href);
+        if (genresSet.size > 0) {
+            url.searchParams.set("genre", Array.from(genresSet).join(","));
+        } else {
+            url.searchParams.delete("genre");
+        }
+        window.history.replaceState(null, "", url);
+    }
+});
+</script>
      <script src="https://kit.fontawesome.com/54a003e4f7.js" crossorigin="anonymous"></script>
                         <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
