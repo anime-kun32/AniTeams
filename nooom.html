@@ -45,6 +45,14 @@
       <!-- Episodes -->
       <div class="flex-none w-full sm:w-1/3 lg:w-1/4 bg-gray-800 rounded shadow p-4" id="episodes">
         <h2 class="text-lg font-semibold mb-4 text-white">Episodes</h2>
+
+        <!-- Episode Range Dropdown -->
+        <div class="mb-4">
+          <select id="episode-range" class="bg-gray-700 text-white px-4 py-2 rounded" onchange="loadEpisodeRange()">
+            <!-- Options will be dynamically added -->
+          </select>
+        </div>
+
         <div id="episode-list" class="grid grid-cols-2 md:grid-cols-1 gap-2">
           <!-- Episodes will be populated here dynamically -->
         </div>
@@ -96,24 +104,59 @@
       const data = await response.json();
       
       const episodeList = document.getElementById('episode-list');
+      const episodeRangeDropdown = document.getElementById('episode-range');
       episodeList.innerHTML = ''; // Clear previous episodes
-      data.data.episodes.forEach(episode => {
-        const episodeElement = document.createElement('div');
-        episodeElement.classList.add('bg-gray-700', 'p-2', 'rounded', 'text-center', 'cursor-pointer', 'hover:bg-gray-600');
-        episodeElement.textContent = `Ep ${episode.number}: ${episode.title}`;
-        
-        if (epParam === episode.episodeId) {
-          episodeElement.classList.add('active');
+
+      // Create the episode range dropdown if more than 20 episodes exist
+      if (data.data.totalEpisodes > 20) {
+        let options = '';
+        let rangeStart = 1;
+        while (rangeStart <= data.data.totalEpisodes) {
+          const rangeEnd = Math.min(rangeStart + 19, data.data.totalEpisodes);
+          options += `<option value="${rangeStart}-${rangeEnd}">Episodes ${rangeStart} - ${rangeEnd}</option>`;
+          rangeStart += 20;
         }
+        episodeRangeDropdown.innerHTML = options;
+        episodeRangeDropdown.classList.remove('hidden');
+      } else {
+        episodeRangeDropdown.classList.add('hidden'); // Hide if less than 20 episodes
+      }
 
-        episodeElement.onclick = () => {
-          updateURLParameter('ep', episode.episodeId);  // Update URL with the episode ID
-          fetchServers(episode.episodeId);  // Fetch server info for the selected episode
-          episodeElement.classList.add('active');  // Mark as active
-        };
+      // Load initial episodes
+      loadEpisodeRange();
+    }
 
-        episodeList.appendChild(episodeElement);
-      });
+    // Load episodes based on the selected range
+    function loadEpisodeRange() {
+      const animeId = getAnimeIdFromUrl();
+      const range = document.getElementById('episode-range').value;
+      const [start, end] = range.split('-').map(Number);
+      
+      fetch(`https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}/episodes?start=${start}&end=${end}`)
+        .then(response => response.json())
+        .then(data => {
+          const episodeList = document.getElementById('episode-list');
+          episodeList.innerHTML = '';
+          
+          data.data.episodes.forEach(episode => {
+            const episodeElement = document.createElement('div');
+            episodeElement.classList.add('bg-gray-700', 'p-2', 'rounded', 'text-center', 'cursor-pointer', 'hover:bg-gray-600');
+            episodeElement.textContent = `Ep ${episode.number}: ${episode.title}`;
+            
+            const epParam = new URLSearchParams(window.location.search).get('ep');
+            if (epParam === episode.episodeId) {
+              episodeElement.classList.add('active');
+            }
+
+            episodeElement.onclick = () => {
+              updateURLParameter('ep', episode.episodeId);  // Update URL with the episode ID
+              fetchServers(episode.episodeId);  // Fetch server info for the selected episode
+              episodeElement.classList.add('active');  // Mark as active
+            };
+
+            episodeList.appendChild(episodeElement);
+          });
+        });
     }
 
     // Fetch server data from API based on episode
@@ -164,7 +207,7 @@
         serverButton.onclick = () => {
           document.querySelectorAll('#dub-servers button').forEach(btn => btn.classList.remove('active'));
           serverButton.classList.add('active');
-          updateURLParameter('server', server.serverId); // Update the server in the URL
+          updateURLParameter('server', server.serverName); // Update the server in the URL
         };
 
         dubServersContainer.appendChild(serverButton);
