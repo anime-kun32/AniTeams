@@ -122,7 +122,7 @@
         episodeRangeDropdown.classList.add('hidden'); // Hide if less than 5 episodes
       }
 
-      // Load initial episodes
+      // Load initial episodes based on default range
       loadEpisodeRange();
     }
 
@@ -132,6 +132,7 @@
       const range = document.getElementById('episode-range').value;
       const [start, end] = range.split('-').map(Number);
       
+      // Fetch only the episodes for the selected range
       fetch(`https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}/episodes?start=${start}&end=${end}`)
         .then(response => response.json())
         .then(data => {
@@ -184,6 +185,7 @@
         }
 
         serverButton.onclick = () => {
+          // Deactivate all other server buttons in sub section
           document.querySelectorAll('#sub-servers button').forEach(btn => btn.classList.remove('active'));
           serverButton.classList.add('active');
           updateURLParameter('server', server.serverId); // Update the server in the URL
@@ -206,6 +208,7 @@
         }
 
         serverButton.onclick = () => {
+          // Deactivate all other server buttons in dub section
           document.querySelectorAll('#dub-servers button').forEach(btn => btn.classList.remove('active'));
           serverButton.classList.add('active');
           updateURLParameter('server', server.serverId); // Update the server in the URL
