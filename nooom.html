@@ -133,13 +133,19 @@
       const [start, end] = range.split('-').map(Number);
       
       // Fetch only the episodes for the selected range
-      fetch(`https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}/episodes?start=${start}&end=${end}`)
+      fetch(`https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}/episodes`)
         .then(response => response.json())
         .then(data => {
           const episodeList = document.getElementById('episode-list');
           episodeList.innerHTML = '';  // Clear previous episodes
-          
-          data.data.episodes.forEach(episode => {
+
+          // Filter episodes within the selected range
+          const filteredEpisodes = data.data.episodes.filter(episode => 
+            episode.number >= start && episode.number <= end
+          );
+
+          // Display episodes in the selected range
+          filteredEpisodes.forEach(episode => {
             const episodeElement = document.createElement('div');
             episodeElement.classList.add('bg-gray-700', 'p-2', 'rounded', 'text-center', 'cursor-pointer', 'hover:bg-gray-600');
             episodeElement.textContent = `Ep ${episode.number}: ${episode.title}`;
@@ -227,12 +233,7 @@
 
     // Initialize page based on URL params
     function initPage() {
-      const epParam = new URLSearchParams(window.location.search).get('ep');
-      if (epParam) {
-        fetchServers(epParam);  // Fetch server info if episode ID is present
-      }
-
-      fetchEpisodes();  // Load episodes
+      fetchEpisodes();  // Load episodes initially
     }
 
     window.onload = initPage;
