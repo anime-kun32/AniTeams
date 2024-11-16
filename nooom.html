@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Anime Watching Page</title>
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Custom dark theme and button hover effect */
@@ -31,7 +30,6 @@
   </style>
 </head>
 <body class="font-sans">
-  <!-- Header -->
   <header class="bg-gray-800 py-4 px-6">
     <h1 class="text-2xl font-bold text-white">Anime Stream</h1>
   </header>
@@ -91,11 +89,10 @@
 
     // Fetch episode data from API
     async function fetchEpisodes() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const episodeId = urlParams.get('ep');
       const animeId = getAnimeIdFromUrl(); // Fetch animeId from the URL
+      const epParam = new URLSearchParams(window.location.search).get('ep');
       
-      const response = await fetch(`https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}`);
+      const response = await fetch(`https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}/episodes`);
       const data = await response.json();
       
       const episodeList = document.getElementById('episode-list');
@@ -105,14 +102,14 @@
         episodeElement.classList.add('bg-gray-700', 'p-2', 'rounded', 'text-center', 'cursor-pointer', 'hover:bg-gray-600');
         episodeElement.textContent = `Ep ${episode.number}: ${episode.title}`;
         
-        if (episodeId === episode.episodeId) {
+        if (epParam === episode.episodeId) {
           episodeElement.classList.add('active');
         }
 
         episodeElement.onclick = () => {
-          updateURLParameter('ep', episode.episodeId);
-          fetchServers(episode.episodeId); // Fetch servers when episode is clicked
-          episodeElement.classList.add('active');
+          updateURLParameter('ep', episode.episodeId);  // Update URL with the episode ID
+          fetchServers(episode.episodeId);  // Fetch server info for the selected episode
+          episodeElement.classList.add('active');  // Mark as active
         };
 
         episodeList.appendChild(episodeElement);
@@ -122,7 +119,7 @@
     // Fetch server data from API based on episode
     async function fetchServers(episodeId) {
       const animeId = getAnimeIdFromUrl(); // Fetch animeId from the URL
-      const response = await fetch(`https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/servers?animeEpisodeId${episodeId}`);
+      const response = await fetch(`https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/servers?animeEpisodeId=${episodeId}`);
       const data = await response.json();
       
       const subServersContainer = document.getElementById('sub-servers');
@@ -131,10 +128,17 @@
       subServersContainer.innerHTML = '';
       dubServersContainer.innerHTML = '';
 
+      // Populate Sub servers
       data.data.sub.forEach(server => {
         const serverButton = document.createElement('button');
         serverButton.classList.add('px-4', 'py-2', 'rounded', 'button-style');
         serverButton.textContent = server.serverName;
+
+        // Highlight active server
+        const currentServer = new URLSearchParams(window.location.search).get('server');
+        if (currentServer && currentServer == server.serverId) {
+          serverButton.classList.add('active');
+        }
 
         serverButton.onclick = () => {
           document.querySelectorAll('#sub-servers button').forEach(btn => btn.classList.remove('active'));
@@ -145,10 +149,17 @@
         subServersContainer.appendChild(serverButton);
       });
 
+      // Populate Dub servers
       data.data.dub.forEach(server => {
         const serverButton = document.createElement('button');
         serverButton.classList.add('px-4', 'py-2', 'rounded', 'button-style');
         serverButton.textContent = server.serverName;
+
+        // Highlight active server
+        const currentServer = new URLSearchParams(window.location.search).get('server');
+        if (currentServer && currentServer == server.serverId) {
+          serverButton.classList.add('active');
+        }
 
         serverButton.onclick = () => {
           document.querySelectorAll('#dub-servers button').forEach(btn => btn.classList.remove('active'));
@@ -160,24 +171,20 @@
       });
     }
 
-    // Function to get the animeId from the URL (assuming it's in the path)
+    // Function to get the animeId from the URL query string
     function getAnimeIdFromUrl() {
-      const pathSegments = window.location.pathname.split('/');
-      // Assuming the animeId is the second segment (e.g., /anime/steinsgate-3)
-      return pathSegments[2];
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('id');  // Get the animeId from the 'id' query param
     }
 
     // Initialize page based on URL params
     function initPage() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const episodeId = urlParams.get('ep');
-      const serverId = urlParams.get('server');
-
-      if (episodeId) {
-        fetchServers(episodeId); // Fetch servers for the episode from URL
+      const epParam = new URLSearchParams(window.location.search).get('ep');
+      if (epParam) {
+        fetchServers(epParam);  // Fetch server info if episode ID is present
       }
 
-      fetchEpisodes(); // Load episodes based on the URL
+      fetchEpisodes();  // Load episodes
     }
 
     window.onload = initPage;
