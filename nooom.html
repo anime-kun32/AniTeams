@@ -107,19 +107,19 @@
       const episodeRangeDropdown = document.getElementById('episode-range');
       episodeList.innerHTML = ''; // Clear previous episodes
 
-      // Create the episode range dropdown if more than 20 episodes exist
-      if (data.data.totalEpisodes > 20) {
+      // Create the episode range dropdown if more than 5 episodes exist
+      if (data.data.totalEpisodes > 5) {
         let options = '';
         let rangeStart = 1;
         while (rangeStart <= data.data.totalEpisodes) {
-          const rangeEnd = Math.min(rangeStart + 19, data.data.totalEpisodes);
+          const rangeEnd = Math.min(rangeStart + 4, data.data.totalEpisodes); // 5 episodes per range
           options += `<option value="${rangeStart}-${rangeEnd}">Episodes ${rangeStart} - ${rangeEnd}</option>`;
-          rangeStart += 20;
+          rangeStart += 5;
         }
         episodeRangeDropdown.innerHTML = options;
         episodeRangeDropdown.classList.remove('hidden');
       } else {
-        episodeRangeDropdown.classList.add('hidden'); // Hide if less than 20 episodes
+        episodeRangeDropdown.classList.add('hidden'); // Hide if less than 5 episodes
       }
 
       // Load initial episodes
@@ -136,7 +136,7 @@
         .then(response => response.json())
         .then(data => {
           const episodeList = document.getElementById('episode-list');
-          episodeList.innerHTML = '';
+          episodeList.innerHTML = '';  // Clear previous episodes
           
           data.data.episodes.forEach(episode => {
             const episodeElement = document.createElement('div');
@@ -187,6 +187,7 @@
           document.querySelectorAll('#sub-servers button').forEach(btn => btn.classList.remove('active'));
           serverButton.classList.add('active');
           updateURLParameter('server', server.serverId); // Update the server in the URL
+          updateURLParameter('category', 'sub'); // Add 'category=sub' to the URL
         };
 
         subServersContainer.appendChild(serverButton);
@@ -207,7 +208,8 @@
         serverButton.onclick = () => {
           document.querySelectorAll('#dub-servers button').forEach(btn => btn.classList.remove('active'));
           serverButton.classList.add('active');
-          updateURLParameter('server', server.serverName); // Update the server in the URL
+          updateURLParameter('server', server.serverId); // Update the server in the URL
+          updateURLParameter('category', 'dub'); // Add 'category=dub' to the URL
         };
 
         dubServersContainer.appendChild(serverButton);
