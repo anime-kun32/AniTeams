@@ -45,6 +45,14 @@
       <!-- Episodes -->
       <div class="flex-none w-full sm:w-1/3 lg:w-1/4 bg-gray-800 rounded shadow p-4" id="episodes">
         <h2 class="text-lg font-semibold mb-4 text-white">Episodes</h2>
+        
+        <!-- Episode Range Dropdown -->
+        <div class="mb-4">
+          <select id="episode-range" class="bg-gray-700 text-white px-4 py-2 rounded" onchange="loadEpisodeRange()">
+            <!-- Options will be dynamically added -->
+          </select>
+        </div>
+
         <div id="episode-list" class="grid grid-cols-2 md:grid-cols-1 gap-2">
           <!-- Episodes will be populated here dynamically -->
         </div>
@@ -80,10 +88,25 @@
   </main>
 
   <script>
-    // Utility function to update the URL parameter
-    function updateURLParameter(param, value) {
+    // Utility function to update the URL parameters
+    function updateURLParameters(param, value) {
       const url = new URL(window.location);
-      url.searchParams.set(param, value);
+      let currentParams = new URLSearchParams(url.search);
+
+      currentParams.set(param, value);
+      
+      // Handle multiple `ep` parameters
+      if (param === 'ep') {
+        const existingEpParams = currentParams.getAll('ep');
+        // Remove previous `ep` values that match
+        existingEpParams.forEach(ep => {
+          if (ep.includes(value.split('?')[0])) {
+            currentParams.delete('ep', ep);
+          }
+        });
+      }
+
+      url.search = currentParams.toString();
       window.history.pushState({}, '', url);
     }
 
@@ -91,30 +114,72 @@
     async function fetchEpisodes() {
       const animeId = getAnimeIdFromUrl(); // Fetch animeId from the URL
       const epParam = new URLSearchParams(window.location.search).get('ep');
-      
+
       const response = await fetch(`https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}/episodes`);
       const data = await response.json();
-      
+
       const episodeList = document.getElementById('episode-list');
+      const episodeRangeDropdown = document.getElementById('episode-range');
+
       episodeList.innerHTML = ''; // Clear previous episodes
-      data.data.episodes.forEach(episode => {
-        const episodeElement = document.createElement('div');
-        episodeElement.classList.add('bg-gray-700', 'p-2', 'rounded', 'text-center', 'cursor-pointer', 'hover:bg-gray-600');
-        episodeElement.textContent = `Ep ${episode.number}: ${episode.title}`;
-        
-        // Check if episode is active based on URL params
-        if (epParam === encodeURIComponent(episode.episodeId)) {
-          episodeElement.classList.add('active');
+      let options = '';
+      
+      // Create the episode range dropdown if more than 5 episodes exist
+      if (data.data.totalEpisodes > 5) {
+        let rangeStart = 1;
+        while (rangeStart <= data.data.totalEpisodes) {
+          const rangeEnd = Math.min(rangeStart + 4, data.data.totalEpisodes); // 5 episodes per range
+          options += `<option value="${rangeStart}-${rangeEnd}">Episodes ${rangeStart} - ${rangeEnd}</option>`;
+          rangeStart += 5;
         }
+        episodeRangeDropdown.innerHTML = options;
+        episodeRangeDropdown.classList.remove('hidden');
+      } else {
+        episodeRangeDropdown.classList.add('hidden'); // Hide if less than 5 episodes
+      }
 
-        episodeElement.onclick = () => {
-          updateURLParameter('ep', encodeURIComponent(episode.episodeId));  // Update URL with the episode ID
-          fetchServers(encodeURIComponent(episode.episodeId));  // Fetch server info for the selected episode
-          episodeElement.classList.add('active');  // Mark as active
-        };
+      // Load initial episodes based on default range
+      loadEpisodeRange();
+    }
 
-        episodeList.appendChild(episodeElement);
-      });
+    // Load episodes based on the selected range
+    function loadEpisodeRange() {
+      const animeId = getAnimeIdFromUrl();
+      const range = document.getElementById('episode-range').value;
+      const [start, end] = range.split('-').map(Number);
+
+      // Fetch only the episodes for the selected range
+      fetch(`https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}/episodes`)
+        .then(response => response.json())
+        .then(data => {
+          const episodeList = document.getElementById('episode-list');
+          episodeList.innerHTML = '';  // Clear previous episodes
+
+          // Filter episodes within the selected range
+          const filteredEpisodes = data.data.episodes.filter(episode => 
+            episode.number >= start && episode.number <= end
+          );
+
+          // Display episodes in the selected range
+          filteredEpisodes.forEach(episode => {
+            const episodeElement = document.createElement('div');
+            episodeElement.classList.add('bg-gray-700', 'p-2', 'rounded', 'text-center', 'cursor-pointer', 'hover:bg-gray-600');
+            episodeElement.textContent = `Ep ${episode.number}: ${episode.title}`;
+            
+            const epParam = new URLSearchParams(window.location.search).get('ep');
+            if (epParam === episode.episodeId) {
+              episodeElement.classList.add('active');
+            }
+
+            episodeElement.onclick = () => {
+              updateURLParameters('ep', episode.episodeId);  // Update URL with the episode ID
+              fetchServers(episode.episodeId);  // Fetch server info for the selected episode
+              episodeElement.classList.add('active');  // Mark as active
+            };
+
+            episodeList.appendChild(episodeElement);
+          });
+        });
     }
 
     // Fetch server data from API based on episode
@@ -125,7 +190,7 @@
       
       const subServersContainer = document.getElementById('sub-servers');
       const dubServersContainer = document.getElementById('dub-servers');
-      
+
       subServersContainer.innerHTML = '';
       dubServersContainer.innerHTML = '';
 
@@ -142,10 +207,11 @@
         }
 
         serverButton.onclick = () => {
+          // Deactivate all other server buttons in sub section
           document.querySelectorAll('#sub-servers button').forEach(btn => btn.classList.remove('active'));
           serverButton.classList.add('active');
-          updateURLParameter('server', server.serverId); // Update the server in the URL
-          updateURLParameter('category', 'sub'); // Add 'category=sub' to the URL
+          updateURLParameters('server', server.serverId); // Update the server in the URL
+          updateURLParameters('category', 'sub'); // Add 'category=sub' to the URL
         };
 
         subServersContainer.appendChild(serverButton);
@@ -164,10 +230,11 @@
         }
 
         serverButton.onclick = () => {
+          // Deactivate all other server buttons in dub section
           document.querySelectorAll('#dub-servers button').forEach(btn => btn.classList.remove('active'));
           serverButton.classList.add('active');
-          updateURLParameter('server', server.serverId); // Update the server in the URL
-          updateURLParameter('category', 'dub'); // Add 'category=dub' to the URL
+          updateURLParameters('server', server.serverId); // Update the server in the URL
+          updateURLParameters('category', 'dub'); // Add 'category=dub' to the URL
         };
 
         dubServersContainer.appendChild(serverButton);
@@ -182,12 +249,7 @@
 
     // Initialize page based on URL params
     function initPage() {
-      const epParam = new URLSearchParams(window.location.search).get('ep');
-      if (epParam) {
-        fetchServers(decodeURIComponent(epParam));  // Fetch server info if episode ID is present
-      }
-
-      fetchEpisodes();  // Load episodes
+      fetchEpisodes();  // Load episodes initially
     }
 
     window.onload = initPage;
