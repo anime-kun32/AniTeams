@@ -28,15 +28,25 @@
       padding: 20px;
     }
 
-    /* Responsive Iframe */
-    iframe {
+    /* Responsive Iframe Container */
+    .iframe-container {
+      position: relative;
       width: 100%;
-      max-width: 1000px;
-      height: 500px;
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      max-width: 1000px; /* Limit the maximum size for desktop */
+      padding-top: 56.25%; /* 16:9 Aspect Ratio (9 / 16 = 0.5625) */
       margin-bottom: 30px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
     }
 
     /* Episodes Section */
@@ -90,7 +100,9 @@
 <body>
   <div id="container">
     <!-- Anime Viewing Section -->
-    <iframe id="animeIframe" src="about:blank" title="Anime Viewer"></iframe>
+    <div class="iframe-container">
+      <iframe id="animeIframe" src="about:blank" title="Anime Viewer"></iframe>
+    </div>
     <div id="episodes"></div>
   </div>
 
@@ -127,7 +139,7 @@
             episodeCard.onclick = () => {
               // Update iframe source
               const iframe = document.getElementById("animeIframe");
-              iframe.src = `https://video.example.com/watch?${episode.episodeId}`;
+              iframe.src = `./player.htm?${episode.episodeId}`;
               
               // Remove active class from all cards
               document.querySelectorAll(".episode-card").forEach(card => card.classList.remove("active"));
