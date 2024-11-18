@@ -90,7 +90,7 @@
   <div id="container">
     <!-- Anime Viewing Section -->
     <iframe id="animeIframe" src="about:blank" title="Anime Viewer"></iframe>
-    <!-- Episodes List Sectiondiv id="episodes"></div>
+    <div id="episodes"></div>
   </div>
 
 
@@ -100,7 +100,7 @@
     const animeId = urlParams.get("id") || "defaultAnimeId"; // Fallback to a default ID
 
     // API URL for fetching episodes
-    const apiUrl = `https://api.example.com/anime/${animeId}/episodes`;
+    const apiUrl = `aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}/episodes`;
 
     // Fetch and populate episodes
     fetch(apiUrl)
