@@ -139,7 +139,7 @@
             episodeCard.onclick = () => {
               // Update iframe source
               const iframe = document.getElementById("animeIframe");
-              iframe.src = `./player.htm?${episode.episodeId}`;
+              iframe.src = `player.htm?${episode.episodeId}`;
               
               // Remove active class from all cards
               document.querySelectorAll(".episode-card").forEach(card => card.classList.remove("active"));
