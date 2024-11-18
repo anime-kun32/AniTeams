@@ -100,7 +100,7 @@
     const animeId = urlParams.get("id") || "defaultAnimeId"; // Fallback to a default ID
 
     // API URL for fetching episodes
-    const apiUrl = `aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}/episodes`;
+    const apiUrl = `https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}/episodes`;
 
     // Fetch and populate episodes
     fetch(apiUrl)
