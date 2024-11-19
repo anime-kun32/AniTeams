@@ -438,7 +438,7 @@ function onFilterButtonClick() {
                         <div class="poster">
                             <img src="${anime.poster}" alt="${anime.name} Poster" class="image" />
                             <a href="details.html?id=${anime.id}" class="overlay">
-                                <img src="play-button.png" alt="Play" class="play-button" />
+                                <img src="play-buttton.png" alt="Play" class="play-button" />
                             </a>
                             <div class="info-left">
                                 <div class="btn">SUB ${anime.episodes.sub}</div>
@@ -473,7 +473,137 @@ function onFilterButtonClick() {
 </div>
     </main>
         
-                      
+              <footer class="footer">
+    <a href="index.html" class="logo-link">
+        <img src="logo.png" alt="AniTeams Logo" class="logo">
+    </a>
+    <div class="footer-container">
+        <div class="pagination">
+            <a href="#">A</a>
+            <a href="#">B</a>
+            <a href="#">C</a>
+            <a href="#">D</a>
+            <a href="#">E</a>
+            <a href="#">F</a>
+            <a href="#">G</a>
+            <a href="#">H</a>
+            <a href="#">I</a>
+            <a href="#">J</a>
+            <a href="#">K</a>
+            <a href="#">L</a>
+            <a href="#">M</a>
+            <a href="#">N</a>
+            <a href="#">O</a>
+            <a href="#">P</a>
+            <a href="#">Q</a>
+            <a href="#">R</a>
+            <a href="#">S</a>
+            <a href="#">T</a>
+            <a href="#">U</a>
+            <a href="#">V</a>
+            <a href="#">W</a>
+            <a href="#">X</a>
+            <a href="#">Y</a>
+            <a href="#">Z</a>
+        </div>
+    </div>
+    <div class="footer-links">
+        
+        <a href="/credits">Credits</a> |
+        <span>Files not stored on this server.</span>
+    </div>
+    <div class="footer-bottom">
+        <span>&copy; <span id="year"></span> AniTeams. All rights reserved.</span>
+    </div>
+</footer>
+
+<style>/* General Footer Styling */
+.footer-container { 
+    display: flex; 
+    justify-content: flex-start;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    margin: 0 50px 0 20px;
+}
+
+.footer {
+    background: url("footer.jpg") no-repeat center center;
+    background-size: cover;
+    height: 350px;
+    overflow: auto;
+    padding-bottom: 30px; /* Adds some space at the bottom */
+}
+
+/* Logo Styling */
+.logo-link {
+    display: inline-block;
+}
+
+.logo {
+    height: 100px; /* Adjust the size of the logo */
+    z-index: 999;
+    transition: transform 0.3s ease; /* Animation for hover effect */
+}
+
+.logo-link:hover .logo {
+    transform: scale(1.05); /* Animation for logo hover */
+}
+
+/* Pagination Styling */
+.pagination {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-left: 5px;
+}
+
+.pagination a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    transition: background-color 100ms ease-in-out; /* Link hover effect animation */
+}
+
+/* Link Hover Effect */
+.pagination a:hover {
+    background-color: hsl(271, 100%, 65%);
+    font-weight: bold;
+}
+
+/* Footer Links Styling */
+.footer-links {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+/* Footer Bottom Styling */
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    color: white;
+}
+
+/* Copyright Year */
+#year {
+    font-weight: bold;
+}
+</style>
+ <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+         
         <script>
         const bars = document.querySelector('.bars');
 document.getElementById("closemenu").onclick = function(){
@@ -533,5 +663,6 @@ startDaySelects.forEach(startDaySelect => {
      <script src="https://kit.fontawesome.com/54a003e4f7.js" crossorigin="anonymous"></script>
                         <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
+        
 </body>
 </html>
