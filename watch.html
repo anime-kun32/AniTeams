@@ -5,96 +5,99 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Anime Watching Page</title>
   <style>
-    /* Dark Theme and Reset */
-    body {
-      margin: 0;
-      font-family: "Poppins", Arial, sans-serif;
-      background-color: #121212;
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
+/* Dark Theme and Reset */
+body {
+  margin: 0;
+  font-family: "Poppins", Arial, sans-serif;
+  background-color: #121212;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
 
-    /* Container Styling */
-    #container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      max-width: 1200px;
-      padding: 20px;
-    }
+/* Container Styling */
+#container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+}
 
-    /* Responsive Iframe Container */
-    .iframe-container {
-      position: relative;
-      width: 100%;
-      max-width: 1000px; /* Limit the maximum size for desktop */
-      padding-top: 56.25%; /* 16:9 Aspect Ratio (9 / 16 = 0.5625) */
-      margin-bottom: 30px;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
+/* Responsive Iframe Container */
+.iframe-container {
+  position: relative;
+  width: 100%;
+  max-width: 1000px; /* Limit the maximum size for desktop */
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  margin-bottom: 30px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
 
-    iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
+iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
 
-    /* Episodes Section */
-    #episodes {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 20px;
-      width: 100%;
-    }
+/* Episodes Section */
+#episodes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
 
-    .episode-card {
-      background-color: #1e1e1e;
-      border-radius: 10px;
-      padding: 15px;
-      cursor: pointer;
-      text-align: center;
-      transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-      color: #ffffff;
-    }
+.episode-card {
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  padding: 15px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+  color: #ffffff;
+}
 
-    .episode-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 12px rgba(255, 255, 255, 0.2);
-      background-color: #282828;
-    }
+.episode-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(255, 255, 255, 0.2);
+  background-color: #282828;
+}
 
-    .episode-number {
-      font-size: 18px;
-      font-weight: bold;
-      color: #1db954;
-    }
+.episode-number {
+  font-size: 18px;
+  font-weight: bold;
+  color: #1db954;
+}
 
-    .episode-title {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #b3b3b3;
-    }
+.episode-title {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #b3b3b3;
+}
 
-    .filler {
-      color: #ff6b6b;
-    }
+.filler {
+  color: #ff6b6b;
+}
 
-    /* Active Class */
-    .episode-card.active {
-      border: 2px solid #1db954;
-      background-color: #333333;
-      transform: translateY(-5px);
-    }
+/* Active Class with Glow */
+.episode-card.active {
+  border: 2px solid #7354e7; /* Vivid border color */
+  background-color: #2d2d4f; /* Complementary background */
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px 4px rgba(115, 84, 231, 0.5); /* Subtle glow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
   </style>
 </head>
 <body>
