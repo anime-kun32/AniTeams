@@ -28,8 +28,7 @@ body {
   padding: 20px;
 }
 
-/* Responsive Iframe Container */
-.iframe-container {
+/* Responsive Iframe {
   position: relative;
   width: 100%;
   max-width: 1000px; /* Limit the maximum size for desktop */
@@ -52,7 +51,7 @@ iframe {
 /* Episodes Section */
 #episodes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Default for smaller devices */
   gap: 20px;
   width: 100%;
 }
@@ -97,6 +96,58 @@ iframe {
   box-shadow: 0 0 15px 4px rgba(115, 84, 231, 0.5); /* Subtle glow */
   transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
+
+/* Responsive Styling: Mobile Devices */
+@media (max-width: 768px) {
+  #episodes {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+  }
+
+  .episode-card {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .episode-number {
+    font-size: 16px;
+  }
+
+  .episode-title {
+    font-size: 12px;
+  }
+}
+
+/* Desktop Layout: Larger Screens */
+@media (min-width: 769px) {
+  #episodes {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns for desktop */
+    gap: 30px; /* Wider gap for desktop */
+  }
+
+  .episode-card {
+    padding: 20px; /* Increase    font-size: 16px;
+  }
+
+  .episode-number {
+    font-size: 20px; /* Larger text for numbers */
+  }
+
+  .episode-title {
+    font-size: 14px; /* Keep titles readable */
+  }
+
+  #container {
+    padding: 40px; /* Add breathing space for larger screens */
+  }
+
+  .iframe-container {
+    max-width: 1200px; /* Increase max size for iframe on desktop */
+    margin-bottom: 40px;
+    border-radius: 15px; /* Slightly rounder corners */
+  }
+}
+
 
   </style>
 </head>
