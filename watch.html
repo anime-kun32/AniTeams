@@ -12,36 +12,33 @@ body {
   background-color: #121212;
   color: #ffffff;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: flex-start;
   min-height: 100vh;
+  padding: 20px;
 }
 
 /* Container Styling */
 #container {
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 100%;
   max-width: 1200px;
-  padding: 20px;
+  gap: 20px; /* Space between iframe and episodes in mobile view */
 }
 
-/* Responsive Iframe {
+/* Responsive Iframe Container */
+.iframe-container {
   position: relative;
   width: 100%;
-  max-width: 1000px; /* Limit the maximum size for desktop */
-  padding-top: 56.25%; /* 16:9 Aspect Ratio */
-  margin-bottom: 30px;
+  padding-top: 56.25%; /* Maintain 16:9 Aspect Ratio */
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 iframe {
-  position: absolute;
-  top: 0;
+  position: 0;
   left: 0;
   width: 100%;
   height: 100%;
@@ -51,11 +48,12 @@ iframe {
 /* Episodes Section */
 #episodes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Default for smaller devices */
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
   width: 100%;
 }
 
+/* Episode Cards */
 .episode-card {
   background-color: #1e1e1e;
   border-radius: 10px;
@@ -90,61 +88,32 @@ iframe {
 
 /* Active Class with Glow */
 .episode-card.active {
-  border: 2px solid #7354e7; /* Vivid border color */
-  background-color: #2d2d4f; /* Complementary background */
+  border: 2px solid #7354e7; /* Highlight active episode */
+  background-color: #2d2d4f;
+  box-shadow: 15px 4px rgba(115, 84, 231, 0.5); /* Subtle glow for active card */
   transform: translateY(-5px);
-  box-shadow: 0 0 15px 4px rgba(115, 84, 231, 0.5); /* Subtle glow */
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
-/* Responsive Styling: Mobile Devices */
-@media (max-width: 768px) {
-  #episodes {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-  }
-
-  .episode-card {
-    padding: 12px;
-    font-size: 14px;
-  }
-
-  .episode-number {
-    font-size: 16px;
-  }
-
-  .episode-title {
-    font-size: 12px;
-  }
-}
-
-/* Desktop Layout: Larger Screens */
+/* Desktop Layout: Side-by-Side */
 @media (min-width: 769px) {
-  #episodes {
-    grid-template-columns: repeat(4, 1fr); /* 4 columns for desktop */
-    gap: 30px; /* Wider gap for desktop */
-  }
-
-  .episode-card {
-    padding: 20px; /* Increase    font-size: 16px;
-  }
-
-  .episode-number {
-    font-size: 20px; /* Larger text for numbers */
-  }
-
-  .episode-title {
-    font-size: 14px; /* Keep titles readable */
-  }
-
   #container {
-    padding: 40px; /* Add breathing space for larger screens */
+    flex-direction: row; /* Iframe and episodes side-by-side */
+    gap: 40px; /* Larger gap for desktop */
   }
 
   .iframe-container {
-    max-width: 1200px; /* Increase max size for iframe on desktop */
-    margin-bottom: 40px;
-    border-radius: 15px; /* Slightly rounder corners */
+    flex: 3; /* Occupy more space for the iframe */
+    max-width: 70%; /* Limit max width */
+  }
+
+  #episodes {
+    flex: 2; /* Smaller section for episodes */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between list items */
+    max-height: calc(100vh - 60px); /* Keep the list within the viewport */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+    padding-right: 10px;
   }
 }
 
