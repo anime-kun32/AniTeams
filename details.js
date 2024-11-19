@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Set the watch link using anime.id from the response
             const watchLink = document.getElementById('watch-link');
-            watchLink.href = `episodes.html?id=${anime.id}`;
+            watchLink.href = `watch.html?id=${anime.id}`;
 
             // Populate more info
             const infoLeft = document.getElementById('more-info-left');
