@@ -240,7 +240,8 @@ function fetchAndDisplayTrendingAnime() {
     </div>
 </footer>
 
-<style>/* General Footer Styling */
+<style>
+ /* General Footer Styling */
 .footer-container { 
     display: flex; 
     justify-content: flex-start;
@@ -265,7 +266,7 @@ function fetchAndDisplayTrendingAnime() {
 .logo {
     height: 100px; /* Adjust the size of the logo */
     z-index: 999;
-    transition: transform 0.3s ease; /* Animation for hover effect */
+    transition: transform 0.3s ease; /* Animation for hover */
 }
 
 .logo-link:hover .logo {
@@ -322,6 +323,67 @@ function fetchAndDisplayTrendingAnime() {
 #year {
     font-weight: bold;
 }
+
+/* Media Queries for Mobile Devices */
+@media screen and (max-width: 768px) {
+    .footer-container {
+        margin: 0 10px; /* Reduce the margin for smaller screens */
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer {
+        height: auto; /* Allow height to adjust dynamically */
+        overflow: hidden; /* Prevent scrolling within the footer */
+        background-size: contain; /* Adjust background image scaling */
+    }
+
+    .logo {
+        height: 80px; /* Reduce logo size on smaller screens */
+    }
+
+    .pagination a {
+        padding: 6px 10px; /* Reduce padding for pagination links */
+        font-size: 14px; /* Adjust font size for better fit */
+    }
+
+    .footer-links {
+        font-size: 14px; /* Reduce font size for footer links */
+    }
+
+    .footer-bottom {
+        font-size: 12px; /* Adjust font size for footer bottom text */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .footer-container {
+        margin: 0 5px;
+    }
+
+    .footer {
+        background-size: cover; /* Ensure full cover on very small screens */
+    }
+
+    .pagination {
+        gap: 5px; /* Narrow gap for pagination links */
+    }
+
+    .pagination a {
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+
+    .footer-links a {
+        margin: 0 5px;
+        font-size: 12px;
+    }
+
+    .footer-bottom {
+        font-size: 10px;
+    }
+}
+
 </style>
  <script>
     document.getElementById("year").textContent = new Date().getFullYear();
