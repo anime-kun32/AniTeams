@@ -241,7 +241,7 @@ function fetchAndDisplayTrendingAnime() {
 </footer>
 
 <style>
- /* General Footer Styling */
+/* General Footer Styling */
 .footer-container { 
     display: flex; 
     justify-content: flex-start;
@@ -253,8 +253,8 @@ function fetchAndDisplayTrendingAnime() {
 .footer {
     background: url("footer.jpg") no-repeat center center;
     background-size: cover;
-    height: 350px;
-    overflow: auto;
+    height: 350px; /* Default height for larger screens */
+    overflow: hidden; /* Prevent unnecessary scrolling */
     padding-bottom: 30px; /* Adds some space at the bottom */
 }
 
@@ -264,9 +264,10 @@ function fetchAndDisplayTrendingAnime() {
 }
 
 .logo {
-    height: 100px; /* Adjust the size of the logo */
+    height: 100px; /* Default logo height for larger screens */
+    max-width: 100%; /* Ensure the logo doesn’t exceed its container */
     z-index: 999;
-    transition: transform 0.3s ease; /* Animation for hover */
+    transition: transform 0.3s ease; /* Animation for hover effect */
 }
 
 .logo-link:hover .logo {
@@ -333,26 +334,25 @@ function fetchAndDisplayTrendingAnime() {
     }
 
     .footer {
-        height: auto; /* Allow height to adjust dynamically */
-        overflow: hidden; /* Prevent scrolling within the footer */
-        background-size: contain; /* Adjust background image scaling */
+        height: 350px; /* Maintain default footer height */
+        background-size: cover; /* Ensure the image scales properly */
     }
 
     .logo {
-        height: 80px; /* Reduce logo size on smaller screens */
+        height: 80px; /* Shrink the logo for medium-sized screens */
     }
 
     .pagination a {
         padding: 6px 10px; /* Reduce padding for pagination links */
-        font-size: 14px; /* Adjust font size for better fit */
+        font-size: 14px; /* Adjust font size */
     }
 
     .footer-links {
-        font-size: 14px; /* Reduce font size for footer links */
+        font-size: 14px; 
     }
 
     .footer-bottom {
-        font-size: 12px; /* Adjust font size for footer bottom text */
+        font-size: 12px; /* Adjust footer text size */
     }
 }
 
@@ -362,7 +362,12 @@ function fetchAndDisplayTrendingAnime() {
     }
 
     .footer {
-        background-size: cover; /* Ensure full cover on very small screens */
+        height: 350px; /* Maintain default footer height */
+        background-size: cover; /* Maintain full background image scaling */
+    }
+
+    .logo {
+        height: 60px; /* Further reduce logo size for small screens */
     }
 
     .pagination {
@@ -383,6 +388,7 @@ function fetchAndDisplayTrendingAnime() {
         font-size: 10px;
     }
 }
+
 
 </style>
  <script>
