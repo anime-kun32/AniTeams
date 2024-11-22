@@ -1,5 +1,5 @@
-// script.js
-const API_URL = "https://aniwatch-api-net.vercel.app/api/v2/hianime/search/suggestion"; // Replace with your deployed api 
+
+const API_URL = "https://aniwatch-api-net.vercel.app/api/v2/hianime/search/suggestion"; // replace with your deployed api url
 const suggestionsList = document.getElementById("suggestions-list");
 
 async function fetchSuggestions(event) {
@@ -16,7 +16,8 @@ async function fetchSuggestions(event) {
     const response = await fetch(`${API_URL}?q=${encodeURIComponent(searchTerm)}`);
     const data = await response.json();
 
-    if (data.success) {
+    // Check if the API response is valid
+    if (data.success && data.data.suggestions) {
       renderSuggestions(data.data.suggestions);
     } else {
       suggestionsList.innerHTML = "<li>No results found</li>";
@@ -40,9 +41,12 @@ function renderSuggestions(suggestions) {
               <div class="more-info">
                 <i class="fa fa-calendar"></i> ${s.moreInfo[0]}
                 <i class="fa fa-film"></i> ${s.moreInfo[1]}
-                <i class="fa fa-clock"></i> ${s.moreInfo[2]}
+                <i class="fa fa-clock"></2]}
               </div>
             </div>
           </a>
-        </ .join("");
+        </li>
+      `;
+    })
+    .join("");
 }
