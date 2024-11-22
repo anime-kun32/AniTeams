@@ -5,13 +5,19 @@ body {
   font-family: Arial, sans-serif;
   background-color: #121212;
   color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align height: 100vh;
 }
 
 .dark-page {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100 {
+}
+
+.search-container {
   position: relative;
   width: 400px;
 }
@@ -52,7 +58,6 @@ body {
   align-items: center;
   padding: 10px;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  cursor: pointer;
 }
 
 .suggestions li:hover {
@@ -84,11 +89,10 @@ body {
 
 .suggestions .info .more-info {
   font-size: 12px;
-  color: #777;
-  margin-top: 5px;
+   margin-top: 5px;
 }
 
-.s i {
+.suggestions .info .more-info i {
   margin-right: 5px;
 }
 
