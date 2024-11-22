@@ -1,20 +1,17 @@
-
+/* styles.css */
 body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
   background-color: #121212;
   color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align height: 100vh;
 }
 
 .dark-page {
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 }
 
 .search-container {
@@ -30,7 +27,6 @@ body {
   border-radius: 5px;
   background-color: #222;
   color: #fff;
-  transition: border-color 0.3s ease;
 }
 
 #search-bar:focus {
@@ -57,12 +53,12 @@ body {
   display: flex;
   align-items: center;
   padding: 10px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 .suggestions li:hover {
   background-color: #333;
-  transform: translateX(5px);
 }
 
 .suggestions img {
@@ -89,15 +85,10 @@ body {
 
 .suggestions .info .more-info {
   font-size: 12px;
-   margin-top: 5px;
+  color: #777;
+  margin-top: 5px;
 }
 
 .suggestions .info .more-info i {
   margin-right: 5px;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-  width: 100%;
 }
