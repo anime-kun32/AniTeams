@@ -1,4 +1,4 @@
-/* styles.css */
+
 body {
   margin: 0;
   padding: 0;
@@ -91,4 +91,10 @@ body {
 
 .suggestions .info .more-info i {
   margin-right: 5px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
 }
