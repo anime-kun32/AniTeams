@@ -1,5 +1,5 @@
-
-const API_URL = "https://aniwatch-api-net.vercel.app/api/v2/hianime/search/suggestion"; // replace with your deployed api url
+// script.js
+const API_URL = "https://aniwatch-api-net.vercel.app/api/v2/hianime/search/suggestion"; // Replace with your actual API URL
 const suggestionsList = document.getElementById("suggestions-list");
 
 async function fetchSuggestions(event) {
@@ -41,7 +41,7 @@ function renderSuggestions(suggestions) {
               <div class="more-info">
                 <i class="fa fa-calendar"></i> ${s.moreInfo[0]}
                 <i class="fa fa-film"></i> ${s.moreInfo[1]}
-                <i class="fa fa-clock"></2]}
+                <i class="fa fa-clock"></i> ${s.moreInfo[2]}
               </div>
             </div>
           </a>
