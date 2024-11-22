@@ -1,8 +1,7 @@
-// script.js
 const API_URL = "https://aniwatch-api-net.vercel.app/api/v2/hianime/search/suggestion"; // Replace with your actual API URL
 const suggestionsList = document.getElementById("suggestions-list");
 
-async functionSuggestions(event) {
+async function fetchSuggestions(event) {
   const searchTerm = event.target.value.trim();
 
   // Clear suggestions if the search term is empty
@@ -32,15 +31,15 @@ function renderSuggestions(suggestions) {
   suggestionsList.innerHTML = suggestions
     .map((s) => {
       return `
-        <a href="details.html?id=${s.id class="suggestion-item">
+        <a href="details.html?id=${s.id}" class="suggestion-item">
           <img src="${s.poster}" alt="${s.name}">
           <div class="info">
-            <div class="title">${s.name}</div>
+           ">${s.name}</div>
             <div class="subtitle">${s.jname}</div>
             <div class="more-info">
               <i class="fa fa-calendar"></i> ${s.moreInfo[0]}
               <i class="fa fa-film"></i> ${s.moreInfo[1]}
-              <i class="fa fa-clock"></i> ${sInfo[2]}
+              <i class="fa fa-clock"></i> ${s.moreInfo[2]}
             </div>
           </div>
         </a>
