@@ -19,11 +19,11 @@ async function fetchSuggestions(event) {
     if (data.success && data.data.suggestions) {
       renderSuggestions(data.data.suggestions);
     } else {
-      suggestionsList.innerHTML = "<div class='suggestion-item'>No results found</div>";
+      suggestionsList.innerHTML = "<div class='no-results'>No results found</div>";
     }
   } catch (error) {
     console.error("Error fetching suggestions:", error);
-    suggestionsList.innerHTML = "<div class='suggestion-item'>Error loading suggestions</div>";
+    suggestionsList.innerHTML = "<div class='no</div>";
   }
 }
 
@@ -34,7 +34,7 @@ function renderSuggestions(suggestions) {
         <a href="details.html?id=${s.id}" class="suggestion-item">
           <img src="${s.poster}" alt="${s.name}">
           <div class="info">
-           ">${s.name}</div>
+            <div class="title">${s.name}</div>
             <div class="subtitle">${s.jname}</div>
             <div class="more-info">
               <i class="fa fa-calendar"></i> ${s.moreInfo[0]}
