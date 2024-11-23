@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artplayer with VTT Thumbnail Plugin</title>
+  
+  <!-- Artplayer CSS -->
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+      background: #000; /* Background color if needed */
+    }
+
+    .artplayer-app {
+      width: 100%;
+      height: 100%;
+      max-width: 1240px; /* Maximum width of the player */
+      max-height: 605px; /* Maximum height of the player */
+      background: #000; /* Background color */
+      box-sizing: border-box; /* Include padding and border in element's total width and height */
+    }
+
+    /* Media queries for different screen sizes */
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px; /* Optional padding for smaller screens */
+      }
+
+      .artplayer-app {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        padding: 10px; /* Optional padding for medium screens */
+      }
+
+      .artplayer-app {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+  </style>
+
+  <!-- Include Eruda for debugging -->
+  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+  <script>eruda.init();</script>
+  
+  <!-- Artplayer Script -->
+  <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
+  
+  <!-- HLS.js Script -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  
+  <!-- Chromecast Plugin Script -->
+  <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-chromecast/dist/artplayer-plugin-chromecast.js"></script>
+  
+  <!-- VTT Thumbnail Plugin Script -->
+  <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-vtt-thumbnail/dist/artplayer-plugin-vtt-thumbnail.js"></script>
+  
+</head>
+<body>
+  <!-- Container for the Artplayer -->
+  <div class="artplayer-app"></div>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  const mockData = {
+    sources: [
+      {
+        url: "https://vd2.biananset.net/_v7/68d599cf606db1687408c36ef1bba53c02bad17fafb3734f86d0b112bba0a69b1c12c285a700d716f8f4b055dd1638bb1bf242c1df96e60b6fc633e3ab50baed78b31d0c5d0e7ea509c4ff6eb6ea94ffd3db37a8ec0e0b51ed2740c9302666d2586b1d06235622c932d25802334bcfdb9298f9c767a7b37571cfaa0a192a523c/master.m3u8",
+        type: "hls",
+      },
+    ],
+    tracks: [
+      {
+        file: "https://s.megastatics.com/subtitle/d7dade207539d331503e2fab754d5dec/eng-2.vtt",
+        label: "English",
+        kind: "captions",
+        default: true,
+      },
+      {
+        file: "https://s.megastatics.com/thumbnails/5213e5557e5cf54c19e45ed1e6e4340f/thumbnails.vtt",
+        kind: "thumbnails",
+      },
+    ],
+  };
+
+  // Debugging: Log mock data
+  console.log("Mock data:", mockData);
+
+  // Verify VTT content
+  fetch(mockData.tracks[1].file)
+    .then((response) => response.text())
+    .then((vttContent) => {
+      console.log("VTT File Content:", vttContent);
+    })
+    .catch((error) => {
+      console.error("Failed to fetch VTT file:", error);
+    });
+
+  // Initialize Artplayer
+  const art = new Artplayer({
+    container: '.artplayer-app',
+    url: mockData.sources[0].url,
+    type: 'm3u8',
+    plugins: [
+      artplayerPluginVttThumbnail({
+        vtt: mockData.tracks[1].file,
+      }),
+    ],
+    customType: {
+      m3u8: function (video, url) {
+        if (Hls.isSupported()) {
+          const hls = new Hls();
+          hls.loadSource(url);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            video.play();
+          });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = url;
+          video.addEventListener('loadedmetadata', () => {
+            video.play();
+          });
+        } else {
+          art.notice.show('Does not support playback of m3u8');
+        }
+      },
+    },
+  });
+
+  // Debugging: Add logs for plugin initialization
+  art.on('plugin:ready', (plugin) => {
+    console.log('Plugin ready:', plugin);
+  });
+
+  art.on('ready', () => {
+    console.log('Artplayer is ready');
+  });
+});
+</script>
