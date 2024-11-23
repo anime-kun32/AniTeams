@@ -76,7 +76,8 @@
 <body>
   <!-- Container for the Artplayer -->
   <div class="artplayer-app"></div>
-<script>document.addEventListener('DOMContentLoaded', () => {
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
   const mockData = {
     sources: [
       {
@@ -98,10 +99,7 @@
     ],
   };
 
-  // Debugging: Log mock data
-  console.log("Mock data:", mockData);
-
-  // Verify VTT content
+  // Verify VTT content for debugging
   fetch(mockData.tracks[1].file)
     .then((response) => response.text())
     .then((vttContent) => {
@@ -116,9 +114,15 @@
     container: '.artplayer-app',
     url: mockData.sources[0].url,
     type: 'm3u8',
+    screenshot: true, // Enable screenshot feature
+    setting: true, // Enable settings menu
+    fullscreen: true,
+    fullscreenWeb: true,
+    airplay: true,
     plugins: [
+      artplayerPluginChromecast({}), // Chromecast plugin
       artplayerPluginVttThumbnail({
-        vtt: mockData.tracks[1].file,
+        vtt: mockData.tracks[1].file, // VTT file for thumbnails
       }),
     ],
     customType: {
@@ -140,6 +144,19 @@
         }
       },
     },
+    moreVideoAttr: {
+      'webkit-playsinline': true,
+      'playsinline': true,
+    },
+    subtitle: {
+      url: mockData.tracks[0].file, // Captions track
+      type: 'vtt',
+      style: {
+        color: '#ffffff', // Subtitle text color
+        fontSize: '16px',
+        background: 'rgba(0, 0, 0, 0.3)', // Subtitle background
+      },
+    },
   });
 
   // Debugging: Add logs for plugin initialization
@@ -151,4 +168,5 @@
     console.log('Artplayer is ready');
   });
 });
+      
 </script>
