@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AniTeams - Watch</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Artplayer Custom Features</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.css">
   <style>
-    html, body {
+        html, body {
       height: 100%;
       margin: 0;
       padding: 0;
@@ -53,218 +53,202 @@
         max-height: 100%;
       }
     }
+    .player-buttons {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+    }
+    .player-buttons button {
+      margin: 5px;
+      padding: 8px 12px;
+      cursor: pointer;
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+    }
+    .player-buttons button:hover {
+      background-color: #444;
+    }
   </style>
 </head>
 <body>
-  <div class="artplayer-app"></div>
+  <div class="artplayer-app" style="position: relative;">
+    <!-- Buttons Overlay -->
+    <div class="player-buttons">
+      <button id="skip-intro">Skip Intro</button>
+      <button id="skip-outro">Skip Outro</button>
+      <button id="resume">Resume Playing</button>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-chromecast/dist/artplayer-plugin-chromecast.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-vtt-thumbnail/dist/artplayer-plugin-vtt-thumbnail.js"></script>
-              <script>
-                        
-                        document.addEventListener('DOMContentLoaded', () => {
-  const baseApiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/sources';
-  let category = 'dub';
-  let art = null;
+  <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-chromecast/dist/artplayer-plugin-chromecast.js"></script>
 
-  const getQueryParam = (param) => {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-  };
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const baseApiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/sources';
+      const id = new URLSearchParams(window.location.search).get('id');
+      if (!id) {
+        console.error('No ID provided in URL');
+        return;
+      }
 
-  const id = getQueryParam('id');
-  if (!id) {
-    console.error('No ID provided in URL');
-    return;
-  }
+      let category = 'dub'; // Default audio category
+      let art = null; // Variable to store the Artplayer instance
 
-  const fetchVideoData = (category) => {
-    const apiUrl = `${baseApiUrl}?animeEpisodeId=${id}&server=hd-1&category=${category}`;
-    console.log(`Fetching video data from: ${apiUrl}`);
-    return fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === 502) {
-          console.error('Bad Gateway error received');
-          return null;
+      // Fetch video data from the API
+      const fetchVideoData = async (category) => {
+        const apiUrl = `${baseApiUrl}?animeEpisodeId=${id}&server=hd-1&category=${category}`;
+        try {
+          const response = await fetch(apiUrl);
+          if (!response.ok) throw new Error('Failed to fetch API data');
+          const data = await response.json();
+          return data.data; // Return the new data structure
+        } catch (error) {
+          console.error('Error fetching video data:', error);
         }
-        return {
-          sources: data.data.sources,
-          vttThumbnail: data.data.tracks.find((track) => track.kind === 'thumbnails')?.file,
-          vttCaptions: data.data.tracks.filter((track) => track.kind === 'captions'),
-          intro: data.data.intro,
-          outro: data.data.outro,
-        };
-      })
-      .catch((error) => {
-        console.error('Error fetching API data:', error);
-      });
-  };
+      };
 
-  const initializePlayer = (data) => {
-    if (!data || !data.sources) {
-      console.error('Invalid data received from API:', data);
-      return;
-    }
+      const initializePlayer = async (data) => {
+        if (!data || !data.sources) {
+          console.error('Invalid data received from API:', data);
+          return;
+        }
 
-    const videoSource = data.sources[0].url;
-    const subtitleTracks = data.vttCaptions || [];
-    const vttThumbnail = data.vttThumbnail;
-    const intro = data.intro || {};
-    const outro = data.outro || {};
+        const videoSource = data.sources[0].url;
+        const subtitleTracks = data.tracks.filter(track => track.kind === 'captions');
+        const thumbnailTrack = data.tracks.find(track => track.kind === 'thumbnails');
+        const intro = data.intro;
+        const outro = data.outro;
 
-    if (art) {
-      art.destroy();
-    }
+        // Destroy the existing player if it exists
+        if (art) {
+          art.destroy();
+        }
 
-    const saveKey = `video-progress-${id}`;
-    const savedTime = localStorage.getItem(saveKey);
+        // Fetch the saved playback time from LocalStorage
+        const saveKey = `video-progress-${id}`;
+        const savedTime = localStorage.getItem(saveKey);
 
-    art = new Artplayer({
-      container: '.artplayer-app',
-      url: videoSource,
-      type: 'm3u8',
-      screenshot: true,
-      setting: true,
-      autoplay: true,
-      fullscreen: true,
-      fullscreenWeb: true,
-      airplay: true,
-      playsInline: true,
-      miniProgressBar: true,
-      highlight: [
-        {
-          time: intro.start,
-          text: 'Intro',
-        },
-        {
-          time: outro.start,
-          text: 'Outro',
-        },
-      ],
-      plugins: [
-        artplayerPluginChromecast({}),
-        artplayerPluginVttThumbnail({ vtt: vttThumbnail }),
-      ],
-      settings: [
-        {
-          html: 'Speed',
-          selector: [
-            { html: '1.0x', playbackRate: 1.0, default: true },
-            { html: '1.5x', playbackRate: 1.5 },
-            { html: '2.0x', playbackRate: 2.0 },
+        // Initialize the Artplayer instance
+        art = new Artplayer({
+          container: '.artplayer-app',
+          url: videoSource,
+          type: 'm3u8',
+          screenshot: true,
+          setting: true,
+          autoplay: true,
+          fullscreen: true,
+          fullscreenWeb: true,
+          airplay: true,
+          playsInline: true,
+          highlight: [
+            { time: intro.start, text: 'Intro Starts' },
+            { time: intro.end, text: 'Intro Ends' },
+            { time: outro.start, text: 'Outro Starts' },
+            { time: outro.end, text: 'Outro Ends' },
           ],
-          onSelect: function (item) {
-            art.playbackRate = item.playbackRate;
-            return item.html;
+          plugins: [
+            artplayerPluginChromecast({}),
+            artplayerPluginVttThumbnail({
+              vtt: thumbnailTrack ? thumbnailTrack.file : '',
+            }),
+          ],
+          settings: [
+            {
+              html: 'Speed',
+              selector: [
+                { html: '1.0x', playbackRate: 1.0, default: true },
+                { html: '1.5x', playbackRate: 1.5 },
+                { html: '2.0x', playbackRate: 2.0 },
+              ],
+              onSelect: function (item) {
+                art.playbackRate = item.playbackRate;
+                return item.html;
+              },
+            },
+            {
+              html: 'Subtitles',
+              selector: subtitleTracks.map(track => ({
+                html: track.label,
+                url: track.file,
+                default: track.default || false,
+              })),
+              onSelect: function (item) {
+                art.subtitle.switch(item.url, item.html);
+                return item.html;
+              },
+            },
+            {
+              html: 'Audio',
+              selector: [
+                { html: 'Sub', category: 'sub', default: category === 'sub' },
+                { html: 'Dub', category: 'dub', default: category === 'dub' },
+              ],
+              onSelect: function (item) {
+                category = item.category;
+                fetchVideoData(category).then(initializePlayer);
+                return item.html;
+              },
+            },
+          ],
+          customType: {
+            m3u8: function (video, url) {
+              if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(video);
+              } else {
+                video.src = url;
+              }
+            },
           },
-        },
-        {
-          html: 'Subtitles',
-          selector: subtitleTracks.map((track) => ({
-            html: track.label,
-            url: track.file,
-            default: track.default || false,
-          })),
-          onSelect: function (item) {
-            art.subtitle.switch(item.url, item.html);
-            return item.html;
-          },
-        },
-      ],
-      customType: {
-        m3u8: function (video, url) {
-          if (Hls.isSupported()) {
-            const hls = new Hls();
-            hls.loadSource(url);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-              video.play();
-            });
-          } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = url;
-            video.addEventListener('loadedmetadata', () => {
-              video.play();
-            });
-          } else {
-            art.notice.show('Does not support playback of m3u8');
+        });
+
+        // Seek to saved time
+        if (savedTime) {
+          art.seek(savedTime);
+          art.notice.show(`Resuming from ${Math.floor(savedTime / 60)}:${Math.floor(savedTime % 60)}`);
+        }
+
+        // Save playback time
+        art.on('video:timeupdate', () => {
+          localStorage.setItem(saveKey, art.currentTime);
+        });
+
+        // Remove saved time when video ends
+        art.on('video:ended', () => {
+          localStorage.removeItem(saveKey);
+        });
+
+        // Custom Buttons Logic
+        document.getElementById('skip-intro').addEventListener('click', () => {
+          if (intro) {
+            art.seek(intro.end);
+            art.notice.show('Skipped Intro');
           }
-        },
-      },
-      moreVideoAttr: {
-        'webkit-playsinline': true,
-        'playsinline': true,
-      },
+        });
+
+        document.getElementById('skip-outro').addEventListener('click', () => {
+          if (outro) {
+            art.seek(outro.end);
+            art.notice.show('Skipped Outro');
+          }
+        });
+
+        document.getElementById('resume').addEventListener('click', () => {
+          art.play();
+          art.notice.show('Resumed Playing');
+        });
+      };
+
+      // Fetch video data and initialize the player
+      fetchVideoData(category).then(initializePlayer);
     });
-
-    if (savedTime) {
-      art.seek(savedTime);
-      const minutes = Math.floor(savedTime / 60);
-      const seconds = Math.floor(savedTime % 60);
-      const formattedTime = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-      art.notice.show(`Resuming from ${formattedTime}`);
-    }
-
-    art.on('video:timeupdate', () => {
-      const currentTime = art.currentTime;
-      localStorage.setItem(saveKey, currentTime);
-    });
-
-    art.on('video:ended', () => {
-      localStorage.removeItem(saveKey);
-    });
-
-    // Add custom buttons for skipping intro and outro
-    art.controls.add({
-      name: 'skipIntro',
-      position: 'right',
-      html: 'Skip Intro',
-      click: () => {
-        if (intro.end) {
-          art.seek(intro.end);
-          art.notice.show('Skipped intro');
-        } else {
-          art.notice.show('Intro data not available');
-        }
-      },
-    });
-
-    art.controls.add({
-      name: 'skipOutro',
-      position: 'right',
-      html: 'Skip Outro',
-      click: () => {
-        if (outro.start) {
-          art.seek(outro.start);
-          art.notice.show('Skipped outro');
-        } else {
-          art.notice.show('Outro data not available');
-        }
-      },
-    });
-  };
-
-  fetchVideoData(category).then((data) => {
-    if (!data) {
-      const otherCategory = category === 'sub' ? 'dub' : 'sub';
-      fetchVideoData(otherCategory).then((data) => {
-        if (!data) {
-          alert(`Error loading both ${category} and ${otherCategory}`);
-        } else {
-          initializePlayer(data);
-        }
-      });
-    } else {
-      initializePlayer(data);
-    }
-  });
-});
-
-</script>
-                
-                        
-
-
+  </script>
 </body>
 </html>
