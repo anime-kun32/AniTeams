@@ -212,43 +212,24 @@
         },
       });
 
-      // Create and style the back button
-      const backButton = document.createElement('div');
-      backButton.innerHTML = '&lt;'; // HTML entity for "<"
-      backButton.style.position = 'absolute';
-      backButton.style.top = '10px';
-      backButton.style.left = '10px';
-      backButton.style.fontSize = '24px';
-      backButton.style.color = 'white';
-      backButton.style.cursor = 'pointer';
-      backButton.style.zIndex = '9999';
+      // Save and resume playback time
+      const saveKey = `video-progress-${id}`; // Unique key based on video ID
+      const savedTime = localStorage.getItem(saveKey); // Retrieve saved time
 
-      // Add click event to the back button
-      backButton.addEventListener('click', () => {
-        window.history.back();
+      // Resume from saved time if available
+      if (savedTime) {
+          art.currentTime = parseFloat(savedTime); // Set the playback time
+      }
+
+      // Listen for time updates and save the current time periodically
+      art.on('video:timeupdate', () => {
+          const currentTime = art.currentTime; // Get current playback time
+          localStorage.setItem(saveKey, currentTime); // Save to localStorage
       });
 
-      // Append the back button to the player container
-      const playerContainer = document.querySelector('.artplayer-app');
-      playerContainer.appendChild(backButton);
-
-      // Hide controls when not hovering over player
-      playerContainer.addEventListener('mousemove', () => {
-        playerContainer.querySelector('.artplayer-controls').style.opacity = '1';
-        playerContainer.querySelector('.artplayer-controls').style.visibility = 'visible';
-      });
-
-      playerContainer.addEventListener('mouseleave', () => {
-        playerContainer.querySelector('.artplayer-controls').style.opacity = '0';
-        playerContainer.querySelector('.artplayer-controls').style.visibility = 'hidden';
-      });
-
-      // Handle rendering subtitles with HTML formatting
-      art.subtitle.on('change', (track) => {
-        const subtitles = track.cues.map(cue => {
-          return cue.text; 
-        }).join('<br>');
-        art.subtitle.render(subtitles);
+      // Clear the saved time if the video ends
+      art.on('video:ended', () => {
+          localStorage.removeItem(saveKey); // Remove saved time
       });
     };
 
