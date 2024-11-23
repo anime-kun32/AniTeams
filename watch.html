@@ -49,12 +49,32 @@ iframe {
   border: none;
 }
 
-/* Episodes Section */
+/* Episodes Section with Vertical Overflow */
 #episodes {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 20px;
   width: 100%;
+  max-height: 600px; /* Limit the height of the episodes section */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-bottom: 10px; /* Add some space below the episodes */
+  scroll-snap-type: y mandatory; /* Smooth vertical scrolling */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+}
+
+/* Styling scrollbar for vertical scrolling */
+#episodes::-webkit-scrollbar {
+  width: 8px; /* Scrollbar width */
+}
+
+#episodes::-webkit-scrollbar-track {
+  background-color: #1e1e1e; /* Dark track */
+  border-radius: 10px;
+}
+
+#episodes::-webkit-scrollbar-thumb {
+  background-color: #3f3f3f; /* Dark gray thumb */
+  border-radius: 10px;
 }
 
 .episode-card {
@@ -96,7 +116,8 @@ iframe {
   transform: translateY(-5px);
   box-shadow: 0 0 15px 4px rgba(115, 84, 231, 0.5); /* Subtle glow */
   transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-}
+    }
+  
 
   </style>
 </head>
