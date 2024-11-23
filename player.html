@@ -60,9 +60,10 @@
   <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-chromecast/dist/artplayer-plugin-chromecast.js"></script>
-  <script src="scripts.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-vtt-thumbnail/dist/artplayer-plugin-vtt-thumbnail.js"></script>
               <script>
-document.addEventListener('DOMContentLoaded', () => {
+                        
+    document.addEventListener('DOMContentLoaded', () => {
   const baseApiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/sources'; // Base URL for the API
   let category = 'dub'; // Default category
   let art = null; // Variable to store the Artplayer instance
@@ -80,26 +81,22 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // Fetch video data from the API based on the selected category and ID
+  // Function to fetch video data from the API
   const fetchVideoData = (category) => {
     const apiUrl = `${baseApiUrl}?animeEpisodeId=${id}&server=hd-1&category=${category}`;
     console.log(`Fetching video data from: ${apiUrl}`); // Debug log
     return fetch(apiUrl)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
+      .then(response => response.json())
       .then(data => {
         if (data.status === 502) {
-          console.error('Bad Gateway error received'); // Debug log
-          return null; // Return null to signify an error
+          console.error('Bad Gateway error received');
+          return null; // Return null if error
         }
-        // Extract sources and tracks from the new API response structure
+        // Extract sources, tracks for captions, and thumbnails
         return {
-          sources: data.data.sources, // Adjust according to new response
-          tracks: data.data.tracks // Adjust according to new response
+          sources: data.data.sources,
+          vttThumbnail: data.data.tracks.find(track => track.kind === 'thumbnails')?.file,
+          vttCaptions: data.data.tracks.filter(track => track.kind === 'captions')
         };
       })
       .catch(error => {
@@ -115,7 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const videoSource = data.sources[0].url;
-    const subtitleTracks = data.tracks.filter(track => track.kind === 'captions');
+    const subtitleTracks = data.vttCaptions || [];
+    const vttThumbnail = data.vttThumbnail;
 
     // Destroy the existing player if it exists
     if (art) {
@@ -123,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Fetch the saved playback time from LocalStorage
-    const saveKey = `video-progress-${id}`; // Unique key based on video ID
+    const saveKey = `video-progress-${id}`;
     const savedTime = localStorage.getItem(saveKey); // Retrieve saved time
 
     // Initialize the Artplayer instance
@@ -140,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
       playsInline: true,
       plugins: [
         artplayerPluginChromecast({}),
+        artplayerPluginVttThumbnail({ vtt: vttThumbnail }), // Add the VTT thumbnail plugin
       ],
       settings: [
         {
@@ -256,6 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
 </script>
                 
                         
