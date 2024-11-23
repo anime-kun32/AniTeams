@@ -61,7 +61,7 @@
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-chromecast/dist/artplayer-plugin-chromecast.js"></script>
   <script src="scripts.js"></script>
-                <script>
+              <script>
 document.addEventListener('DOMContentLoaded', () => {
   const baseApiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/sources'; // Base URL for the API
   let category = 'dub'; // Default category
@@ -122,6 +122,11 @@ document.addEventListener('DOMContentLoaded', () => {
       art.destroy();
     }
 
+    // Fetch the saved playback time from LocalStorage
+    const saveKey = `video-progress-${id}`; // Unique key based on video ID
+    const savedTime = localStorage.getItem(saveKey); // Retrieve saved time
+
+    // Initialize the Artplayer instance
     art = new Artplayer({
       container: '.artplayer-app',
       url: videoSource,
@@ -212,36 +217,26 @@ document.addEventListener('DOMContentLoaded', () => {
       },
     });
 
-    // Save and resume playback time
-    const saveKey = `video-progress-${id}`; // Unique key based on video ID
-    const savedTime = localStorage.getItem(saveKey); // Retrieve saved time
-
-    // Log the saved data for debugging
-    console.log(`LocalStorage Key: ${saveKey}`);
-    console.log(`Saved Time: ${savedTime}`);
-
-    // If saved time exists, resume playback and show notice
+    // If there's a saved time, seek to it immediately
     if (savedTime) {
+      art.seek(savedTime); // Automatically seek to the saved time
       const minutes = Math.floor(savedTime / 60);
       const seconds = Math.floor(savedTime % 60);
       const formattedTime = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-
-      // Display notice for the user
+      
+      // Show a notification that the video is resuming from the saved time
       art.notice.show(`Resuming from ${formattedTime}`);
-
-      // Set the playback time to the saved time
-      art.seek(savedTime); // Correct method to seek to a specific time
     }
 
-    // Listen for time updates and save the current time periodically
+    // Save the playback time periodically
     art.on('video:timeupdate', () => {
       const currentTime = art.currentTime; // Get current playback time
-      localStorage.setItem(saveKey, currentTime); // Save to localStorage
+      localStorage.setItem(saveKey, currentTime); // Save to LocalStorage
     });
 
-    // Clear the saved time if the video ends
+    // Remove saved time when the video ends
     art.on('video:ended', () => {
-      localStorage.removeItem(saveKey); // Remove saved time
+      localStorage.removeItem(saveKey); // Remove saved time from LocalStorage
     });
   };
 
@@ -262,6 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+                
                         
 
 
