@@ -76,97 +76,214 @@
 <body>
   <!-- Container for the Artplayer -->
   <div class="artplayer-app"></div>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-  const mockData = {
-    sources: [
-      {
-        url: "https://vd2.biananset.net/_v7/68d599cf606db1687408c36ef1bba53c02bad17fafb3734f86d0b112bba0a69b1c12c285a700d716f8f4b055dd1638bb1bf242c1df96e60b6fc633e3ab50baed78b31d0c5d0e7ea509c4ff6eb6ea94ffd3db37a8ec0e0b51ed2740c9302666d2586b1d06235622c932d25802334bcfdb9298f9c767a7b37571cfaa0a192a523c/master.m3u8",
-        type: "hls",
-      },
-    ],
-    tracks: [
-      {
-        file: "https://s.megastatics.com/subtitle/d7dade207539d331503e2fab754d5dec/eng-2.vtt",
-        label: "English",
-        kind: "captions",
-        default: true,
-      },
-      {
-        file: "https://s.megastatics.com/thumbnails/5213e5557e5cf54c19e45ed1e6e4340f/thumbnails.vtt",
-        kind: "thumbnails",
-      },
-    ],
+   <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const baseApiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/sources';
+  let category = 'dub';
+  let art = null;
+
+  const getQueryParam = (param) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
   };
 
-  // Verify VTT content for debugging
-  fetch(mockData.tracks[1].file)
-    .then((response) => response.text())
-    .then((vttContent) => {
-      console.log("VTT File Content:", vttContent);
-    })
-    .catch((error) => {
-      console.error("Failed to fetch VTT file:", error);
+  const id = getQueryParam('id');
+  if (!id) {
+    console.error('No ID provided in URL');
+    return;
+  }
+
+  const fetchVideoData = (category) => {
+    const apiUrl = `${baseApiUrl}?animeEpisodeId=${id}&server=hd-1&category=${category}`;
+    console.log(`Fetching video data from: ${apiUrl}`);
+    return fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+      })
+      .then(data => {
+        if (data.status === 502) return null;
+        return {
+          sources: data.data.sources,
+          tracks: data.data.tracks,
+        };
+      })
+      .catch(error => console.error('Error fetching API data:', error));
+  };
+
+  const convertVTTFormat = async (url) => {
+    try {
+      const response = await fetch(url);
+      const text = await response.text();
+      const lines = text.split('\n');
+      let converted = ['WEBVTT', ''];
+      const baseUrl = url.substring(0, url.lastIndexOf('/') + 1);
+      for (let line of lines) {
+        line = line.trim();
+        if (!line || line === 'WEBVTT') continue;
+        if (/^\d+$/.test(line)) continue;
+        if (line.includes('-->')) {
+          const [start, end] = line.split('-->').map(time => {
+            const match = time.trim().match(/(\d{2}):(\d{2}):(\d{2})\.(\d{3})/);
+            if (match) {
+              const [_, hh, mm, ss, ms] = match;
+              const totalSeconds = parseInt(hh) * 3600 + parseInt(mm) * 60 + parseInt(ss);
+              const minutes = Math.floor(totalSeconds / 60);
+              const seconds = totalSeconds % 60;
+              return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms}`;
+            }
+            return time.trim();
+          });
+          converted.push(`${start} --> ${end}`);
+        } else if (line.includes('#xywh=')) {
+          const [imageName, coordinates] = line.split('#');
+          converted.push(`${baseUrl}${imageName}#${coordinates}`);
+        }
+      }
+      const blob = new Blob([converted.join('\n')], { type: 'text/vtt' });
+      return URL.createObjectURL(blob);
+    } catch (error) {
+      console.error('Error converting VTT format:', error);
+      return null;
+    }
+  };
+
+  const initializePlayer = async (data) => {
+    if (!data || !data.sources) {
+      console.error('Invalid data received from API:', data);
+      return;
+    }
+
+    const videoSource = data.sources[0].url;
+    const subtitleTracks = data.tracks.filter(track => track.kind === 'captions');
+    const thumbnailTrack = data.tracks.find(track => track.kind === 'thumbnails');
+
+    if (art) art.destroy();
+
+    art = new Artplayer({
+      container: '.artplayer-app',
+      url: videoSource,
+      type: 'm3u8',
+      screenshot: true,
+      setting: true,
+      autoplay: true,
+      fullscreen: true,
+      fullscreenWeb: true,
+      miniProgressBar: true,
+      airplay: true,
+      playsInline: true,
+      plugins: [artplayerPluginChromecast({})],
+      settings: [
+        {
+          html: 'Speed',
+          selector: [
+            { html: '1.0x', playbackRate: 1.0, default: true },
+            { html: '1.5x', playbackRate: 1.5 },
+            { html: '2.0x', playbackRate: 2.0 },
+          ],
+          onSelect: (item) => {
+            art.playbackRate = item.playbackRate;
+            return item.html;
+          },
+        },
+        {
+          html: 'Subtitles',
+          selector: subtitleTracks.map(track => ({
+            html: track.label,
+            url: track.file,
+            default: track.default || false,
+          })),
+          onSelect: (item) => {
+            art.subtitle.switch(item.url, item.html);
+            return item.html;
+          },
+        },
+        {
+          html: 'Audio',
+          selector: [
+            { html: 'Sub', category: 'sub', default: category === 'sub' },
+            { html: 'Dub', category: 'dub', default: category === 'dub' },
+          ],
+          onSelect: (item) => {
+            category = item.category;
+            fetchVideoData(category).then(data => {
+              if (!data) {
+                const otherCategory = category === 'sub' ? 'dub' : 'sub';
+                fetchVideoData(otherCategory).then(data => {
+                  if (!data) {
+                    alert(`Error loading both ${category} and ${otherCategory}`);
+                  } else {
+                    initializePlayer(data);
+                  }
+                });
+              } else {
+                initializePlayer(data);
+              }
+            });
+            return item.html;
+          },
+        },
+      ],
+      customType: {
+        m3u8: (video, url) => {
+          if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(url);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+          } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = url;
+            video.addEventListener('loadedmetadata', () => video.play());
+          } else {
+            art.notice.show('Does not support playback of m3u8');
+          }
+        },
+      },
+      moreVideoAttr: {
+        'webkit-playsinline': true,
+        'playsinline': true,
+      },
     });
 
-  // Initialize Artplayer
-  const art = new Artplayer({
-    container: '.artplayer-app',
-    url: mockData.sources[0].url,
-    type: 'm3u8',
-    screenshot: true, // Enable screenshot feature
-    setting: true, // Enable settings menu
-    fullscreen: true,
-    fullscreenWeb: true,
-    airplay: true,
-    plugins: [
-      artplayerPluginChromecast({}), // Chromecast plugin
-      artplayerPluginVttThumbnail({
-        vtt: mockData.tracks[1].file, // VTT file for thumbnails
-      }),
-    ],
-    customType: {
-      m3u8: function (video, url) {
-        if (Hls.isSupported()) {
-          const hls = new Hls();
-          hls.loadSource(url);
-          hls.attachMedia(video);
-          hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            video.play();
-          });
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-          video.src = url;
-          video.addEventListener('loadedmetadata', () => {
-            video.play();
-          });
+    if (thumbnailTrack) {
+      const thumbnailVTT = await convertVTTFormat(thumbnailTrack.file);
+      if (thumbnailVTT) {
+        art.plugins.add(artplayerPluginVttThumbnail({ vtt: thumbnailVTT }));
+      }
+    }
+
+    const saveKey = `video-progress-${id}`;
+    const savedTime = localStorage.getItem(saveKey);
+
+    if (savedTime) {
+      art.currentTime = parseFloat(savedTime);
+      art.notice.show(`Resuming from ${savedTime} seconds`);
+    }
+
+    art.on('video:timeupdate', () => {
+      const currentTime = art.currentTime;
+      localStorage.setItem(saveKey, currentTime);
+    });
+
+    art.on('video:ended', () => {
+      localStorage.removeItem(saveKey);
+    });
+  };
+
+  fetchVideoData(category).then(data => {
+    if (!data) {
+      const otherCategory = category === 'sub' ? 'dub' : 'sub';
+      fetchVideoData(otherCategory).then(data => {
+        if (!data) {
+          alert(`Error loading both ${category} and ${otherCategory}`);
         } else {
-          art.notice.show('Does not support playback of m3u8');
+          initializePlayer(data);
         }
-      },
-    },
-    moreVideoAttr: {
-      'webkit-playsinline': true,
-      'playsinline': true,
-    },
-    subtitle: {
-      url: mockData.tracks[0].file, // Captions track
-      type: 'vtt',
-      style: {
-        color: '#ffffff', // Subtitle text color
-        fontSize: '16px',
-        background: 'rgba(0, 0, 0, 0.3)', // Subtitle background
-      },
-    },
-  });
-
-  // Debugging: Add logs for plugin initialization
-  art.on('plugin:ready', (plugin) => {
-    console.log('Plugin ready:', plugin);
-  });
-
-  art.on('ready', () => {
-    console.log('Artplayer is ready');
+      });
+    } else {
+      initializePlayer(data);
+    }
   });
 });
-      
-</script>
+   </script>
+   
