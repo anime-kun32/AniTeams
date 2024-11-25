@@ -18,18 +18,14 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(data => {
             if (!data.success) {
-                console('Failed to fetch anime details');
+                console.error('Failed to fetch anime details');
                 return;
             }
 
             const anime = data.data.anime.info;
-            const moreInfo = data.data.anime.moreInfo;
-
-            // Set the document title
-            document.title = anime.name;
-
-            // Populate main anime details
-            const animeImage = document.getElementById('anime-image');
+            const moreInfo = data.data.anime.moreInfo; 
+            document.title = anime.name; 
+            const animeImage = document.geElementById('anime-image');
             const animeTitle = document.getElementById('anime-title');
             const animeDescription = document.getElementById('anime-description');
 
@@ -41,19 +37,70 @@ document.addEventListener('DOMContentLoaded', function () {
             const watchLink = document.getElementById('watch-link');
             if (watchLink) watchLink.href = `episodes.html?id=${anime.id}`;
 
+            // Add the bookmark button
+            const bookmarkContainer = document.getElementById('bookmark-container');
+            if (bookmarkContainer) {
+                let isBookmarked = false; 
+                const bookmarkButton = document.createElement('button');
+                const bookmarkMessage = document.createElement('div');
+
+                bookmarkButton.textContent = 'Bookmark';
+                bookmarkButton.id = 'bookmark-button';
+                bookmarkMessage.id = 'bookmark-message';
+                bookmarkMessage.style.color = 'green';
+                bookmarkMessage.style.marginTop = '10px';
+
+                bookmarkContainer.appendChild(bookmarkButton);
+                bookmarkContainer.appendChild(bookmarkMessage);
+
+                // Dialog elements
+                const welcomeDialog = document.getElementById('welcome-dialog');
+                const dialogHeader = document.querySelector('.dialog-header');
+                const dialogMessage = document.querySelector('.dialog-message');
+                const okButton = document.getElementById('ok-button');
+
+      // Event listener for bookmark button
+                bookmarkButton.addEventListener('click', () => {
+                    isBookmarked = !isBookmarked;
+                    if (isBookmarked) {
+                        bookmarkMessage.textContent = `${anime.name} is now bookmarked!`;
+                        bookmarkButton.textContent = 'Bookmarked';
+
+                        // Show dialog with anime title
+                        if (welcomeDialog && dialogHeader && dialogMessage) {
+                            dialogHeader.textContent = `🎉 ${anime.name} is Bookmarked!`;
+                            dialogMessage.innerHTML = `<ul><li>✨ ${anime.name} is now saved in your bookmarks.</li></ul>`;
+                            welcomeDialog.style.display = 'flex';
+                        }
+                    } else {
+                        bookmarkMessage.textContent = `${anime.name} is no longer bookmarked.`;
+                        bookmarkButton.textContent = 'Bookmark';
+                    }
+                });
+
+                // Close dialog on "OK" button click
+                if (okButton) {
+                    okButton.addEventListener('click', () => {
+                        if (welcomeDialog) {
+                            welcomeDialog.style.display = 'none';
+                        }
+                    });
+                }
+            }
+
             // Populate more info
             const infoLeft = document.getElementById('more-info-left');
-            const infoRight = document.getElementById('more-info-right');
+            const infoRight = document.getElementById('more-info-right'); // Fixed with assignment operator
             if (infoLeft && infoRight) {
                 const moreInfoEntries = [
-                    `Japanese: ${moreInfo.japanese}`,
+                    `Japanese: ${moreInfo.j}`,
                     `Synonyms: ${moreInfo.synonyms}`,
                     `Aired: ${moreInfo.aired}`,
                     `Premiered: ${moreInfo.premiered}`,
                     `Duration: ${moreInfo.duration}`,
                     `Status: ${moreInfo.status}`,
                     `MAL Score: ${moreInfo.malscore}`,
-                    `Genres ${moreInfo.genres.join(', ')}`,
+                    `Genres: ${moreInfo.genres.join(', ')}`,
                     `Studios: ${moreInfo.studios}`,
                     `Producers: ${moreInfo.producers.join(', ')}`
                 ];
@@ -72,14 +119,14 @@ document.addEventListener('DOMContentLoaded', function () {
             // Populate promotional videos
             const videoButton = document.getElementById('video-button');
             const videoModal = document.getElementById('video-modal');
-            const videoFrame = document.getElementById('video-frame'); // Fixed the query
+            const videoFrame = document.getElementById('video-frame');
             const videoClose = document.getElementById('video-close');
 
             if (videoButton && videoModal && videoFrame && videoClose) {
                 videoButton.addEventListener('click', () => {
-                    if (anime.promotionalVideos.length > 0) {
-                        videoFrame.src = anime.promotionalVideos[0].source; // Load the first video by default
-                        videoModal.style.display = 'flex';
+                    if (anime.promotionalVideos && anime.promotionalVideos.length > 0) {
+                        videoFrame.src = anime.promotionalVideos[0].source; 
+                        videoModal.style = 'flex';
                     }
                 });
 
@@ -90,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Populate characters and voice actors
-            const characterCardsContainer = document.getElementBy('character-cards');
+            const characterCardsContainer = document.getElementById('character-cards');
             if (characterCardsContainer) {
                 anime.charactersVoiceActors.forEach(character => {
                     const characterCard = document.createElement('div');
@@ -104,5 +151,5 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
         })
-        .catch(error => console.error('Error fetching anime details:', error));
+        .catch(error => console.error('Error fetching anime details or processing data:', error));
 });
