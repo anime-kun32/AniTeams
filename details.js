@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    const apiUrl = https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeIdFromUrl};
+    const apiUrl = `https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeIdFromUrl}`;
 
     // Fetch anime details from the API
     fetch(apiUrl)
@@ -36,22 +36,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Set the watch link using anime.id from the response
             const watchLink = document.getElementById('watch-link');
-            watchLink.href = episodes.html?id=${anime.id};
+            watchLink.href = `episodes.html?id=${anime.id}`;
 
             // Populate more info
             const infoLeft = document.getElementById('more-info-left');
             const infoRight = document.getElementById('more-info-right');
             const moreInfoEntries = [
-                Japanese: ${moreInfo.japanese},
-                Synonyms: ${moreInfo.synonyms},
-                Aired: ${moreInfo.aired},
-                Premiered: ${moreInfo.premiered},
-                Duration: ${moreInfo.duration},
-                Status: ${moreInfo.status},
-                MAL Score: ${moreInfo.malscore},
-                Genres: ${moreInfo.genres.join(', ')},
-                Studios: ${moreInfo.studios},
-                Producers: ${moreInfo.producers.join(', ')}
+                `Japanese: ${moreInfo.japanese}`,
+                `Synonyms: ${moreInfo.synonyms}`,
+                `Aired: ${moreInfo.aired}`,
+                `Premiered: ${moreInfo.premiered}`,
+                `Duration: ${moreInfo.duration}`,
+                `Status: ${moreInfo.status}`,
+                `MAL Score: ${moreInfo.malscore}`,
+                `Genres: ${moreInfo.genres.join(', ')}`,
+                `Studios: ${moreInfo.studios}`,
+                `Producers: ${moreInfo.producers.join(', ')}`
             ];
 
             moreInfoEntries.forEach((info, index) => {
@@ -87,12 +87,13 @@ document.addEventListener('DOMContentLoaded', function () {
             anime.charactersVoiceActors.forEach(character => {
                 const characterCard = document.createElement('div');
                 characterCard.classList.add('character-card');
-                characterCard.innerHTML = 
+                characterCard.innerHTML = `
                     <img src="${character.character.poster}" alt="${character.character.name}">
                     <p>${character.character.name}</p>
                     <p>Voice Actor: ${character.voiceActor.name}</p>
-                ;
+                `;
                 characterCardsContainer.appendChild(characterCard);
             });
         })
-        .catch(error => console.error('Error fetching anime details:', error)); 
+        .catch(error => console.error('Error fetching anime details:', error));
+});
