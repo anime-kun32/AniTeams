@@ -148,9 +148,17 @@
    </nav>
    <!-- Magnifying Glass Icon and Login Button -->
    <div class="header-extras">
-    <div class="css-icon-search">
+    <div class="css-icon-search" onclick="redirectToPage()">
     </div>
    </div>
+
+    <script>
+    // Function to redirect the user to a new page
+    function redirectToPage() {
+      window.location.href = './search.html'; // Change this URL to your desired destination
+    }
+  </script>
+   
   </header>
   <!-- Sidebar / Side Menu -->
   <aside class="side-menu" id="sideMenu">
