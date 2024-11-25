@@ -23,9 +23,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             const anime = data.data.anime.info;
-            const moreInfo = data.data.anime.moreInfo; 
-            document.title = anime.name; 
-            const animeImage = document.geElementById('anime-image');
+            const moreInfo = data.data.anime.moreInfo;
+
+            document.title = anime.name;
+            const animeImage = document.getElementById('anime-image');
             const animeTitle = document.getElementById('anime-title');
             const animeDescription = document.getElementById('anime-description');
 
@@ -40,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Add the bookmark button
             const bookmarkContainer = document.getElementById('bookmark-container');
             if (bookmarkContainer) {
-                let isBookmarked = false; 
+                let isBookmarked = false;
                 const bookmarkButton = document.createElement('button');
                 const bookmarkMessage = document.createElement('div');
 
@@ -59,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const dialogMessage = document.querySelector('.dialog-message');
                 const okButton = document.getElementById('ok-button');
 
-      // Event listener for bookmark button
+                // Event listener for bookmark button
                 bookmarkButton.addEventListener('click', () => {
                     isBookmarked = !isBookmarked;
                     if (isBookmarked) {
@@ -67,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         bookmarkButton.textContent = 'Bookmarked';
 
                         // Show dialog with anime title
-                        if (welcomeDialog && dialogHeader && dialogMessage) {
+                        if welcomeDialog && dialogHeader && dialogMessage) {
                             dialogHeader.textContent = `🎉 ${anime.name} is Bookmarked!`;
                             dialogMessage.innerHTML = `<ul><li>✨ ${anime.name} is now saved in your bookmarks.</li></ul>`;
                             welcomeDialog.style.display = 'flex';
@@ -90,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Populate more info
             const infoLeft = document.getElementById('more-info-left');
-            const infoRight = document.getElementById('more-info-right'); // Fixed with assignment operator
+            const infoRight = document.getElementById('more-info-right');
             if (infoLeft && infoRight) {
                 const moreInfoEntries = [
                     `Japanese: ${moreInfo.j}`,
@@ -101,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     `Status: ${moreInfo.status}`,
                     `MAL Score: ${moreInfo.malscore}`,
                     `Genres: ${moreInfo.genres.join(', ')}`,
-                    `Studios: ${moreInfo.studios}`,
+                    `Studios: ${more.studios}`,
                     `Producers: ${moreInfo.producers.join(', ')}`
                 ];
 
@@ -125,8 +126,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (videoButton && videoModal && videoFrame && videoClose) {
                 videoButton.addEventListener('click', () => {
                     if (anime.promotionalVideos && anime.promotionalVideos.length > 0) {
-                        videoFrame.src = anime.promotionalVideos[0].source; 
-                        videoModal.style = 'flex';
+                        videoFrame.src = anime.promotionalVideos[0].source;
+                        videoModal.style.display = 'flex'; // Corrected here
                     }
                 });
 
@@ -139,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Populate characters and voice actors
             const characterCardsContainer = document.getElementById('character-cards');
             if (characterCardsContainer) {
-                anime.charactersVoiceActors.forEach(character => {
+                anime.charactersVActors.forEach(character => {
                     const characterCard = document.createElement('div');
                     characterCard.classList.add('character-card');
                     characterCard.innerHTML = `
