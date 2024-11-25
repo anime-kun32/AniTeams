@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const anime = data.data.anime.info;
             const moreInfo = data.data.anime.moreInfo;
 
-            // Update the <h1> tag with the anime name
+            // Update the with the anime name
             document.getElementById('anime-header').textContent = anime.name;
 
             // Set the document title to the anime name
@@ -57,8 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
             moreInfoEntries.forEach((info, index) => {
                 const listItem = document.createElement('li');
                 listItem.textContent = info;
-                if (index % 2 === 0) {
-                    infoLeft.appendChild(listItem);
+                if (index % 2 === 0Child(listItem);
                 } else {
                     infoRight.appendChild(listItem);
                 }
@@ -94,7 +93,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 `;
                 characterCardsContainer.appendChild(characterCard);
             });
+
+            // Bookmark Button Logic
+            const bookmarkButton = document.getElementById('bookmark-button');
+
+            bookmarkButton.addEventListener('click', () => {
+                if (!animeIdFromUrl) return;
+
+                let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+                if (bookmarks.includes(animeIdFromUrl)) {
+                    alert('This anime is already bookmarked.');
+                } else {
+                    bookmarks.push(animeIdFromUrl);
+                    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+                    alert('Anime bookmarked successfully!');
+                }
+            });
         })
         .catch(error => console.error('Error fetching anime details:', error));
 });
-
