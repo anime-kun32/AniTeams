@@ -364,6 +364,7 @@
             <h2>Description</h2>
             <p id="anime-description"></p>
             <a id="watch-link" href="#" target="_blank">Watch Now</a>
+            <button id="bookmark-button">Bookmark</button>
             <div class="additional-info">
                 <h3>More Info</h3>
                 <ul id="more-info-left" class="info-list"></ul>
@@ -390,6 +391,148 @@
         <div class="character-cards" id="character-cards">
             <!-- Character and Voice Actor cards will be inserted here -->
         </div>
+     <style>#bookmark-button {
+    display: inline-block;
+    margin-top: 1em;
+    padding: 0.5em 1em;
+    background-color: #28a745; /* Green color for bookmark */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+#bookmark-button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+ @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    /* Dialog Styling */
+    .dialog {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9); /* Darker semi-transparent black */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out, visibility 0s 0.3s;
+    }
+
+    .dialog.active {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .dialog-content {
+        background-color: #1b1b1b; /* Sleek dark gray background */
+        color: #f2f2f2; /* Light gray text */
+        padding: 30px;
+        border-radius: 16px;
+        text-align: left;
+        max-width: 480px;
+        width: 90%;
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.7);
+        animation: fadeIn 0.5s ease-out;
+        font-family: 'Poppins', sans-serif; /* Stylish Google Font */
+    }
+
+    .dialog-header {
+        font-size: 26px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        border-bottom: 3px solid #9932cc; /* Elegant purple underline */
+        padding-bottom: 8px;
+        color: #d69df5; /* Light purple */
+        text-align: center;
+    }
+
+    .dialog-message p {
+        margin: 0 0 15px;
+        font-size: 16px;
+        line-height: 1.8;
+    }
+
+    .dialog-message ul {
+        margin: 0 0 15px;
+        padding-left: 20px;
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+    .dialog-message ul li {
+        margin-bottom: 10px;
+    }
+
+    /* Button Styles */
+    #ok-button {
+        display: block;
+        margin: 20px auto 0;
+        background-color: #9932cc; /* Purple button */
+        color: #fff;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        font-family: 'Poppins', sans-serif;
+        box-shadow: 0 4px 10px rgba(153, 50, 204, 0.4);
+    }
+
+    #ok-button:hover {
+        background-color: #a74be7; /* Lighter purple on hover */
+        transform: scale(1.05);
+    }
+
+    /* Fade-in Animation */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>   
+         <script>
+       
+        let animeTitle = document.getElementBy('anime-title').innerText;
+        let isBookmarked = false;
+
+        // Event listener for bookmark action
+        document.querySelector('.bookmark-button').addEventListener('click', () => {
+            // Toggle bookmark status
+            isBookmarked = !isBookmarked;
+
+            // Dynamically update the button text and the message
+            if (isBookmarked) {
+                // Change button text to 'Bookmarked'
+                document.querySelector('.bookmark-button').innerText = 'Bookmarked';
+
+                // Display message with the anime title
+                document.querySelector('.message').innerText = `${animeTitle} is now bookmarked!`;
+            } else {
+                // Change button text back to 'Bookmark'
+                document.querySelector('.bookmark-button').innerText = 'Bookmark';
+
+                // Display message with the anime title
+                document.querySelector('.message').innerText = `${animeTitle} is no longer bookmarked.`;
+            }
+        });
+    </script>
   <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
 
