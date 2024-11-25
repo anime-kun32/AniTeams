@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anime Details</title>
-    <link rel="stylesheet" href="details.css">
+    <link rel="stylesheet" href="css/details.css">
 </head>
 <body>
     <!-- Header -->
@@ -17,8 +17,6 @@
         <div class="movie-card" id="movie-card">
             <img id="anime-image" src="" alt="Anime Image">
             <div class="card-title" id="anime-title"></div>
-            <!-- Bookmark Button -->
-            <button id="bookmark-button">Bookmark</button>
         </div>
         <div class="movie-description" id="movie-description">
             <h2>Description</h2>
@@ -43,32 +41,19 @@
             <iframe id="video-frame" src="" frameborder="0" allowfullscreen></iframe>
         </div>
     </section>
-    <!---- styles for bookmark button---->
-    <style>
-        #bookmark-button {
-    margin-top: 1em;
-    padding: 0.5em 1em;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#bookmark-button:hover {
-    background-color: #45a049;
-}
-</style>
-    
-
 
     <!-- Characters and Voice Actors Section -->
     <section class="characters-voice-actors">
         <h2>Characters & Voice Actors</h2>
-        <div class="character-cards" id="character-cards"></div>
+        <div class="character-cards" id="character-cards">
+            <!-- Character and Voice Actor cards will be inserted here -->
+        </div>
+ 
+
+
     </section>
-,
+  
+
     <script src="details.js"></script>
 </body>
 </html>
