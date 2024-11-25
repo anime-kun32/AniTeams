@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anime Details</title>
-    <link rel="stylesheet" href="details.css">
-    <style>/* Header Styling */
-header {
+    <link rel="stylesheet" href="css/details.css">
+</head>
+<body>
+    <!-- Header -->
+    <style> header {
     position: absolute;
     top: 0;
     left: 0;
@@ -239,11 +241,8 @@ header {
     .menu a:hover {
         color: lightblue;
     }
-}
-</style>
-  
-</head>
-<body>
+}</style>
+
     <!-- Header -->
     <header>
         
@@ -328,13 +327,13 @@ header {
         // Load genres on page load
         window.onload = fetchGenres;
   </script>
-    </header>
-
     <!-- Main Content -->
     <div class="main-content">
         <div class="movie-card" id="movie-card">
             <img id="anime-image" src="" alt="Anime Image">
             <div class="card-title" id="anime-title"></div>
+            <!-- Bookmark Button -->
+            <button id="bookmark-button">Bookmark</button>
         </div>
         <div class="movie-description" id="movie-description">
             <h2>Description</h2>
@@ -363,9 +362,26 @@ header {
     <!-- Characters and Voice Actors Section -->
     <section class="characters-voice-actors">
         <h2>Characters & Voice Actors</h2>
-        <div class="character-cards" id="character-cards">
-            <!-- Character and Voice Actor cards will be inserted here -->
-        </div>
-     <script src="details.js"></script>   
+        <div class="character-cards" id="character-cards"></div>
+    </section>
+        
+<script>#bookmark-button {
+    margin-top: 1em;
+    padding: 0.5em 1em;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#bookmark-button:hover {
+    background-color: #45a049;
+}
+</script>
+    <script src="js/details.txt"></script>
 </body>
 </html>
+
+
