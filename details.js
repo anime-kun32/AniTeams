@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    const apiUrl = `https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeIdFromUrl}`;
+    const apiUrl = https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeIdFromUrl};
 
     // Fetch anime details from the API
     fetch(apiUrl)
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const anime = data.data.anime.info;
             const moreInfo = data.data.anime.moreInfo;
 
-            // Update the with the anime name
+            // Update the <h1> tag with the anime name
             document.getElementById('anime-header').textContent = anime.name;
 
             // Set the document title to the anime name
@@ -36,28 +36,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Set the watch link using anime.id from the response
             const watchLink = document.getElementById('watch-link');
-            watchLink.href = `episodes.html?id=${anime.id}`;
+            watchLink.href = episodes.html?id=${anime.id};
 
             // Populate more info
             const infoLeft = document.getElementById('more-info-left');
             const infoRight = document.getElementById('more-info-right');
             const moreInfoEntries = [
-                `Japanese: ${moreInfo.japanese}`,
-                `Synonyms: ${moreInfo.synonyms}`,
-                `Aired: ${moreInfo.aired}`,
-                `Premiered: ${moreInfo.premiered}`,
-                `Duration: ${moreInfo.duration}`,
-                `Status: ${moreInfo.status}`,
-                `MAL Score: ${moreInfo.malscore}`,
-                `Genres: ${moreInfo.genres.join(', ')}`,
-                `Studios: ${moreInfo.studios}`,
-                `Producers: ${moreInfo.producers.join(', ')}`
+                Japanese: ${moreInfo.japanese},
+                Synonyms: ${moreInfo.synonyms},
+                Aired: ${moreInfo.aired},
+                Premiered: ${moreInfo.premiered},
+                Duration: ${moreInfo.duration},
+                Status: ${moreInfo.status},
+                MAL Score: ${moreInfo.malscore},
+                Genres: ${moreInfo.genres.join(', ')},
+                Studios: ${moreInfo.studios},
+                Producers: ${moreInfo.producers.join(', ')}
             ];
 
             moreInfoEntries.forEach((info, index) => {
                 const listItem = document.createElement('li');
                 listItem.textContent = info;
-                if (index % 2 === 0Child(listItem);
+                if (index % 2 === 0) {
+                    infoLeft.appendChild(listItem);
                 } else {
                     infoRight.appendChild(listItem);
                 }
@@ -86,29 +87,12 @@ document.addEventListener('DOMContentLoaded', function () {
             anime.charactersVoiceActors.forEach(character => {
                 const characterCard = document.createElement('div');
                 characterCard.classList.add('character-card');
-                characterCard.innerHTML = `
+                characterCard.innerHTML = 
                     <img src="${character.character.poster}" alt="${character.character.name}">
                     <p>${character.character.name}</p>
                     <p>Voice Actor: ${character.voiceActor.name}</p>
-                `;
+                ;
                 characterCardsContainer.appendChild(characterCard);
             });
-
-            // Bookmark Button Logic
-            const bookmarkButton = document.getElementById('bookmark-button');
-
-            bookmarkButton.addEventListener('click', () => {
-                if (!animeIdFromUrl) return;
-
-                let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
-                if (bookmarks.includes(animeIdFromUrl)) {
-                    alert('This anime is already bookmarked.');
-                } else {
-                    bookmarks.push(animeIdFromUrl);
-                    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-                    alert('Anime bookmarked successfully!');
-                }
-            });
         })
-        .catch(error => console.error('Error fetching anime details:', error));
-});
+        .catch(error => console.error('Error fetching anime details:', error)); 
