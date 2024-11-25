@@ -31,7 +31,24 @@
         <button id="ok-button">Got It!</button>
     </div>
 </div>
+<script>
+    // Check localStorage for the welcome dialog status
+    document.addEventListener("DOMContentLoaded", () => {
+        const dialog = document.getElementById("welcome-dialog");
+        const okButton = document.getElementById("ok-button");
 
+        // Show dialog if not already acknowledged
+        if (!localStorage.getItem("welcomeAcknowledged")) {
+            dialog.classList.add("active");
+        }
+
+        // Handle the 'Got It!' button click
+        okButton.addEventListener("click", () => {
+            localStorage.setItem("welcomeAcknowledged", "true");
+            dialog.classList.remove("active");
+        });
+    });
+</script>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
