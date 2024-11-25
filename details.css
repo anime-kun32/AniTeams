@@ -6,6 +6,19 @@ body {
     color: #ffffff;
 }
 
+header {
+    background-color: #1c1c1c;
+    color: white;
+    padding: 1em;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
 .main-content {
     display: flex;
     flex-wrap: wrap;
@@ -67,7 +80,7 @@ body {
     display: inline-block;
     margin-top: 1em;
     padding: 0.5em 1em;
-    background-color: #7354e7;
+    background-color: #e50914;
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -138,7 +151,7 @@ body {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #7354e7;
+    background-color: #e50914;
     color: white;
     border: none;
     border-radius: 5px;
