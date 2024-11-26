@@ -38,14 +38,15 @@ async function fetchAnimes() {
                 buttons.classList.add("buttons");
 
                 const watchButton = document.createElement("a");
-                watchButton.href = "#";
+                watchButton.href = `details.html?id=${anime.id}` ;
                 watchButton.classList.add("watch-button");
                 watchButton.textContent = "Watch Now";
 
                 const detailsButton = document.createElement("a");
-                detailsButton.href = "#";
-                detailsButton.classList.add("details-button");
-                detailsButton.textContent = "Details";
+detailsButton.href = `details.html?id=${anime.id}`; 
+detailsButton.classList.add("details-button");
+detailsButton.textContent = "Details";
+
 
                 // Append all elements
                 buttons.appendChild(watchButton);
