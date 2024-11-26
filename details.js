@@ -25,16 +25,22 @@ document.addEventListener('DOMContentLoaded', function () {
             const anime = data.data.anime.info;
             const moreInfo = data.data.anime.moreInfo;
 
-            document.getElementById('anime-header').textContent = anime.name;
+            const animeHeader = document.getElementById('anime-header');
+            const animeImage = document.getElementById('anime-image');
+            const animeTitle = document.getElementById('anime-title');
+            const animeDescription = document.getElementById('anime-description');
+            const watchLink = document.getElementById('watch-link');
+
+            if (animeHeader) animeHeader.textContent = anime.name;
             document.title = anime.name;
-            document.getElementById('anime-image').src = anime.poster;
-            document.getElementById('anime-title').textContent = anime.name;
-            document.getElementById('anime-description').textContent = anime.description;
-            document.getElementById('watch-link').href = `episodes.html?id=${anime.id}`;
+            if (animeImage) animeImage.src = anime.poster;
+            if (animeTitle) animeTitle.textContent = anime.name;
+            if (animeDescription) animeDescription.textContent = anime.description;
+            if (watchLink) watchLink.href = `episodes.html?id=${anime.id}`;
 
             const moreInfoEntries = [
                 `Japanese: ${moreInfo.japanese}`,
- `Synonyms: ${moreInfo.synonyms}`,
+                `Synonyms: ${moreInfo.synonyms}`,
                 `Aired: ${moreInfo.aired}`,
                 `Premiered: ${moreInfo.premiered}`,
                 `Duration: ${moreInfo.duration}`,
@@ -45,30 +51,39 @@ document.addEventListener('DOMContentLoaded', function () {
                 `Producers: ${moreInfo.producers.join(', ')}`
             ];
 
+            const moreInfoLeft = document.getElementById('more-info-left');
+            const moreInfoRight = document.getElementById('more-info-right');
+
             moreInfoEntries.forEach((info, index) => {
                 const listItem = document.createElement('li');
                 listItem.textContent = info;
-                if (index % 2 === 0) {
-                    document.getElementById('more-info-left').appendChild(listItem);
-                } else {
-                    document.getElementById('more-info-right').appendChild(listItem);
+                if (index % 2 === 0 && moreInfoLeft) {
+                    moreInfoLeft.appendChild(listItem                } else if (moreInfoRight) {
+                    moreInfoRight.appendChild(listItem);
                 }
             });
 
-            document.getElementById('video-button').addEventListener('click', () => {
-                const videoModal = document.getElementById('video-modal');
-                const videoFrame = document.getElementById('video-frame');
-                if (anime.promotionalVideos.length > 0) {
-                    videoFrame.src = anime.promotionalVideos[0].source;
-                    videoModal.style.display = 'flex';
-                }
-            });
+            const videoButton = document.getElementById('video-button');
+            const videoModal = document.getElementById('video-modal');
+            const videoFrame = document.getElementById('video-frame');
+            if (videoButton) {
+                videoButton.addEventListener('click', () => {
+                    if (anime.promotionalVideos.length > 0 && videoFrame) {
+                        videoFrame.src = anime.promotionalVideos[0].source;
+                        if (videoModal) videoModal.style.display = 'flex';
+                    }
+                });
+            }
 
-            document.getElementById('video-close').addEventListener('click', () => {
-                const videoModal = document.getElementById('video-modal');
-                videoModal.display = 'none';
-                document.getElementById('video-frame').src = ''; // Reset video
-            });
+            const videoClose = document.getElementById('video-close');
+            if (videoClose) {
+                videoClose.addEventListener('click', () => {
+                    if (videoModal) {
+                        videoModal.style.display = 'none'; // Corrected to use style.display
+                        if (videoFrame) videoFrame.src = ''; // Reset video
+                    }
+                });
+            }
 
             const characterCardsContainer = document.getElementById('character-cards');
             anime.charactersVoiceActors.forEach(character => {
@@ -77,9 +92,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 characterCard.innerHTML = `
                     <img src="${character.character.poster}" alt="${character.character.name}">
                     <p>${character.character.name}</p>
-                    <p>Voice Actor: ${character.voiceActor.name}</p>
+                    <p>Voice Actor:character.voiceActor.name}</p>
                 `;
-                characterCardsContainer.appendChild(characterCard);
+                if (characterCardsContainer) {
+                    characterCardsContainer.appendChild(characterCard);
+                }
             });
 
             const bookmarkButton = document.getElementById('bookmark-button');
@@ -87,25 +104,35 @@ document.addEventListener('DOMContentLoaded', function () {
             const okButton = document.getElementById('ok-button');
             const bookmarkMessage = document.getElementById('bookmark-message');
 
-            bookmarkButton.addEventListener('click', () => {
-                const bookmark = {
-                    id: anime.id,
-                    name: anime.name,
-                    poster: anime.poster,
-                    description: anime.description
-                };
+            if (bookmarkButton) {
+                bookmarkButton.addEventListener('click', () => {
+                    const bookmark = {
+                        id: anime.id,
+                        name: anime.name,
+                        poster: anime.poster,
+                        description: anime.description
+                    };
 
-                let bookmarks = JSON.parse(localStorage.getItem('animeBookmarks')) || [];
-                bookmarks.push(bookmark);
-                localStorage.setItem('animeBookmarks', JSON.stringify(bookmarks));
+                    let bookmarks = JSON.parse(localStorage.getItem('animeBookmarks')) || [];
+                    bookmarks.push(bookmark);
+                    localStorage.setItem('animeBookmarks', JSON.stringify(bookmarks));
 
-                bookmarkMessage.textContent = `${anime.name} is now in your bookmarks.`;
-                welcomeDialog.style.display = 'flex';
- });
+                    if (bookmarkMessage) {
+                        bookmarkMessage.textContent = `${anime.name} is now in your bookmarks.`;
+                    }
+                    if (welcomeDialog) {
+                        welcomeDialog.style.display = 'flex';
+                    }
+                });
+            }
 
-            okButton.addEventListener('click', () => {
-                welcomeDialog.style.display = 'none';
-            });
+            if (okButton) {
+                okButton.addEventListener('click', () => {
+                    if (welcomeDialog) {
+                        welcomeDialog.style.display = 'none';
+                    }
+                });
+            }
         })
         .catch(error => console.error('Error fetching anime details:', error));
 });
