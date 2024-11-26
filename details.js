@@ -9,7 +9,7 @@
                 return; // This return statement is valid because it's inside this function
             }
 
-            const apiUrl = `https://aniwatch-api-vercel.app/api/v2/hianime/anime/${animeIdFromUrl}`;
+            const apiUrl = `https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeIdFromUrl}`;
 
             // Fetch anime details from the API
             fetch(apiUrl)
