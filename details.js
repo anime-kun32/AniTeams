@@ -1,4 +1,4 @@
-   document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
             const urlParams = new URLSearchParams(window.location.search);
             const animeIdFromUrl = urlParams.get('id');
 
@@ -17,12 +17,13 @@
                     return response.json();
                 })
                 .then(data => {
-                    if (!data.success.error('Failed to fetch anime details');
+                    if (!data.success) {
+                        console.error('Failed to fetch anime details');
                         return;
                     }
 
                     const anime = data.data.anime.info;
-                    const moreInfo = data.data.anime.moreInfo;
+ = data.data.anime.moreInfo;
 
                     document.getElementById('anime-header').textContent = anime.name;
                     document.title = anime.name;
@@ -44,10 +45,10 @@
                         `Producers: ${moreInfo.producers.join(', ')}`
                     ];
 
-                    moreInfoEntries.forEach((info) => {
+                    moreInfoEntries.forEach((info, index) => {
                         const listItem = document.createElement('li');
                         listItem.textContent = info;
-                        if (index % 2 === 0) {
+                        if ( 0) {
                             document.getElementById('more-info-left').appendChild(listItem);
                         } else {
                             document.getElementById('more-info-right').appendChild(listItem);
@@ -69,11 +70,11 @@
                         document.getElementById('video-frame').src = ''; // Reset video
                     });
 
-CardsContainer = document.getElementById('character-cards');
+                    const characterCardsContainer = document.getElementById('character-cards');
                     anime.charactersVoiceActors.forEach(character => {
                         const characterCard = document.createElement('div');
                         characterCard.classList.add('character-card');
-                        characterCard.innerHTML = `
+                        characterHTML = `
                             <img src="${character.character.poster}" alt="${character.character.name}">
                             <p>${character.character.name}</p>
                             <p>Voice Actor: ${character.voiceActor.name}</p>
@@ -96,15 +97,15 @@ CardsContainer = document.getElementById('character-cards');
 
                         let bookmarks = JSON.parse(localStorage.getItem('animeBookmarks')) || [];
                         bookmarks.push(bookmark);
-.setItem('animeBookmarks', JSON.stringify(bookmarks));
+                        localStorage.setItem('animeBookmarks', JSON.stringify(bookmarks));
 
                         bookmarkMessage.textContent = `${anime.name} is now in your bookmarks.`;
                         welcomeDialog.style.display = 'flex';
                     });
 
-                    okButton.addEventListener('click', () => {
+                    okButton('click', () => {
                         welcomeDialog.style.display = 'none';
                     });
                 })
                 .catch(error => console.error('Error fetching anime details:', error));
-        });
+        })
