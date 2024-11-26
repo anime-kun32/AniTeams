@@ -54,14 +54,16 @@ document.addEventListener('DOMContentLoaded', function () {
             const moreInfoLeft = document.getElementById('more-info-left');
             const moreInfoRight = document.getElementById('more-info-right');
 
-            moreInfoEntries.forEach((info, index) => {
-                const listItem = document.createElement('li');
-                listItem.textContent = info;
-                if (index % 2 === 0 && moreInfoLeft) {
-                    moreInfoLeft.appendChild(listItem                } else if (moreInfoRight) {
-                    moreInfoRight.appendChild(listItem);
-                }
-            });
+          moreInfoEntries.forEach((info, index) => {
+    const listItem = document.createElement('li');
+    listItem.textContent = info;
+    if (index % 2 === 0 && moreInfoLeft) {
+        moreInfoLeft.appendChild(listItem); 
+    } else if (moreInfoRight) {
+        moreInfoRight.appendChild(listItem);
+    }
+});
+
 
             const videoButton = document.getElementById('video-button');
             const videoModal = document.getElementById('video-modal');
