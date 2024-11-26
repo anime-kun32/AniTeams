@@ -85,7 +85,7 @@
                     });
 
                     // Populate promotional videos
-                    const videoButton = documentElementById('video-button');
+                    const videoButton = document.ElementById('video-button');
                     const videoModal = document.getElementById('video-modal');
                     const videoFrame = document.getElementById('video-frame');
                     const videoClose = document.getElementById('video-close');
