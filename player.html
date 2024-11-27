@@ -54,9 +54,33 @@
         max-height: 100%;
       }
     }
+    
+.app-skip-btn {
+  position: absolute;
+  top: -6.5rem;
+  background-color: #171717;
+  color: #fff;
+  line-height: 1rem;
+  width: 6rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  right: 2%;
+  padding: 0.5em !important;
+}
+    .app-skip-btn:hover {
+  background: #212121;
+    }
+    @media (min-width: 768px) {
+  .app-skip-btn {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+    }
   </style>
   
-  
+  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
   <!-- Artplayer Script -->
   <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
   
@@ -76,7 +100,7 @@
   <div class="artplayer-app"></div>
 
   <script>
-document.addEventListener('DOMContentLoaded', () => {
+          document.addEventListener('DOMContentLoaded', () => {
   const baseApiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/sources';
   let category = 'dub';
   let art = null;
@@ -94,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const fetchVideoData = (category) => {
     const apiUrl = `${baseApiUrl}?animeEpisodeId=${id}&server=hd-1&category=${category}`;
-    console.log(`Fetching video data from: ${apiUrl}`);
     return fetch(apiUrl)
       .then(response => {
         if (!response.ok) throw new Error('Network response was not ok');
@@ -102,60 +125,20 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .then(data => {
         if (data.status === 502) return null;
-        return {
-          sources: data.data.sources,
-          tracks: data.data.tracks,
-        };
+        return data;
       })
       .catch(error => console.error('Error fetching API data:', error));
   };
 
-  const convertVTTFormat = async (url) => {
-    try {
-      const response = await fetch(url);
-      const text = await response.text();
-      const lines = text.split('\n');
-      let converted = ['WEBVTT', ''];
-      const baseUrl = url.substring(0, url.lastIndexOf('/') + 1);
-      for (let line of lines) {
-        line = line.trim();
-        if (!line || line === 'WEBVTT') continue;
-        if (/^\d+$/.test(line)) continue;
-        if (line.includes('-->')) {
-          const [start, end] = line.split('-->').map(time => {
-            const match = time.trim().match(/(\d{2}):(\d{2}):(\d{2})\.(\d{3})/);
-            if (match) {
-              const [_, hh, mm, ss, ms] = match;
-              const totalSeconds = parseInt(hh) * 3600 + parseInt(mm) * 60 + parseInt(ss);
-              const minutes = Math.floor(totalSeconds / 60);
-              const seconds = totalSeconds % 60;
-              return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms}`;
-            }
-            return time.trim();
-          });
-          converted.push(`${start} --> ${end}`);
-        } else if (line.includes('#xywh=')) {
-          const [imageName, coordinates] = line.split('#');
-          converted.push(`${baseUrl}${imageName}#${coordinates}`);
-        }
-      }
-      const blob = new Blob([converted.join('\n')], { type: 'text/vtt' });
-      return URL.createObjectURL(blob);
-    } catch (error) {
-      console.error('Error converting VTT format:', error);
-      return null;
-    }
-  };
-
   const initializePlayer = async (data) => {
-    if (!data || !data.sources) {
+    if (!data || !data.data.sources) {
       console.error('Invalid data received from API:', data);
       return;
     }
 
-    const videoSource = data.sources[0].url;
-    const subtitleTracks = data.tracks.filter(track => track.kind === 'captions');
-    const thumbnailTrack = data.tracks.find(track => track.kind === 'thumbnails');
+    const videoSource = data.data.sources[0].url;
+    const intro = data.data.intro;
+    const outro = data.data.outro;
 
     if (art) art.destroy();
 
@@ -171,59 +154,11 @@ document.addEventListener('DOMContentLoaded', () => {
       airplay: true,
       playsInline: true,
       miniProgressBar: true,
-      pip:true,
-      plugins: [artplayerPluginChromecast({})],
-      settings: [
-        {
-          html: 'Speed',
-          selector: [
-            { html: '1.0x', playbackRate: 1.0, default: true },
-            { html: '1.5x', playbackRate: 1.5 },
-            { html: '2.0x', playbackRate: 2.0 },
-          ],
-          onSelect: (item) => {
-            art.playbackRate = item.playbackRate;
-            return item.html;
-          },
-        },
-        {
-          html: 'Subtitles',
-          selector: subtitleTracks.map(track => ({
-            html: track.label,
-            url: track.file,
-            default: track.default || false,
-          })),
-          onSelect: (item) => {
-            art.subtitle.switch(item.url, item.html);
-            return item.html;
-          },
-        },
-        {
-          html: 'Audio',
-          selector: [
-            { html: 'Sub', category: 'sub', default: category === 'sub' },
-            { html: 'Dub', category: 'dub', default: category === 'dub' },
-          ],
-          onSelect: (item) => {
-            category = item.category;
-            fetchVideoData(category).then(data => {
-              if (!data) {
-                const otherCategory = category === 'sub' ? 'dub' : 'sub';
-                fetchVideoData(otherCategory).then(data => {
-                  if (!data) {
-                    alert(`Error loading both ${category} and ${otherCategory}`);
-                  } else {
-                    initializePlayer(data);
-                  }
-                });
-              } else {
-                initializePlayer(data);
-              }
-            });
-            return item.html;
-          },
-        },
-      ],
+      pip: true,
+      moreVideoAttr: {
+        'webkit-playsinline': true,
+        'playsinline': true,
+      },
       customType: {
         m3u8: (video, url) => {
           if (Hls.isSupported()) {
@@ -239,34 +174,40 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         },
       },
-      moreVideoAttr: {
-        'webkit-playsinline': true,
-        'playsinline': true,
-      },
     });
-
-    if (thumbnailTrack) {
-      const thumbnailVTT = await convertVTTFormat(thumbnailTrack.file);
-      if (thumbnailVTT) {
-        art.plugins.add(artplayerPluginVttThumbnail({ vtt: thumbnailVTT }));
-      }
-    }
-
-    const saveKey = `video-progress-${id}`;
-    const savedTime = localStorage.getItem(saveKey);
-
-    if (savedTime) {
-      art.currentTime = parseFloat(savedTime);
-      art.notice.show(`Resuming from ${savedTime} seconds`);
-    }
 
     art.on('video:timeupdate', () => {
       const currentTime = art.currentTime;
-      localStorage.setItem(saveKey, currentTime);
+
+      if (currentTime >= intro.start && currentTime <= intro.end) {
+        art.seek = intro.end + 1;
+        art.notice.show('Skipped Opening');
+      } else if (currentTime >= outro.start && currentTime <= outro.end) {
+        art.seek = outro.end + 1;
+        art.notice.show('Skipped Ending');
+      }
     });
 
-    art.on('video:ended', () => {
-      localStorage.removeItem(saveKey);
+    art.on('ready', () => {
+      art.controls.add({
+        name: 'skip-opening',
+        position: 'top',
+        html: '<button class="app-skip-btn">Skip Opening</button>',
+        click: () => {
+          art.seek = intro.end + 1;
+          art.notice.show('Skipped Opening');
+        },
+      });
+
+      art.controls.add({
+        name: 'skip-ending',
+        position: 'top',
+        html: '<button class="app-skip-btn">Skip Ending</button>',
+        click: () => {
+          art.seek = outro.end + 1;
+          art.notice.show('Skipped Ending');
+        },
+      });
     });
   };
 
@@ -285,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+      
 </script>
 
           
