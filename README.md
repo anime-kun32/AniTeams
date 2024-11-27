@@ -1,5 +1,5 @@
 # AniTeams
-Welcome to AniTeams . An Anime streaming website , uses [Aniwatch](https://github.com/ghoshRitesh12/aniwatch-api). Uses (artplayer)[https://artplayer.org] for the video player. 
+Welcome to AniTeams . An Anime streaming website , uses [Aniwatch](https://github.com/ghoshRitesh12/aniwatch-api). Uses [artplayer](https://artplayer.org)for the video player. 
 # What's new 
 - A completely new layout
 - Added the Bookmark feature
