@@ -100,7 +100,7 @@
   <div class="artplayer-app"></div>
 
   <script>
-          document.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener('DOMContentLoaded', () => {
   const baseApiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/sources';
   let category = 'dub';
   let art = null;
@@ -116,29 +116,33 @@
     return;
   }
 
-  const fetchVideoData = (category) => {
+  const fetchVideoData = async () => {
     const apiUrl = `${baseApiUrl}?animeEpisodeId=${id}&server=hd-1&category=${category}`;
-    return fetch(apiUrl)
-      .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.json();
-      })
-      .then(data => {
-        if (data.status === 502) return null;
-        return data;
-      })
-      .catch(error => console.error('Error fetching API data:', error));
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) throw new Error('Failed to fetch video data');
+      const data = await response.json();
+      if (data.status === 502) return null;
+      return {
+        sources: data.data.sources,
+        tracks: data.data.tracks,
+        intro: data.data.intro,
+        outro: data.data.outro,
+      };
+    } catch (error) {
+      console.error('Error fetching API data:', error);
+      return null;
+    }
   };
 
   const initializePlayer = async (data) => {
-    if (!data || !data.data.sources) {
+    if (!data || !data.sources) {
       console.error('Invalid data received from API:', data);
       return;
     }
 
-    const videoSource = data.data.sources[0].url;
-    const intro = data.data.intro;
-    const outro = data.data.outro;
+    const videoSource = data.sources[0].url;
+    const { intro, outro } = data;
 
     if (art) art.destroy();
 
@@ -146,18 +150,14 @@
       container: '.artplayer-app',
       url: videoSource,
       type: 'm3u8',
-      screenshot: true,
-      setting: true,
       autoplay: true,
       fullscreen: true,
-      fullscreenWeb: true,
-      airplay: true,
       playsInline: true,
       miniProgressBar: true,
       pip: true,
       moreVideoAttr: {
         'webkit-playsinline': true,
-        'playsinline': true,
+        playsinline: true,
       },
       customType: {
         m3u8: (video, url) => {
@@ -165,68 +165,72 @@
             const hls = new Hls();
             hls.loadSource(url);
             hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
           } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = url;
-            video.addEventListener('loadedmetadata', () => video.play());
           } else {
-            art.notice.show('Does not support playback of m3u8');
+            art.notice.show('This browser does not support HLS');
           }
         },
       },
     });
 
+    const skipButton = (name, label, clickHandler) => {
+      return {
+        name,
+        position: 'top',
+        html: `<button class="app-skip-btn">${label}</button>`,
+        click: clickHandler,
+      };
+    };
+
     art.on('video:timeupdate', () => {
       const currentTime = art.currentTime;
 
-      if (currentTime >= intro.start && currentTime <= intro.end) {
-        art.seek = intro.end + 1;
-        art.notice.show('Skipped Opening');
-      } else if (currentTime >= outro.start && currentTime <= outro.end) {
-        art.seek = outro.end + 1;
-        art.notice.show('Skipped Ending');
+      // Handle intro skip button
+      if (intro && currentTime >= intro.start && currentTime <= intro.end) {
+        if (!art.controls.get('intro')) {
+          art.controls.add(
+            skipButton('intro', 'Skip Opening', () => {
+              art.seek = intro.end + 1;
+              art.notice.show = 'Skipped Opening';
+              art.controls.remove('intro');
+            })
+          );
+        }
+      } else {
+        if (art.controls.get('intro')) {
+          art.controls.remove('intro');
+        }
       }
-    });
 
-    art.on('ready', () => {
-      art.controls.add({
-        name: 'skip-opening',
-        position: 'top',
-        html: '<button class="app-skip-btn">Skip Opening</button>',
-        click: () => {
-          art.seek = intro.end + 1;
-          art.notice.show('Skipped Opening');
-        },
-      });
-
-      art.controls.add({
-        name: 'skip-ending',
-        position: 'top',
-        html: '<button class="app-skip-btn">Skip Ending</button>',
-        click: () => {
-          art.seek = outro.end + 1;
-          art.notice.show('Skipped Ending');
-        },
-      });
+      // Handle outro skip button
+      if (outro && currentTime >= outro.start && currentTime <= outro.end) {
+        if (!art.controls.get('outro')) {
+          art.controls.add(
+            skipButton('outro', 'Skip Ending', () => {
+              art.seek = outro.end + 1;
+              art.notice.show = 'Skipped Ending';
+              art.controls.remove('outro');
+            })
+          );
+        }
+      } else {
+        if (art.controls.get('outro')) {
+          art.controls.remove('outro');
+        }
+      }
     });
   };
 
-  fetchVideoData(category).then(data => {
+  fetchVideoData().then((data) => {
     if (!data) {
-      const otherCategory = category === 'sub' ? 'dub' : 'sub';
-      fetchVideoData(otherCategory).then(data => {
-        if (!data) {
-          alert(`Error loading both ${category} and ${otherCategory}`);
-        } else {
-          initializePlayer(data);
-        }
-      });
+      alert('Error loading video data');
     } else {
       initializePlayer(data);
     }
   });
 });
-      
+            
 </script>
 
           
