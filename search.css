@@ -1,0 +1,446 @@
+* {
+    box-sizing: border-box;
+}
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: auto;
+    font-family: "Poppins", sans-serif;
+    background-color: black;
+    color: #FFBADE;
+}
+
+/* Header and Button Styling */
+.bars {
+    margin-left: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 101;
+    display: flex;
+    flex-direction: column;
+}
+
+.login{
+    background-color: blueviolet;
+    padding: 12px 20px 12px 20px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    margin-left: 30px;
+    font-size: 18px;
+}
+
+.login:hover{
+    opacity: 0.8;
+}
+.login:active{
+    opacity: 0.4;
+}
+
+/* Responsive Container */
+.container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    max-width: 100%;
+    padding: 10px;
+    flex-wrap: wrap;
+    color: white;
+}
+
+
+/* Search Bar */
+#search-bar {
+    padding: 10px;
+    width: 100%;
+    max-width: 300px; /* Restrict max-width for better responsiveness */
+    border-radius: 10px;
+    outline: none;
+    border: 1px solid black;
+    font-family: 'Poppins', sans-serif;
+}
+#search-bar::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+}
+
+/* Navigation Links */
+.nav-links {
+    text-decoration: none;
+    position: relative;
+    color: white;
+}
+
+.nav-links::after {
+    content: "";
+    position: absolute;
+    height: 2px;
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    background-color: white;
+    transition: width 200ms ease-in-out;
+}
+
+.nav-links:hover::after {
+    width: 70%;
+}
+
+/* Menu Items */
+.menu ul li a {
+    text-decoration: none;
+    font-size: 16px;
+    color: #FFFF;
+    margin-left: 10px;
+    cursor: pointer;
+}
+.menu ul li a:hover {
+    color: blue;
+}
+
+.menu ul li a{
+    text-decoration: none;
+    font-size: 16px;
+    color: #FFFF;
+    margin-left: 10px;
+    margin-left: -20px;
+}
+.menu ul li a:hover{
+    color: blue;
+}
+.sidebar{
+    position: fixed;
+    list-style: none;
+    gap: 20px;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 40vh;
+    z-index: 999;
+    background-color: rgba(128, 0, 128, 0.347);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    backdrop-filter: blur(10px);
+   
+}
+.closemenu{
+    background-color: transparent;
+    border: none;
+    font-size: 15px;
+    color: #FFFF;
+    margin-top: 20px;
+    cursor: pointer;
+    margin-top: 30px;
+    margin-left: 10px;
+    margin-left: -20px;
+}
+@media (max-width: 412px){
+    .nav-links{
+        display: none;
+    
+    } 
+    .container {
+        flex-direction: column;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+      h2 span{
+            position: absolute;
+            left: 130px;
+            top: 80px;
+            font-size: 30px;
+      }
+         
+      .category-filter{
+        max-width: 412px;
+        overflow-x: hidden;
+    }
+    #search-bar{
+        transform: translateX(60px);
+        width: 260px !important;
+    }
+    .login{
+        transform: translateY(-200px) translateX(320px);
+        margin-right: 10px;
+        padding: 12px !important;
+        font-size: 13px !important;}
+    
+}
+@media (max-width: 570px){
+    .container{
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+    .category-filter{
+        max-width: 570px;
+        overflow-x: hidden;
+    }
+    .bars{
+        margin-top: 20px;
+        margin-right: 10px;
+    }
+    #search-bar{
+        display: flex;
+        flex-grow: 1;
+        margin-top: 10px;
+    }
+    .login{
+        margin-top: 20px;
+    }
+}
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .container {
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .login {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    #search-bar {
+        max-width: 200px;
+    }
+    .category-filter{
+        max-width: 768px;
+        overflow-x: hidden;
+    }
+}
+
+@media (max-width: 612px) {
+    .container {
+     /* Stack items vertically */
+        align-items: flex-start;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .nav-links{
+        display: none;
+    }
+    .login {
+        font-size: 12px;
+        padding: 6px 10px;
+        margin-left: 0; /* Align centrally */
+    }
+
+    #search-bar {
+        max-width: 100%;
+        width: auto;
+    }
+
+    .bars {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+    .category-filter{
+        max-width: 612px;
+        overflow-x: hidden;
+    }
+}
+
+
+@media screen and (max-width: 360px) {
+    .container{
+        flex-wrap: wrap;
+    }
+    .category-filter{
+        max-width: 360px;
+        overflow-x: hidden;
+    }
+    h2 span{
+        transform: translateX(-25px);
+        font-size: 30px;
+    }
+    #search-bar{
+        transform: translateX(30px);
+        width: 270px !important;
+    }
+    .login{
+        transform: translateY(-200px) translateX(278px);
+        margin-right: 10px;
+        padding: 12px !important;
+        font-size: 13px !important;
+    }
+}
+.category-filter {
+    display: block; /* Ensures it occupies the full width and aligns vertically */
+    margin-bottom: 20px; /* Adds space below the filter */
+    position: relative; /* Ensures it stays in the natural document flow */
+    width: 100%; /* Makes the filter take up the full width of its container */
+    height: auto; /* Allows the height to adjust automatically based on content */
+    top: auto; /* Removes any top alignment (if previously set) */
+    translate: none; /* Removes translate positioning (if previously set) */
+    z-index: 2;
+}
+
+
+
+select{
+    appearance: none; /* Removes default styling */
+    background-color: transparent;
+    color: #ffb6c1;
+    padding: 5px;
+    border: none;
+    cursor: pointer;
+    margin-left: 5px;
+    outline: none;
+    font-size: 13px;
+  }
+  select:active{
+    border: none;
+  }
+div p{
+    font-size: 20px;
+    color: white;
+}
+.filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Space between the filter items */
+    color: white;
+    margin-top: 10px;
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 10px 15px 10px 10px;
+    border: 1px solid #ffb6c1;
+    border-radius: 5px;
+    margin-top: 10px;
+    
+}
+
+.filter-item label {
+    font-size: 14px; /* Adjust label font size if needed */
+    color: white; /* Match your theme color */
+    margin-bottom: 1px;
+    font-size: 15px;
+}
+option {
+    background-color: #3c3b51; /* Dark option background */
+    color: #f5f5f5; /* Light text color */
+    padding: 8px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.start-month{
+    margin-left: 3px;
+    text-align: center;
+}
+
+.genre-filter p{
+    display: block;
+    position: relative;
+    top: 20%;
+    margin-right: 50em;
+}
+.ni-list {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;  /* Allows the items to wrap to the next line if necessary */
+    gap: 10px;  /* Adds space between the genre items */
+}
+.f-genre-item{
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+   row-gap: 6px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    cursor: pointer;
+    padding: 10px 10px 10px 10px;
+    border: 1px solid #ffb6c1;
+    border-radius: 6px;
+    text-align: center;
+}
+.f-genre-item.active {
+    /* or any other styling to indicate selection */
+    color: white;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ffb6c1;
+    border-radius: 6px;
+   background-color: transparent;
+}
+.f-genre-item.active::after{
+    content: "";
+    border: none;
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to bottom right, rgb(126, 27, 218), #e100ff);
+    border-radius: 6px;
+    z-index: -999;
+}
+.f-genre-item.active:active::after{
+    border: none;
+    display: flex;
+}
+.f-genre-item.active:active{
+    z-index: 5;
+    border: none;
+}
+.f-genre-item:active:not(.f-genre-item.active:active){
+    background-image:  linear-gradient(to bottom right, rgb(126, 27, 218), #e100ff);
+    border: none;
+}
+.filter-button-con{
+    display: inline-flex;
+}
+.filter-button{
+    padding: 13px 13px 13px 13px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border: none;
+    background-color: #3c3b51;
+    color: white;
+    font-size: 15px;
+    top: -10px;
+    margin-right: 1em;
+    margin-top: 1em;
+    margin-left: 1em;
+    cursor: pointer;
+}
+.filter-button::after{
+    content: "";
+    border: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to bottom right, rgb(126, 27, 218), #e100ff);
+    border-radius: 6px;
+    z-index: -1;
+}
+.filter-button:hover{
+    z-index: 0; 
+}
+.filter-button:active{
+    opacity: 0.4;
+}
+.f-genre-item.selected {
+    background-color: #e100ff; /* Persistent highlight color */
+    color: white; /* Ensure text remains visible */
+    border-color: #e100ff; /* Optional: Update border color */
+}
+
