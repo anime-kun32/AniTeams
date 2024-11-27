@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (animeImage) animeImage.src = anime.poster;
             if (animeTitle) animeTitle.textContent = anime.name;
             if (animeDescription) animeDescription.textContent = anime.description;
-            if (watchLink) watchLink.href = `episodes.html?id=${anime.id}`;
+            if (watchLink) watchLink.href = `watch.html?id=${anime.id}`;
 
             const moreInfoEntries = [
                 `Japanese: ${moreInfo.japanese}`,
