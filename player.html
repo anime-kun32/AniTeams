@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AniTeams -Watch</title>
+  
+  <!-- Artplayer CSS -->
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+      background: #000; /* Background color if needed */
+    }
+
+    .artplayer-app {
+      width: 100%;
+      height: 100%;
+      max-width: 1240px; /* Maximum width of the player */
+      max-height: 605px; /* Maximum height of the player */
+      background: #000; /* Background color */
+      box-sizing: border-box; /* Include padding and border in element's total width and height */
+    }
+
+    /* Media queries for different screen sizes */
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px; /* Optional padding for smaller screens */
+      }
+
+      .artplayer-app {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        padding: 10px; /* Optional padding for medium screens */
+      }
+
+      .artplayer-app {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+    
+.app-skip-btn {
+  position: absolute;
+  top: -6.5rem;
+  background-color: #171717;
+  color: #fff;
+  line-height: 1rem;
+  width: 6rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  right: 2%;
+  padding: 0.5em !important;
+}
+    .app-skip-btn:hover {
+  background: #212121;
+    }
+    @media (min-width: 768px) {
+  .app-skip-btn {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+    }
+  </style>
+  
+  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
+  <!-- Artplayer Script -->
+  <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
+  
+  <!-- HLS.js Script -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  
+  <!-- Chromecast Plugin Script -->
+  <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-chromecast/dist/artplayer-plugin-chromecast.js"></script>
+  
+  
+  <!-- VTT Thumbnail Plugin Script -->
+  <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-vtt-thumbnail/dist/artplayer-plugin-vtt-thumbnail.js"></script>
+  
+</head>
+<body>
+  <!-- Container for the Artplayer -->
+  <div class="artplayer-app"></div>
+
+  <script>
+      document.addEventListener('DOMContentLoaded', () => {
+  const baseApiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/sources';
+  let category = 'dub';
+  let art = null;
+
+  const getQueryParam = (param) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  };
+
+  const id = getQueryParam('id');
+  if (!id) {
+    console.error('No ID provided in URL');
+    return;
+  }
+
+  const fetchVideoData = async () => {
+    const apiUrl = `${baseApiUrl}?animeEpisodeId=${id}&server=hd-1&category=${category}`;
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) throw new Error('Failed to fetch video data');
+      const data = await response.json();
+      if (data.status === 502) return null;
+      return {
+        sources: data.data.sources,
+        tracks: data.data.tracks,
+        intro: data.data.intro,
+        outro: data.data.outro,
+      };
+    } catch (error) {
+      console.error('Error fetching API data:', error);
+      return null;
+    }
+  };
+
+  const initializePlayer = async (data) => {
+    if (!data || !data.sources) {
+      console.error('Invalid data received from API:', data);
+      return;
+    }
+
+    const videoSource = data.sources[0].url;
+    const { intro, outro } = data;
+
+    if (art) art.destroy();
+
+    art = new Artplayer({
+      container: '.artplayer-app',
+      url: videoSource,
+      type: 'm3u8',
+      autoplay: true,
+      fullscreen: true,
+      playsInline: true,
+      miniProgressBar: true,
+      pip: true,
+      moreVideoAttr: {
+        'webkit-playsinline': true,
+        playsinline: true,
+      },
+      customType: {
+        m3u8: (video, url) => {
+          if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(url);
+            hls.attachMedia(video);
+          } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = url;
+          } else {
+            art.notice.show('This browser does not support HLS');
+          }
+        },
+      },
+    });
+
+    const skipButton = (name, label, clickHandler) => {
+      return {
+        name,
+        position: 'top',
+        html: `<button class="app-skip-btn">${label}</button>`,
+        click: clickHandler,
+      };
+    };
+
+    art.on('video:timeupdate', () => {
+      const currentTime = art.currentTime;
+
+      // Handle intro skip button
+      if (intro && currentTime >= intro.start && currentTime <= intro.end) {
+        if (!art.controls.get('intro')) {
+          art.controls.add(
+            skipButton('intro', 'Skip Opening', () => {
+              art.seek = intro.end + 1;
+              art.notice.show = 'Skipped Opening';
+              art.controls.remove('intro');
+            })
+          );
+        }
+      } else {
+        if (art.controls.get('intro')) {
+          art.controls.remove('intro');
+        }
+      }
+
+      // Handle outro skip button
+      if (outro && currentTime >= outro.start && currentTime <= outro.end) {
+        if (!art.controls.get('outro')) {
+          art.controls.add(
+            skipButton('outro', 'Skip Ending', () => {
+              art.seek = outro.end + 1;
+              art.notice.show = 'Skipped Ending';
+              art.controls.remove('outro');
+            })
+          );
+        }
+      } else {
+        if (art.controls.get('outro')) {
+          art.controls.remove('outro');
+        }
+      }
+    });
+  };
+
+  fetchVideoData().then((data) => {
+    if (!data) {
+      alert('Error loading video data');
+    } else {
+      initializePlayer(data);
+    }
+  });
+});
+            
+</script>
+
+          
+
+           
+  
+</body>
+</html>
