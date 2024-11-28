@@ -100,7 +100,7 @@
   <div class="artplayer-app"></div>
 
   <script>
-      document.addEventListener('DOMContentLoaded', () => {
+   document.addEventListener('DOMContentLoaded', () => {
   const baseApiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/sources';
   let category = 'dub';
   let art = null;
@@ -116,21 +116,52 @@
     return;
   }
 
-  const fetchVideoData = async () => {
+  const fetchVideoData = (category) => {
     const apiUrl = `${baseApiUrl}?animeEpisodeId=${id}&server=hd-1&category=${category}`;
+    console.log(`Fetching video data from: ${apiUrl}`);
+    return fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response .then(data => {
+        if (data.status === 502) return null;
+        return data.data;
+      })
+      .catch(error => console.error('Error fetching API data:', error));
+  };
+
+  const convertVTTFormat = async (url) => {
     try {
-      const response = await fetch(apiUrl);
-      if (!response.ok) throw new Error('Failed to fetch video data');
-      const data = await response.json();
-      if (data.status === 502) return null;
-      return {
-        sources: data.data.sources,
-        tracks: data.data.tracks,
-        intro: data.data.intro,
-        outro: data.data.outro,
-      };
+      const response = await fetch(url);
+      const text = await response.text();
+      const lines = text.split('\n');
+      let converted = ['WEBVTT', ''];
+      const baseUrl = url.substring(0, url.lastIndexOf('/') + 1);
+      for (let line of lines) {
+        line = line.trim();
+        if (!line || line === 'WEBVTT') continue;
+        if (/^\d+$/.test(line)) continue;
+        if (line.includes('-->')) {
+          const [start, end] = line.split('-->').map(time => {
+            const match = time.trim().match(/(\d{2}):(\d{2}):(\d{2})\.(\d{3})/);
+            if (match) {
+              const [_, hh, mm, ss, ms] = match;
+              const totalSeconds = parseInt(hh) * 3600 + parseInt(mm) * 60 + parseInt(ss);
+              const minutes = Math.floor(totalSeconds / 60);
+              const seconds = totalSeconds % 60;
+              return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms}`;
+            }
+            return time.trim();
+          });
+          converted.push(`${start} --> ${end}`);
+        } else if (line.includes('#xywh=')) {
+          const [imageName, coordinates] = line.split('#');
+          converted.push(`${baseUrl}${imageName}#${coordinates}`);
+        }
+      }
+      const blob.join('\n')], { type: 'text/vtt' });
+      return URL.createObjectURL(blob);
     } catch (error) {
-      console.error('Error fetching API data:', error);
+      console.error('Error converting VTT format:', error);
       return null;
     }
   };
@@ -142,7 +173,10 @@
     }
 
     const videoSource = data.sources[0].url;
-    const { intro, outro } = data;
+    const subtitleTracks = data.tracks.filter(track => track.kind === 'captions');
+    const thumbnailTrack = data.tracks.find(track => track.kind === 'thumbnails');
+    const intro = data.intro;
+    const outro = data.outro;
 
     if (art) art.destroy();
 
@@ -150,82 +184,89 @@
       container: '.artplayer-app',
       url: videoSource,
       type: 'm3u8',
+      screenshot: true,
+      setting: true,
       autoplay: true,
       fullscreen: true,
+      fullscreenWeb: true,
+      airplay: true,
       playsInline: true,
       miniProgressBar: true,
       pip: true,
-      moreVideoAttr: {
-        'webkit-playsinline': true,
-        playsinline: true,
-      },
+      plugins: [artplayerPluginChromecast({})],
       customType: {
         m3u8: (video, url) => {
           if (Hls.isSupported()) {
             const hls = new Hls();
             hls.loadSource(url);
             hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
           } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = url;
+            video.addEventListener('loadedmetadata', () => video.play());
           } else {
-            art.notice.show('This browser does not support HLS');
+            art.notice.show3u8');
           }
         },
       },
+      moreVideoAttr: {
+        'webkit-playsinline': true,
+        'playsinline': true,
+      },
+      settings: [
+        {
+          html: 'Change to Sub',
+          onClick: () => {
+            category = 'sub';
+            fetchVideoData(category).then(initializePlayer);
+          },
+        },
+        {
+          html: 'Change to Dub',
+          onClick: () => {
+            category = 'dub';
+            fetchVideoData(category).then(initializePlayer);
+          },
+        },
+      ],
     });
 
-    const skipButton = (name, label, clickHandler) => {
-      return {
-        name,
-        position: 'top',
-        html: `<button class="app-skip-btn">${label}</button>`,
-        click: clickHandler,
-      };
-    };
+    if (thumbnailTrack) {
+      const thumbnailVTT = await convertVTTFormat(thumbnailTrack.file);
+      if (thumbnailVTT) {
+        art.plugins.add(artplayerPluginVttThumbnail({ vtt: thumbnailVTT }));
+      }
+    }
+
+    subtitleTracks.forEach(track => {
+      art.subtitle.add({
+        name: track.label,
+        url: track.file,
+      });
+    });
 
     art.on('video:timeupdate', () => {
       const currentTime = art.currentTime;
-
-      // Handle intro skip button
       if (intro && currentTime >= intro.start && currentTime <= intro.end) {
-        if (!art.controls.get('intro')) {
-          art.controls.add(
-            skipButton('intro', 'Skip Opening', () => {
-              art.seek = intro.end + 1;
-              art.notice.show = 'Skipped Opening';
-              art.controls.remove('intro');
-            })
-          );
-        }
-      } else {
-        if (art.controls.get('intro')) {
-          art.controls.remove('intro');
-        }
-      }
-
-      // Handle outro skip button
-      if (outro && currentTime >= outro.start && currentTime <= outro.end) {
-        if (!art.controls.get('outro')) {
-          art.controls.add(
-            skipButton('outro', 'Skip Ending', () => {
-              art.seek = outro.end + 1;
-              art.notice.show = 'Skipped Ending';
-              art.controls.remove('outro');
-            })
-          );
-        }
-      } else {
-        if (art.controls.get('outro')) {
-          art.controls.remove('outro');
-        }
+        art.seek = intro.end + 1;
+        art.notice.show('Skipped Opening');
+      } else if (outro && currentTime >= outro.start && currentTime <= outro.end) {
+        art.seek = outro.end + 1;
+        art.notice.show('Skipped Ending');
       }
     });
   };
 
-  fetchVideoData().then((data) => {
+  fetchVideoData(category).then(data => {
     if (!data) {
-      alert('Error loading video data');
-    } else {
+      const otherCategory = category === 'sub' ? 'dub' : 'sub';
+      fetchVideoData(otherCategory).then(data => {
+        if (!data) {
+          alert(`Error loading both ${category} and ${otherCategory}`);
+        } else {
+          initializePlayer(data);
+        }
+      {
       initializePlayer(data);
     }
   });
