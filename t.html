@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Anime Details</title>
+  <!-- Font Awesome for Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
   <style>
     /* General Reset and Dark Theme */
     body {
@@ -23,31 +26,36 @@
     #container {
       width: 100%;
       max-width: 900px;
+      text-align: center;
     }
 
-    /* Poster Image Card */
-    .poster-card {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-      margin-bottom: 20px;
+    /* Poster Image */
+    .poster {
+      width: 200px;
+      height: auto;
+      border-radius: 15px;
+      margin: 0 auto;
     }
 
-    .poster-card img {
-      width: 100%;
-      display: block;
-      border-radius: 10px;
+    /* Title Section */
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin: 15px 0 10px 0;
     }
 
-    /* Rating and Stats Section */
+    /* Stats Section */
     .stats {
       display: flex;
       justify-content: space-around;
       align-items: center;
       padding: 10px;
-      font-size: 16px;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      margin: 20px auto;
+      width: 80%;
     }
 
     .stats .icon {
@@ -57,6 +65,7 @@
     }
 
     .stats .icon i {
+      font-size: 16px;
       color: #1db954;
     }
 
@@ -65,20 +74,22 @@
       margin-bottom: 20px;
       font-size: 16px;
       line-height: 1.5;
+      text-align: justify;
     }
 
     .description span {
       font-weight: bold;
       cursor: pointer;
-      color: #7354e7;
+      color: #ffffff;
     }
 
     /* More Info Section */
     .more-info {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
       border-radius: 10px;
       padding: 15px;
       margin-bottom: 20px;
+      text-align: left;
     }
 
     .more-info div {
@@ -87,6 +98,7 @@
 
     .more-info div span {
       font-weight: bold;
+      color: #a5a5a5;
     }
 
     /* Seasons Section */
@@ -97,67 +109,53 @@
       justify-content: center;
     }
 
-    .season-card {
-      background: rgba(0, 0, 0, 0.6);
+    .episode-card {
+      background-color: #1e1e1e;
       border-radius: 10px;
-      padding: 10px;
+      padding: 15px;
+      cursor: pointer;
       text-align: center;
       transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
       color: #ffffff;
-      width: 120px;
-      overflow: hidden;
       position: relative;
-    }
-
-    .season-card img {
-      width: 100%;
-      border-radius: 10px;
-      margin-bottom: 10px;
+      width: 150px;
+      height: 200px;
+      overflow: hidden;
     }
 
     /* Blurred Background for Season Cards */
-    .season-card::before {
-      content: '';
+    .episode-card::before {
+      content: attr(data-title);
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: url('https://cdn.noitatnemucod.net/thumbnail/100x200/100/f418e820bf9f9c011f0a87cf24315168.jpg') no-repeat center center;
-      background-size: cover;
-      filter: blur(8px);
-      opacity: 0.3;
-      z-index: -1;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: bold;
       border-radius: 10px;
+      z-index: -1;
     }
 
-    .season-card:hover {
+    .episode-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 6px 12px rgba(255, 255, 255, 0.2);
-    }
-
-    /* Background Blur */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://cdn.noitatnemucod.net/thumbnail/300x400/100/0624387936576c007eff71adb47bcab6.jpg');
-      background-size: cover;
-      filter: blur(20px);
-      opacity: 0.3;
-      z-index: -1;
     }
   </style>
 </head>
 <body>
   <div id="container">
-    <!-- Poster Image -->
-    <div class="poster-card">
-      <img id="poster" src="" alt="Anime Poster">
-    </div>
+    <!-- Poster -->
+    <img id="poster" class="poster" alt="Anime Poster">
+
+    <!-- Title -->
+    <h1 id="animeTitle">Anime Title</h1>
 
     <!-- Stats Section -->
     <div class="stats">
@@ -167,7 +165,7 @@
     </div>
 
     <!-- Description Section -->
-    <div class="description" id="description">
+    <div class="description">
       <span id="descText"></span>
       <span id="readToggle"></span>
     </div>
@@ -205,8 +203,13 @@
         const moreInfo = data.data.anime.moreInfo;
         const seasons = data.data.seasons;
 
-        // Update Poster and Stats
+        // Update Poster
         document.getElementById("poster").src = anime.poster;
+
+        // Update Title
+        document.getElementById("animeTitle").textContent = anime.name;
+
+        // Update Stats
         document.getElementById("rating").textContent = anime.stats.rating;
         document.getElementById("sub").textContent = anime.stats.episodes.sub + " Episodes";
         document.getElementById("dub").textContent = anime.stats.episodes.dub + " Episodes";
@@ -241,16 +244,16 @@
         // Populate Seasons
         const seasonsContainer = document.getElementById("seasons");
         seasons.forEach((season) => {
-          const seasonCard = document.createElement("div");
-          seasonCard.className = "season-card";
-          seasonCard.innerHTML = `
-            <img src="${season.poster}" alt="${season.name}" />
-            <div>${season.title}</div>
-          `;
-          seasonsContainer.appendChild(seasonCard);
+          const card = document.createElement("div");
+          card.className = "episode-card";
+          card.setAttribute("data-title", season.title);
+          card.textContent = season.name;
+          seasonsContainer.appendChild(card);
         });
       })
-      .catch((err) => console.error("Error fetching anime details:", err));
+      .catch((error) => {
+        console.error("Error fetching anime details:", error);
+      });
   </script>
 </body>
 </html>
