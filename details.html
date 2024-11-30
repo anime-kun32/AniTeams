@@ -142,53 +142,6 @@
       font-weight: bold;
       color: #a5a5a5;
     }
-
-    /* Seasons Section */
-    #seasons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      justify-content: center;
-    }
-
-    .season-card {
-      width: 150px;
-      height: 80px;
-      background: rgba(0, 0, 0, 0.6);
-      border-radius: 10px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
-      color: #ffffff;
-    }
-
-    .season-card::before {
-      content: attr(data-title);
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: bold;
-      z-index: -1;
-    }
-
-    .season-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 12px rgba(255, 255, 255, 0.2);
-    }
   </style>
 </head>
 <body>
@@ -227,38 +180,26 @@
       <div><span>Genres:</span> <span id="genres"></span></div>
       <div><span>Studios:</span> <span id="studios"></span></div>
     </div>
-
-    <!-- Seasons Section -->
-    <div id="seasons">
-      <!-- Seasons will be dynamically populated -->
-    </div>
   </div>
 
   <script>
-    // Extract the anime ID from URL
     const urlParams = new URLSearchParams(window.location.search);
     const animeId = urlParams.get("id") || "defaultAnimeId";
-
-    // API URL
     const apiUrl = `https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}`;
 
-    // Fetch Anime Details
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
         const anime = data.data.anime.info;
-
-        // Update Document Title
         document.title = anime.name;
 
-        // Populate Data
+        // Populate Details
         document.getElementById("poster").src = anime.poster;
         document.getElementById("animeTitle").textContent = anime.name;
         document.getElementById("rating").textContent = anime.stats.rating;
         document.getElementById("sub").textContent = anime.stats.episodes.sub + " Sub";
         document.getElementById("dub").textContent = anime.stats.episodes.dub + " Dub";
 
-        // Description with Read More/Less
         const descText = document.getElementById("descText");
         const readToggle = document.getElementById("readToggle");
         const fullDescription = anime.description;
@@ -276,7 +217,6 @@
           readToggle.textContent = isExpanded ? "Read Less" : "Read More";
         });
 
-        // More Info
         document.getElementById("japanese").textContent = anime.titles.jp;
         document.getElementById("synonyms").textContent = anime.titles.synonyms;
         document.getElementById("aired").textContent = anime.aired;
@@ -284,11 +224,9 @@
         document.getElementById("genres").textContent = anime.genres.join(", ");
         document.getElementById("studios").textContent = anime.studios.join(", ");
 
-        // Watch Now Button
         const watchNowButton = document.getElementById("watchNow");
         watchNowButton.href = `watch.html?id=${animeId}`;
 
-        // Bookmark Button
         const bookmarkButton = document.getElementById("bookmark");
         bookmarkButton.addEventListener("click", () => {
           const bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
@@ -304,5 +242,4 @@
       .catch((error) => console.error("Error fetching anime details:", error));
   </script>
 </body>
-    </html>
-    
+</html>
