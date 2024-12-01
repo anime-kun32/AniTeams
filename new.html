@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anime Watching Page</title>
+  <style>
+    /* Dark Theme and Reset */
+    body {
+      margin: 0;
+      font-family: "Poppins", Arial, sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* Container Styling */
+    #container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+      padding: 20px;
+    }
+
+    /* Responsive Iframe Container */
+    .iframe-container {
+      position: relative;
+      width: 100%;
+      max-width: 1000px;
+      padding-top: 56.25%;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Episodes Section */
+    #episodes {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 400px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 10px;
+      border-radius: 10px;
+      background-color: #1e1e1e;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    #episodes::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #episodes::-webkit-scrollbar-track {
+      background-color: #1e1e1e;
+    }
+
+    #episodes::-webkit-scrollbar-thumb {
+      background-color: #3f3f3f;
+      border-radius: 10px;
+    }
+
+    .episode-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #1e1e1e;
+      color: #ffffff;
+      transition: background-color 0.3s ease;
+    }
+
+    .episode-card:nth-child(odd) {
+      background-color: #1e1e1e;
+    }
+
+    .episode-card:nth-child(even) {
+      background-color: #2a2a2a;
+    }
+
+    .episode-card:hover {
+      background-color: #333333;
+    }
+
+    .episode-number {
+      font-size: 16px;
+      font-weight: bold;
+      color: #2d2d4f;
+      margin-right: 10px;
+    }
+
+    .episode-title {
+      font-size: 14px;
+      color: #b3b3b3;
+    }
+
+    .filler {
+      color: #ff6b6b;
+    }
+
+    /* Active Class with Vertical Line */
+    .episode-card.active {
+      background-color: #2d2d4f;
+      border-left: 4px solid #7354e7;
+      position: relative;
+    }
+
+    .play-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      background-color: #7354e7;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+    }
+
+    .play-button:hover {
+      background-color: #9077ff;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <!-- Anime Viewing Section -->
+    <div class="iframe-container">
+      <iframe id="animeIframe" src="about:blank" title="Anime Viewer"></iframe>
+    </div>
+    <div id="episodes"></div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const animeId = urlParams.get("id") || "defaultAnimeId";
+    const iframe = document.getElementById("animeIframe");
+    const episodesContainer = document.getElementById("episodes");
+
+    const apiUrl = `https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}/episodes`;
+
+    // Function to set active episode based on iframe src
+    function updateActiveEpisode() {
+      const iframeSrc = iframe.src.split("?")[1];
+      const episodeCards = episodesContainer.querySelectorAll(".episode-card");
+
+      episodeCards.forEach((card) => {
+        card.classList.remove("active");
+        card.querySelector(".play-button").style.display = "none";
+        const cardEpisodeId = card.dataset.episodeId;
+        if (iframeSrc === cardEpisodeId.split("?")[1]) {
+          card.classList.add("active");
+          card.querySelector(".play-button").style.display = "inline-flex";
+        }
+      });
+    }
+
+    // Fetch and populate episodes
+    fetch(apiUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success) {
+          data.data.episodes.forEach((episode, index) => {
+            const episodeCard = document.createElement("div");
+            episodeCard.className = "episode-card";
+            episodeCard.dataset.episodeId = episode.episodeId;
+            episodeCard.innerHTML = `
+              <div>
+                <span class="episode-number">${episode.number}</span>
+                <span class="episode-title">${episode.title} ${
+              episode.isFiller ? '<span class="filler">(Filler)</span>' : ""
+            }</span>
+              </div>
+            `;
+
+            const playButton = document.createElement("button");
+            playButton.className = "play-button";
+            playButton.innerText = "Play";
+            playButton.style.display = "none"; // Hidden by default
+            episodeCard.appendChild(playButton);
+
+            episodeCard.onclick = () => {
+              iframe.src = `./player.html?id=${episode.episodeId}`;
+              updateActiveEpisode();
+            };
+
+            episodesContainer.appendChild(episodeCard);
+
+            if (index === 0) {
+              iframe.src = `./player.html?id=${episode.episodeId}`;
+              updateActiveEpisode();
+            }
+          });
+
+          // Monitor iframe source for changes
+          const observer = new MutationObserver(updateActiveEpisode);
+          observer.observe(iframe, { attributes: true, attributeFilter: ["src"] });
+        }
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  </script>
+</body>
+  </html>
+    
