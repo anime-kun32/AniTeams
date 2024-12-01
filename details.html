@@ -3,146 +3,152 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loading...</title> <!-- Temporary title until updated dynamically -->
-  <!-- Font Awesome for Icons -->
+  <title>Loading...</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
   <style>
-    /* General Reset and Dark Theme */
     body {
-      margin: 0;
-      font-family: 'Poppins', Arial, sans-serif;
-      background-color: #121212 url('https://pic.re/image') no-repeat center center fixed;
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
-      overflow-x: hidden;
-    }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #ffffff;
+  background: #121212;
+  background-size: cover;
+  backdrop-filter: blur(10px);
+}
 
-    /* Container Styling */
-    #container {
-      width: 100%;
-      max-width: 900px;
-      text-align: center;
-    }
+#container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
 
-    /* Poster Image */
-    .poster {
-      width: 200px;
-      height: auto;
-      border-radius: 15px;
-      margin: 0 auto;
-    }
+.poster {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
 
-    /* Title Section */
-    h1 {
-      font-size: 24px;
-      font-weight: bold;
-      text-transform: uppercase;
-      margin: 15px 0 10px 0;
-    }
+h1 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
 
-    /* Stats Section */
-    .stats {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 10px;
-      font-size: 14px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      margin: 20px auto;
-      width: 80%;
-    }
+.stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
 
-    .stats .icon {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
+.icon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 
-    .stats .icon i {
-      font-size: 16px;
-      color: #1db954;
-    }
+.icon i {
+  color: #ffcc00;
+}
 
-    /* Buttons Section */
-    .buttons {
-      margin: 20px 0;
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
 
-    .btn {
-      padding: 10px 20px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      border: none;
-      transition: transform 0.3s, background-color 0.3s;
-    }
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
 
-    .btn-watch {
-      background-color: #6a0dad; /* Purple */
-      color: #ffffff;
-      text-decoration: none;
-    }
+.btn-watch {
+  background-color: #6a5acd;
+  color: white;
+}
 
-    .btn-watch:hover {
-      background-color: #813dd0;
-      transform: translateY(-3px);
-    }
+.btn-watch:hover {
+  background-color: #7b68ee;
+}
 
-    .btn-bookmark {
-      background-color: #e0e0e0; /* Light gray */
-      color: #121212;
-    }
+.btn-bookmark {
+  background-color: #444444;
+  color: white;
+}
 
-    .btn-bookmark:hover {
-      background-color: #d6d6d6;
-      transform: translateY(-3px);
-    }
+.btn-bookmark:hover {
+  background-color: #666666;
+}
 
-    /* Description Section */
-    .description-container {
-      text-align: justify;
-      margin-bottom: 20px;
-    }
+.description-container {
+  margin-bottom: 20px;
+}
 
-    .description-text {
-      font-size: 16px;
-      line-height: 1.5;
-    }
+.description-text {
+  margin-bottom: 10px;
+}
 
-    .read-toggle {
-      font-weight: bold;
-      cursor: pointer;
-      color: #ffffff;
-    }
+.read-toggle {
+  color: #cccccc;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    /* More Info Section */
-    .more-info {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 20px;
-      text-align: left;
-    }
+.more-info {
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
 
-    .more-info div {
-      margin-bottom: 10px;
-    }
+.more-info div {
+  margin-bottom: 10px;
+}
 
-    .more-info div span {
-      font-weight: bold;
-      color: #a5a5a5;
-    }
+.more-info span:first-child {
+  font-weight: bold;
+  color: #cccccc;
+}
+
+.seasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.episode-card {
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+  color: #ffffff;
+  flex: 0 0 120px;
+  max-width: 120px;
+}
+
+.episode-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+}
+
+.episode-card h3 {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
   </style>
 </head>
 <body>
@@ -191,19 +197,27 @@
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
-        const anime = data.data.anime.info;
-        document.title = anime.name;
+        const anime = data?.data?.anime?.info;
+        const moreInfo = data?.data?.anime?.moreInfo;
+
+        if (!anime || !moreInfo) {
+          console.error("Invalid API response structure:", data);
+          alert("Failed to load anime details. Please try again later.");
+          return;
+        }
+
+        document.title = anime.name || "Anime Details";
 
         // Populate Details
-        document.getElementById("poster").src = anime.poster;
-        document.getElementById("animeTitle").textContent = anime.name;
-        document.getElementById("rating").textContent = anime.stats.rating;
-        document.getElementById("sub").textContent = anime.stats.episodes.sub + " Sub";
-        document.getElementById("dub").textContent = anime.stats.episodes.dub + " Dub";
+        document.getElementById("poster").src = anime.poster || "";
+        document.getElementById("animeTitle").textContent = anime.name || "Unknown Title";
+        document.getElementById("rating").textContent = anime.stats?.rating || "N/A";
+        document.getElementById("sub").textContent = anime.stats?.episodes?.sub ? anime.stats.episodes.sub + " Sub" : "N/A";
+        document.getElementById("dub").textContent = anime.stats?.episodes?.dub ? anime.stats.episodes.dub + " Dub" : "N/A";
 
         const descText = document.getElementById("descText");
         const readToggle = document.getElementById("readToggle");
-        const fullDescription = anime.description;
+        const fullDescription = anime.description || "No description available.";
         let isExpanded = false;
         const truncateText = (text, limit) =>
           text.split(" ").slice(0, limit).join(" ") + "...";
@@ -218,31 +232,36 @@
           readToggle.textContent = isExpanded ? "Read Less" : "Read More";
         });
 
-        document.getElementById("japanese").textContent = anime.titles.jp;
-        document.getElementById("synonyms").textContent = anime.titles.synonyms;
-        document.getElementById("aired").textContent = anime.aired;
-        document.getElementById("status").textContent = anime.status;
-        document.getElementById("genres").textContent = anime.genres.join(", ");
-        document.getElementById("studios").textContent = anime.studios.join(", ");
+        // More Info Section
+        document.getElementById("japanese").textContent = moreInfo.japanese || "N/A";
+        document.getElementById("synonyms").textContent = moreInfo.synonyms || "N/A";
+        document.getElementById("aired").textContent = moreInfo.aired || "N/A";
+        document.getElementById("status").textContent = moreInfo.status || "N/A";
+        document.getElementById("genres").textContent = moreInfo.genres?.join(", ") || "N/A";
+        document.getElementById("studios").textContent = moreInfo.studios || "N/A";
 
+        // Watch Now Button
         const watchNowButton = document.getElementById("watchNow");
         watchNowButton.href = `watch.html?id=${animeId}`;
 
+        // Bookmark Button
         const bookmarkButton = document.getElementById("bookmark");
         bookmarkButton.addEventListener("click", () => {
           const bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
           if (!bookmarks.includes(animeId)) {
             bookmarks.push(animeId);
             localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
-            alert(`${anime.name} bookmarked!`);
+            alert(`${anime.name || "This anime"} bookmarked!`);
           } else {
             alert("Already bookmarked!");
           }
         });
       })
-      .catch((error) => console.error("Error fetching anime details:", error));
+      .catch((error) => {
+        console.error("Error fetching anime details:", error);
+        alert("Failed to fetch anime details. Please try again later.");
+      });
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
 </body>
 </html>
+
