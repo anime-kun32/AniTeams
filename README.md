@@ -6,4 +6,8 @@ Welcome to AniTeams . An Anime streaming website , uses [Aniwatch](https://githu
 - Advanced searching method with filter layout
 - A new layout for the streaming page
 - Added new features to artplayer
-# 
+## To Do List
+- [ ] Add comment feature  
+- [ ] Include login and sign-up
+- [ ] Resume watching feature
+- [ ] skip intro and outro 
