@@ -48,6 +48,9 @@
             try {
                 // Construct the API URL using the full animeEpisodeId directly
                 const apiUrl = `https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/sources?animeEpisodeId=${animeEpisodeId}&server=hd-1&category=${category}`;
+                
+                // Log the constructed API URL to the console
+                console.log("Fetching API URL:", apiUrl);
 
                 // Fetch video data from the API
                 const response = await fetch(apiUrl);
@@ -124,5 +127,7 @@
         // Load player with the default 'sub' category on page load
         loadPlayer('sub');
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
 </body>
 </html>
