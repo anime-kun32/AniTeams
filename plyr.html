@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,9 +63,11 @@
                     return;
                 }
 
-                const videoSrc = data.sources[0].url;
+                const videoSrc = data.sources[0].url; // HLS URL for the video
                 const thumbnailTrack = data.tracks.find(track => track.kind === 'thumbnails')?.file;
                 const subtitles = data.tracks.filter(track => track.kind === 'subtitles');
+
+                console.log("Video source URL:", videoSrc);  // Log the video URL
 
                 const video = document.getElementById('player');
 
@@ -78,6 +81,15 @@
                     const hls = new Hls();
                     hls.loadSource(videoSrc);
                     hls.attachMedia(video);
+
+                    // Log if the HLS stream was successfully loaded
+                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                        console.log("HLS stream loaded successfully.");
+                    });
+
+                    hls.on(Hls.Events.ERROR, function(event, data) {
+                        console.error("HLS Error: ", data);
+                    });
                 } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                     video.src = videoSrc;
                 } else {
@@ -128,7 +140,5 @@
         // Load player with the default 'sub' category on page load
         loadPlayer('sub');
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
 </body>
 </html>
