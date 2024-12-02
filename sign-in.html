@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Sign-In</title>
+  
+  <!-- Custom CSS -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: auto;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button#googleSignIn {
+      background-color: #4285F4;
+      color: white;
+    }
+
+    button#signOut {
+      background-color: #EA4335;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Google Sign-In</h1>
+    <button id="googleSignIn">Sign in with Google</button>
+    <button id="signOut" style="display:none;">Sign Out</button>
+    <div id="userDetails"></div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+  apiKey: "AIzaSyChVz9Wzx2I-FjziR0teB39QgspINxUXYw",
+  authDomain: "comment-ab863.firebaseapp.com",
+  databaseURL: "https://comment-ab863-default-rtdb.firebaseio.com",
+  projectId: "comment-ab863",
+  storageBucket: "comment-ab863.appspot.com",
+  messagingSenderId: "671930104341",
+  appId: "1:671930104341:web:2a43daa2e6cc4e9ec3ac1c",
+  measurementId: "G-LJ1RYM3C1M"
+};
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // DOM Elements
+    const signInButton = document.getElementById("googleSignIn");
+    const signOutButton = document.getElementById("signOut");
+    const userDetails = document.getElementById("userDetails");
+
+    // Sign-In with Google
+    signInButton.addEventListener("click", () => {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const user = result.user;
+          userDetails.innerHTML = `
+            <p>Welcome, ${user.displayName}!</p>
+            <img src="${user.photoURL}" alt="Profile Picture" style="width:100px; border-radius:50%;">
+            <p>Email: ${user.email}</p>
+          `;
+          signInButton.style.display = "none";
+          signOutButton.style.display = "block";
+        })
+        .catch((error) => {
+          console.error("Error during sign-in:", error);
+        });
+    });
+
+    // Sign-Out
+    signOutButton.addEventListener("click", () => {
+      signOut(auth)
+        .then(() => {
+          userDetails.innerHTML = "";
+          signInButton.style.display = "block";
+          signOutButton.style.display = "none";
+        })
+        .catch((error) => {
+          console.error("Error during sign-out:", error);
+        });
+    });
+  </script>
+</body>
+</html>
