@@ -3,86 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Plyr Player with Radio Controls</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+    <title>Anime Player</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.5.4/dist/plyr.css">
     <style>
         body {
-            margin: 0;
-            background: #121212;
-            color: #fff;
-            font-family: Arial, sans-serif;
-        }
-        .plyr {
-            --plyr-color-main: red; /* Red timeline */
-            background: black; /* Black control menu */
-        }
-        video {
-            width: 100%;
-            height: 100%;
-        }
-        ::cue {
-            font-family: "Arial", sans-serif;
-            font-size: 16px;
+            background-color: #121212;
             color: #ffffff;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 5px;
-            border-radius: 5px;
+            font-family: 'Arial', sans-serif;
         }
-        #radio-controls {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            gap: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            border-radius: 5px;
-        }
-        #radio-controls label {
-            cursor: pointer;
-        }
-        #radio-controls input {
-            margin-right: 5px;
+        #player {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div id="player-container" style="width: 100%; height: 100vh; position: relative;">
-        <!-- Video Player -->
-        <video id="player" playsinline controls crossorigin="anonymous"></video>
+    <video id="player" class="plyr" controls>
+        <!-- HLS.js will handle setting the source dynamically -->
+        <source id="videoSource" />
+    </video>
 
-        <!-- Radio Controls -->
-        <div id="radio-controls">
-            <label>
-                <input type="radio" name="category" value="sub" checked> Sub
-            </label>
-            <label>
-                <input type="radio" name="category" value="dub"> Dub
-            </label>
-        </div>
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/plyr@3.5.4/dist/plyr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@0.14.18/dist/hls.min.js"></script>
 
     <script>
         let playerInstance = null;
 
+        // Function to get query parameters from the URL
+        function getQueryParam(name) {
+            const url = new URL(window.location.href);
+            return url.searchParams.get(name); // Get the value of the query parameter by name
+        }
+
         async function loadPlayer(category = 'sub') {
-            const params = new URLSearchParams(window.location.search);
-            const animeEpisodeId = params.get('animeEpisodeId');
+            const animeEpisodeId = getQueryParam('animeEpisodeId'); // Extract full ID directly from the URL
 
             if (!animeEpisodeId) {
-                alert('Missing required parameters in the URL!');
+                alert('Anime Episode ID not found in the URL!');
                 return;
             }
 
             try {
-                // API URL construction based on category selection
+                // Construct the API URL using the full animeEpisodeId directly
                 const apiUrl = `https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/sources?animeEpisodeId=${animeEpisodeId}&server=hd-1&category=${category}`;
 
-                // Fetch video data from API
+                // Fetch video data from the API
                 const response = await fetch(apiUrl);
                 const data = await response.json();
+
+                if (!data || !data.sources || data.sources.length === 0) {
+                    alert('No video sources found!');
+                    return;
+                }
 
                 const videoSrc = data.sources[0].url;
                 const thumbnailTrack = data.tracks.find(track => track.kind === 'thumbnails')?.file;
@@ -110,12 +84,28 @@
                 playerInstance = new Plyr(video, {
                     captions: { active: true, update: true, language: 'auto' },
                     controls: [
-                        'play-large', 'rewind', 'play', 'fast-forward', 'progress', 
-                        'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen'
+                        'play-large', 'rewind', 'play', 'fast-forward', 'progress',
+                        'current-time', 'mute', 'volume', 'captions', 'settings', 'subdub', 'fullscreen'
                     ],
                     tooltips: { controls: true, seek: true },
                     thumbnail: { enabled: true, file: thumbnailTrack }
                 });
+
+                // Add Sub/Dub toggle control to the Plyr controls
+                const subdubToggle = document.createElement('button');
+                subdubToggle.type = 'button';
+                subdubToggle.className = 'plyr__control';
+                subdubToggle.setAttribute('data-plyr', 'subdub');
+                subdubToggle.textContent = category === 'sub' ? 'Sub' : 'Dub';
+
+                subdubToggle.addEventListener('click', () => {
+                    const newCategory = category === 'sub' ? 'dub' : 'sub';
+                    subdubToggle.textContent = newCategory === 'sub' ? 'Sub' : 'Dub';
+                    loadPlayer(newCategory);  // Reload player with the new category
+                });
+
+                const controlBar = playerInstance.elements.controls;
+                controlBar.appendChild(subdubToggle);
 
                 // Add subtitle tracks dynamically
                 subtitles.forEach(sub => {
@@ -131,14 +121,7 @@
             }
         }
 
-        // Event listener for radio controls
-        const radioControls = document.getElementById('radio-controls');
-        radioControls.addEventListener('change', (e) => {
-            const selectedCategory = e.target.value;
-            loadPlayer(selectedCategory);
-        });
-
-        // Load default player on page load with "sub" category
+        // Load player with the default 'sub' category on page load
         loadPlayer('sub');
     </script>
 </body>
