@@ -33,12 +33,13 @@
 
         // Function to get query parameters from the URL
         function getQueryParam(name) {
-            const url = new URL(window.location.href);
-            return url.searchParams.get(name); // Get the value of the query parameter by name
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name); // Get the value of the query parameter by name
         }
 
         async function loadPlayer(category = 'sub') {
-            const animeEpisodeId = getQueryParam('animeEpisodeId'); // Extract full ID directly from the URL
+            // Extract the full anime ID from the URL's 'id' parameter
+            const animeEpisodeId = getQueryParam('id'); 
 
             if (!animeEpisodeId) {
                 alert('Anime Episode ID not found in the URL!');
