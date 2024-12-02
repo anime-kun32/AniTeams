@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Plyr Player</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
+    <style>
+        body {
+            margin: 0;
+            background: #121212;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .plyr {
+            --plyr-color-main: red; /* Red timeline */
+            background: black; /* Black control menu */
+        }
+        video {
+            width: 100%;
+            height: 100%;
+        }
+        ::cue {
+            font-family: "Arial", sans-serif;
+            font-size: 16px;
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="player-container" style="width: 100%; height: 100vh;">
+        <video id="player" playsinline controls crossorigin="anonymous"></video>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.min.js"></script>
+
+    <script>
+        // Function to dynamically fetch video and track data from API
+        async function loadPlayer() {
+            const params = new URLSearchParams(window.location.search);
+            const videoID = params.get('id'); // Retrieve 'id' from URL parameters
+
+            if (!videoID) {
+                alert('Video ID is missing in the URL!');
+                return;
+            }
+
+            try {
+                // Fetch video data from API
+                const response = await fetch(`https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/sources?animeEpisodeId=${videoID}&server=hd-1&category=sub`);
+                const data = await response.json();
+
+                // Extract video sources and track information
+                const videoSrc = data.sources[0].url;
+                const thumbnailTrack = data.tracks.find(track => track.kind === 'thumbnails')?.file;
+                const subtitles = data.tracks.filter(track => track.kind === 'subtitles');
+
+                const video = document.getElementById('player');
+
+                // Set HLS source if necessary
+                if (Hls.isSupported()) {
+                    const hls = new Hls();
+                    hls.loadSource(videoSrc);
+                    hls.attachMedia(video);
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = videoSrc;
+                } else {
+                    console.error('HLS is not supported on this browser.');
+                }
+
+                // Initialize Plyr
+                const player = new Plyr(video, {
+                    captions: { active: true, update: true, language: 'auto' },
+                    controls: [
+                        'play-large', 'rewind', 'play', 'fast-forward', 'progress', 
+                        'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen'
+                    ],
+                    tooltips: { controls: true, seek: true },
+                    thumbnail: { enabled: true, file: thumbnailTrack }
+                });
+
+                // Add subtitle tracks dynamically
+                subtitles.forEach(sub => {
+                    const track = document.createElement('track');
+                    track.kind = 'subtitles';
+                    track.label = sub.label || 'Subtitle';
+                    track.srclang = sub.srclang || 'en';
+                    track.src = sub.file;
+                    video.appendChild(track);
+                });
+
+                // Double-tap skip feature
+                video.addEventListener('dblclick', (e) => {
+                    const skipTime = 10; // Seconds to skip
+                    const boundingRect = video.getBoundingClientRect();
+                    const isLeftHalf = e.clientX < boundingRect.left + boundingRect.width / 2;
+
+                    if (isLeftHalf) {
+                        player.rewind(skipTime);
+                    } else {
+                        player.forward(skipTime);
+                    }
+                });
+            } catch (error) {
+                console.error('Failed to load video:', error);
+            }
+        }
+
+        // Load player on page load
+        loadPlayer();
+    </script>
+</body>
+          </html>
+          
