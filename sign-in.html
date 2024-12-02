@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Sign-In</title>
-  
-  <!-- Custom CSS -->
+  <title>Firebase Authentication with 30-Day Token Expiration</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -30,7 +28,7 @@
       cursor: pointer;
     }
 
-    button#googleSignIn {
+    button#signIn {
       background-color: #4285F4;
       color: white;
     }
@@ -43,54 +41,62 @@
 </head>
 <body>
   <div class="container">
-    <h1>Google Sign-In</h1>
-    <button id="googleSignIn">Sign in with Google</button>
+    <h1>Firebase Authentication</h1>
+    <button id="signIn">Sign In</button>
     <button id="signOut" style="display:none;">Sign Out</button>
     <div id="userDetails"></div>
   </div>
 
-  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+    import { getAuth, signInWithCustomToken, getIdToken, signOut } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 
     // Firebase configuration
     const firebaseConfig = {
-  apiKey: "AIzaSyChVz9Wzx2I-FjziR0teB39QgspINxUXYw",
-  authDomain: "comment-ab863.firebaseapp.com",
-  databaseURL: "https://comment-ab863-default-rtdb.firebaseio.com",
-  projectId: "comment-ab863",
-  storageBucket: "comment-ab863.appspot.com",
-  messagingSenderId: "671930104341",
-  appId: "1:671930104341:web:2a43daa2e6cc4e9ec3ac1c",
-  measurementId: "G-LJ1RYM3C1M"
+  apiKey: "AIzaSyBgonWKzerFz_YMUHBFIbGkGAr2de0OAQo",
+  authDomain: "aniteams-83c62.firebaseapp.com",
+  databaseURL: "https://aniteams-83c62-default-rtdb.firebaseio.com",
+  projectId: "aniteams-83c62",
+  storageBucket: "aniteams-83c62.appspot.com",
+  messagingSenderId: "571785825154",
+  appId: "1:571785825154:web:d8f684c660c28eab121d9b",
+  measurementId: "G-72YGQR0CPH"
 };
-
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
 
     // DOM Elements
-    const signInButton = document.getElementById("googleSignIn");
+    const signInButton = document.getElementById("signIn");
     const signOutButton = document.getElementById("signOut");
     const userDetails = document.getElementById("userDetails");
 
-    // Sign-In with Google
+    // Sign-In with Custom Token
     signInButton.addEventListener("click", () => {
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          const user = result.user;
-          userDetails.innerHTML = `
-            <p>Welcome, ${user.displayName}!</p>
-            <img src="${user.photoURL}" alt="Profile Picture" style="width:100px; border-radius:50%;">
-            <p>Email: ${user.email}</p>
-          `;
-          signInButton.style.display = "none";
-          signOutButton.style.display = "block";
+      // Fetch custom token from your server (e.g., using fetch API)
+      fetch('/your-server-endpoint/generate-token') // Replace with your server endpoint
+        .then(response => response.json())
+        .then(data => {
+          const customToken = data.token; // Assuming your server returns the token as 'token'
+          signInWithCustomToken(auth, customToken)
+            .then((result) => {
+              const user = result.user;
+              userDetails.innerHTML = `
+                <p>Welcome, ${user.displayName}!</p>
+                <img src="${user.photoURL}" alt="Profile Picture" style="width:100px; border-radius:50%;">
+                <p>Email: ${user.email}</p>
+              `;
+              signInButton.style.display = "none";
+              signOutButton.style.display = "block";
+              // Save the custom token in local storage
+              localStorage.setItem('customToken', customToken);
+            })
+            .catch((error) => {
+              console.error("Error during sign-in:", error);
+            });
         })
         .catch((error) => {
-          console.error("Error during sign-in:", error);
+          console.error("Error fetching custom token:", error);
         });
     });
 
@@ -101,11 +107,33 @@
           userDetails.innerHTML = "";
           signInButton.style.display = "block";
           signOutButton.style.display = "none";
+          // Clear the custom token from local storage
+          localStorage.removeItem('customToken');
         })
         .catch((error) => {
           console.error("Error during sign-out:", error);
         });
     });
+
+    // Check token expiration and re-authenticate
+    function checkTokenExpiration() {
+      // Get the custom token from local storage
+      const customToken = localStorage.getItem('customToken');
+      if (customToken) {
+        signInWithCustomToken(auth, customToken)
+          .then((result) => {
+            // User is re-authenticated
+            console.log("User re-authenticated");
+          })
+          .catch((error) => {
+            console.error("Error during re-authentication:", error);
+            // Handle re-authentication failure (e.g., prompt the user to sign in again)
+          });
+      }
+    }
+
+    // Call checkTokenExpiration periodically (e.g., every 5 minutes)
+    setInterval(checkTokenExpiration, 5 * 60 * 1000);
   </script>
   <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
