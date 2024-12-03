@@ -14,6 +14,8 @@
       --text-color: #ffffff;
       --muted-color: #b3b3b3;
       --error-color: #ff6b6b;
+      --active-color: #2d2d4f;
+      --hover-color: #333333;
     }
 
     /* General reset */
@@ -30,9 +32,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       min-height: 100vh;
       overflow-x: hidden;
+      padding: 20px;
     }
 
     /* Container styling */
@@ -44,10 +47,11 @@
       padding: 20px;
     }
 
+    /* Iframe container styling */
     .iframe-container {
       position: relative;
       width: 100%;
-      padding-top: 56.25%;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
       margin-bottom: 20px;
       border-radius: 10px;
       overflow: hidden;
@@ -63,242 +67,200 @@
       border: none;
     }
 
-    /* Episodes Container */
+    /* Search box styling */
+    .search-container {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .search-container input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #333;
+      background-color: #2a2a2a;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    /* Episodes List Styling */
     #episodes-container {
       width: 100%;
-      max-width: 1200px;
-      background-color: var(--secondary-bg);
+      max-width: 600px;
       padding: 20px;
+      background-color: var(--secondary-bg);
       border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Search Bar */
-    .search-bar {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-      background-color: var(--primary-bg);
-      border-radius: 5px;
-      padding: 10px;
-      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-    }
-
-    .search-bar input {
-      flex: 1;
-      border: none;
-      background: transparent;
-      color: var(--text-color);
-      font-size: 16px;
-      padding: 5px;
-      outline: none;
-    }
-
-    .search-bar i {
-      color: var(--muted-color);
-      margin-right: 10px;
-    }
-
-    /* Episodes Grid */
-    #episodes {
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      overflow-y: auto;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Square grid */
       gap: 10px;
     }
 
-    .episode-card {
+    /* Episode Square Container Styling */
+    .episode-item {
       display: flex;
-      align-items: center;
       justify-content: center;
-      flex-direction: column;
-      background-color: var(--secondary-bg);
-      border-radius: 10px;
-      padding: 15px;
+      align-items: center;
+      width: 100px;
+      height: 100px; /* Reduced square size */
+      background-color: #2a2a2a;
+      color: #ffffff;
+      border-radius: 8px;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s ease, background-color 0.3s ease;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      position: relative;
+      text-align: center;
     }
 
-    .episode-card:hover {
-      background-color: var(--accent-color);
-      transform: scale(1.05);
+    /* Active Episode Styling */
+    .episode-item.active {
+      background-color: var(--active-color);
+      border-left: 4px solid var(--accent-color);
     }
 
-    .episode-card.active {
-      background-color: var(--accent-color);
+    .episode-item:hover {
+      background-color: var(--hover-color);
     }
 
     .episode-number {
-      font-size: 18px;
       font-weight: bold;
-      margin-bottom: 5px;
-      color: var(--text-color);
     }
 
     .episode-title {
-      font-size: 12px;
-      color: var(--muted-color);
+      display: none;
     }
 
-    .filler {
-      color: var(--error-color);
+    .episode-item.active .episode-title {
+      display: block;
     }
 
-    /* Toggle Switch */
-    .toggle-container {
+    /* Switch for toggling episode title display */
+    .switch-container {
       display: flex;
       align-items: center;
-      margin-bottom: 20px;
+      margin: 20px 0;
     }
 
-    .toggle-container span {
-      font-size: 14px;
+    .switch-container input {
       margin-right: 10px;
     }
 
-    .toggle {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 24px;
-    }
-
-    .toggle input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: 0.4s;
-      border-radius: 24px;
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 16px;
-      width: 16px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: 0.4s;
-      border-radius: 50%;
-    }
-
-    input:checked + .slider {
-      background-color: var(--accent-color);
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(26px);
-    }
   </style>
 </head>
 <body>
   <div id="container">
-    <!-- Anime Viewer -->
+    <!-- Search box outside the episode container -->
+    <div class="search-container">
+      <input type="text" id="search" placeholder="Search episode by number or title">
+    </div>
+
+    <!-- Anime Viewing Section -->
     <div class="iframe-container">
       <iframe id="animeIframe" src="about:blank" title="Anime Viewer"></iframe>
     </div>
 
     <!-- Episodes Section -->
-    <div id="episodes-container">
-      <!-- Search Bar -->
-      <div class="search-bar">
-        <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Search by title or episode number..." />
-      </div>
+    <div id="episodes-container"></div>
 
-      <!-- Toggle Button -->
-      <div class="toggle-container">
-        <span>Show titles</span>
-        <label class="toggle">
-          <input type="checkbox" id="toggleSwitch" checked />
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <!-- Episodes Grid -->
-      <div id="episodes"></div>
+    <!-- Switch for toggling episode title display -->
+    <div class="switch-container">
+      <input type="checkbox" id="toggleTitle" checked>
+      <span>Show Episode Titles</span>
     </div>
   </div>
 
   <script>
-    // Extract anime ID from the URL
+    // Extract the anime ID from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const animeId = urlParams.get("id") || "defaultAnimeId";
 
+    // Correct API URL for fetching episodes
     const apiUrl = `https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}/episodes`;
 
-    const searchInput = document.getElementById("searchInput");
-    const toggleSwitch = document.getElementById("toggleSwitch");
-    const episodesContainer = document.getElementById("episodes");
-    const animeIframe = document.getElementById("animeIframe");
+    let episodesData = []; // Store episodes data to filter later
 
-    let episodes = [];
-
-    // Fetch episodes
+    // Fetch episodes and populate the container
     fetch(apiUrl)
-      .then((res) => res.json())
+      .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          episodes = data.data.episodes;
-          renderEpisodes(episodes);
+          episodesData = data.data.episodes;
+          const episodesContainer = document.getElementById("episodes-container");
+          episodesData.forEach((episode, index) => {
+            const episodeItem = document.createElement("div");
+            episodeItem.classList.add("episode-item");
+            episodeItem.innerHTML = `
+              <div class="episode-number">${episode.number}</div>
+              ${document.getElementById('toggleTitle').checked ? `<div class="episode-title">${episode.title}</div>` : ''}
+            `;
+            // Set active class on click
+            episodeItem.onclick = () => {
+              const iframe = document.getElementById("animeIframe");
+              iframe.src = `./player.html?id=${episode.episodeId}`;
+              document.querySelectorAll(".episode-item").forEach(item => item.classList.remove("active"));
+              episodeItem.classList.add("active");
+            };
+
+            episodesContainer.appendChild(episodeItem);
+
+            // Automatically set the first episode as active
+            if (index === 0) {
+              episodeItem.click();
+            }
+          });
+        } else {
+          console.error("Failed to load episodes");
         }
       })
-      .catch(console.error);
+      .catch((error) => console.error("Error fetching data:", error));
 
-    // Render episodes
-    function renderEpisodes(episodes) {
-      episodesContainer.innerHTML = episodes
-        .map((episode) => `
-          <div class="episode-card" data-title="${episode.title}" data-number="${episode.number}" data-id="${episode.episodeId}">
-            <div class="episode-number">${episode.number}</div>
-            <div class="episode-title" style="display: ${toggleSwitch.checked ? 'block' : 'none'}">
-              ${episode.title} ${episode.isFiller ? '<span class="filler">(Filler)</span>' : ""}
-            </div>
-          </div>
-        `)
-        .join("");
-
-      // Add click events to load iframe
-      document.querySelectorAll(".episode-card").forEach((card) => {
-        card.addEventListener("click", () => {
-          animeIframe.src = `./player.html?id=${card.dataset.id}`;
-          document.querySelectorAll(".episode-card").forEach((el) => el.classList.remove("active"));
-          card.classList.add("active");
-        });
-      });
-
-      // Automatically load the first episode
-      if (episodes.length > 0) {
-        document.querySelector(".episode-card").click();
-      }
-    }
-
-    // Search filter
-    searchInput.addEventListener("input", (e) => {
-      const query = e.target.value.toLowerCase();
-      const filtered = episodes.filter(
-        (ep) =>
-          ep.title.toLowerCase().includes(query) ||
-          ep.number.toString().includes(query)
+    // Handle search functionality
+    const searchInput = document.getElementById("search");
+    searchInput.addEventListener("input", function() {
+      const query = searchInput.value.toLowerCase();
+      const filteredEpisodes = episodesData.filter(episode => 
+        episode.number.toString().includes(query) || 
+        episode.title.toLowerCase().includes(query)
       );
-      renderEpisodes(filtered);
+
+      // Clear current episodes
+      const episodesContainer = document.getElementById("episodes-container");
+      episodesContainer.innerHTML = "";
+
+      // Append filtered episodes
+      filteredEpisodes.forEach((episode) => {
+        const episodeItem = document.createElement("div");
+        episodeItem.classList.add("episode-item");
+        episodeItem.innerHTML = `
+          <div class="episode-number">${episode.number}</div>
+          ${document.getElementById('toggleTitle').checked ? `<div class="episode-title">${episode.title}</div>` : ''}
+        `;
+        // Set active class on click
+        episodeItem.onclick = () => {
+          const iframe = document.getElementById("animeIframe");
+          iframe.src = `./player.html?id=${episode.episodeId}`;
+          document.querySelectorAll(".episode-item").forEach(item => item.classList.remove("active"));
+          episodeItem.classList.add("active");
+        };
+
+        episodesContainer.appendChild(episodeItem);
+      });
     });
 
-    // Toggle display of titles
-    toggleSwitch.addEventListener("change", () => {
-      document.querySelectorAll(".episode-title").forEach((el) => {
-        el.style.display = toggleSwitch.checked ? "block" : "none";
+    // Handle title visibility toggle
+    const toggleTitle = document.getElementById('toggleTitle');
+    toggleTitle.addEventListener('change', function() {
+      const episodes = document.querySelectorAll('.episode-item');
+      episodes.forEach((item) => {
+        const titleDiv = item.querySelector('.episode-title');
+        if (titleDiv) {
+          titleDiv.style.display = toggleTitle.checked ? 'block' : 'none';
+        }
       });
     });
   </script>
