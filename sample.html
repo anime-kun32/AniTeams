@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anime Watching Page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Root styling mimicking Next.js modern design */
+    :root {
+      --primary-bg: #121212;
+      --secondary-bg: #1e1e1e;
+      --accent-color: #7354e7;
+      --text-color: #ffffff;
+      --muted-color: #b3b3b3;
+      --error-color: #ff6b6b;
+    }
+
+    /* General reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", Arial, sans-serif;
+      background-color: var(--primary-bg);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Container styling */
+    #container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .iframe-container {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Episodes Container */
+    #episodes-container {
+      width: 100%;
+      max-width: 1200px;
+      background-color: var(--secondary-bg);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Search Bar */
+    .search-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      background-color: var(--primary-bg);
+      border-radius: 5px;
+      padding: 10px;
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text-color);
+      font-size: 16px;
+      padding: 5px;
+      outline: none;
+    }
+
+    .search-bar i {
+      color: var(--muted-color);
+      margin-right: 10px;
+    }
+
+    /* Episodes Grid */
+    #episodes {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 10px;
+    }
+
+    .episode-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background-color: var(--secondary-bg);
+      border-radius: 10px;
+      padding: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    .episode-card:hover {
+      background-color: var(--accent-color);
+      transform: scale(1.05);
+    }
+
+    .episode-card.active {
+      background-color: var(--accent-color);
+    }
+
+    .episode-number {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: var(--text-color);
+    }
+
+    .episode-title {
+      font-size: 12px;
+      color: var(--muted-color);
+    }
+
+    .filler {
+      color: var(--error-color);
+    }
+
+    /* Toggle Switch */
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .toggle-container span {
+      font-size: 14px;
+      margin-right: 10px;
+    }
+
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <!-- Anime Viewer -->
+    <div class="iframe-container">
+      <iframe id="animeIframe" src="about:blank" title="Anime Viewer"></iframe>
+    </div>
+
+    <!-- Episodes Section -->
+    <div id="episodes-container">
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search by title or episode number..." />
+      </div>
+
+      <!-- Toggle Button -->
+      <div class="toggle-container">
+        <span>Show titles</span>
+        <label class="toggle">
+          <input type="checkbox" id="toggleSwitch" checked />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- Episodes Grid -->
+      <div id="episodes"></div>
+    </div>
+  </div>
+
+  <script>
+    // Extract anime ID from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const animeId = urlParams.get("id") || "defaultAnimeId";
+
+    const apiUrl = `https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}/episodes`;
+
+    const searchInput = document.getElementById("searchInput");
+    const toggleSwitch = document.getElementById("toggleSwitch");
+    const episodesContainer = document.getElementById("episodes");
+    const animeIframe = document.getElementById("animeIframe");
+
+    let episodes = [];
+
+    // Fetch episodes
+    fetch(apiUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          episodes = data.data.episodes;
+          renderEpisodes(episodes);
+        }
+      })
+      .catch(console.error);
+
+    // Render episodes
+    function renderEpisodes(episodes) {
+      episodesContainer.innerHTML = episodes
+        .map((episode) => `
+          <div class="episode-card" data-title="${episode.title}" data-number="${episode.number}" data-id="${episode.episodeId}">
+            <div class="episode-number">${episode.number}</div>
+            <div class="episode-title" style="display: ${toggleSwitch.checked ? 'block' : 'none'}">
+              ${episode.title} ${episode.isFiller ? '<span class="filler">(Filler)</span>' : ""}
+            </div>
+          </div>
+        `)
+        .join("");
+
+      // Add click events to load iframe
+      document.querySelectorAll(".episode-card").forEach((card) => {
+        card.addEventListener("click", () => {
+          animeIframe.src = `./player.html?id=${card.dataset.id}`;
+          document.querySelectorAll(".episode-card").forEach((el) => el.classList.remove("active"));
+          card.classList.add("active");
+        });
+      });
+
+      // Automatically load the first episode
+      if (episodes.length > 0) {
+        document.querySelector(".episode-card").click();
+      }
+    }
+
+    // Search filter
+    searchInput.addEventListener("input", (e) => {
+      const query = e.target.value.toLowerCase();
+      const filtered = episodes.filter(
+        (ep) =>
+          ep.title.toLowerCase().includes(query) ||
+          ep.number.toString().includes(query)
+      );
+      renderEpisodes(filtered);
+    });
+
+    // Toggle display of titles
+    toggleSwitch.addEventListener("change", () => {
+      document.querySelectorAll(".episode-title").forEach((el) => {
+        el.style.display = toggleSwitch.checked ? "block" : "none";
+      });
+    });
+  </script>
+</body>
+</html>
