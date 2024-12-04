@@ -10,4 +10,5 @@ Welcome to AniTeams . An Anime streaming website , uses [Aniwatch](https://githu
 - [ ] Add comment feature  
 - [ ] Include login and sign-up
 - [ ] Resume watching feature
-- [ ] skip intro and outro 
+- [ ] skip intro and outro
+- [ ] Manga readinig api 
