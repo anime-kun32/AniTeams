@@ -1,0 +1,170 @@
+{
+  "count": 11,
+  "next": null,
+  "prev": null,
+  "data": [
+    {
+      "title": "Jujutsu Kaisen",
+      "slug": "jujutsu-kaisen-168",
+      "genres": [
+        "action",
+        "demons",
+        "fantasy",
+        "shounen",
+        "supernatural"
+      ],
+      "cover": "https://img.mreadercdn.com/_m/500x800/100/85/16/8516c62ab781385d91ea169a9a3b86d2/8516c62ab781385d91ea169a9a3b86d2.jpg",
+      "synopsis": "Hidden in plain sight, an age-old conflict rages on. Supernatural monsters known as \"Curses\" terrorize humanity from the shadows, and powerful humans known as \"Jujutsu\" sorcerers use mystical arts to...",
+      "chapter": 271
+    },
+    {
+      "title": "Mashle: Magic and Muscles",
+      "slug": "mashle-magic-and-muscles-1616",
+      "genres": [
+        "action",
+        "comedy",
+        "magic",
+        "parody",
+        "shounen",
+        "supernatural"
+      ],
+      "cover": "https://img.mreadercdn.com/_m/500x800/100/6b/04/6b042be68de5dfcce3adb83b4c7867b3/6b042be68de5dfcce3adb83b4c7867b3.jpg",
+      "synopsis": "To everyone else in his magic-dominated world, the young and powerless Mash Vandead is a threat to the gene pool and must be purged. Living secretly in the forest, he spends every day training his...",
+      "chapter": 162.5
+    },
+    {
+      "title": "Dragon Ball Super",
+      "slug": "dragon-ball-super-5699",
+      "genres": [
+        "action",
+        "comedy",
+        "martial arts",
+        "shounen",
+        "super power"
+      ],
+      "cover": "https://img.mreadercdn.com/_m/500x800/100/00/44/0044656ee05ca233329d179ac98801a9/0044656ee05ca233329d179ac98801a9.jpg",
+      "synopsis": "Reuniting the franchise's iconic characters, follows the aftermath of Goku's fierce battle with Majin Buu as he attempts to maintain earth's fragile peace.  (Source: AniDB)",
+      "chapter": 103
+    },
+    {
+      "title": "Jiangshi X",
+      "slug": "jiangshi-x-64105",
+      "genres": [
+        "action",
+        "fantasy",
+        "historical",
+        "shounen"
+      ],
+      "cover": "https://img.mreadercdn.com/_m/500x800/100/ff/2f/ff2f81bd7b9af238b1d8292da2f3a8d0/ff2f81bd7b9af238b1d8292da2f3a8d0.jpg",
+      "synopsis": "A silent darkness threatens a thousand years of peace... Who can stand up to great evil...and Jiangshi?! Young warriors, become the light that defeats despair! Welcome to this new Chinese battle...",
+      "chapter": 34
+    },
+    {
+      "title": "Komi Can't Communicate",
+      "slug": "komi-cant-communicate-287",
+      "genres": [
+        "comedy",
+        "school",
+        "shounen"
+      ],
+      "cover": "https://img.mreadercdn.com/_m/500x800/100/71/15/71157caa0d251504b2999f9ceb45fc33/71157caa0d251504b2999f9ceb45fc33.jpg",
+      "synopsis": "It's Shouko Komi's first day at the prestigious Itan Private High School, and she has already risen to the status of the school's Madonna. With long black hair and a tall, graceful appearance, she...",
+      "chapter": 491
+    },
+    {
+      "title": "JoJo's Bizarre Adventure Part 9: The JoJoLands",
+      "slug": "jojos-bizarre-adventure-part-9-the-jojolands-64643",
+      "genres": [
+        "action",
+        "adventure",
+        "drama",
+        "slice of life"
+      ],
+      "cover": "https://img.mreadercdn.com/_m/500x800/100/c3/d3/c3d3e8904ef6a210bb5ca5652c6aec17/c3d3e8904ef6a210bb5ca5652c6aec17.jpg",
+      "synopsis": "O'ahu, present day. Dua Lipa is the trending musician, and COVID is still a major concern. On this island lives a 15-year-old boy named Jodio Joestar. Living with his brother and mother, he acts as a...",
+      "chapter": 20
+    },
+    {
+      "title": "One-Punch Man",
+      "slug": "onepunch-man-40",
+      "genres": [
+        "action",
+        "comedy",
+        "parody",
+        "sci-fi",
+        "super power",
+        "supernatural"
+      ],
+      "cover": "https://img.mreadercdn.com/_m/500x800/100/77/ef/77ef441119b58b0e7549337543083dbe/77ef441119b58b0e7549337543083dbe.jpg",
+      "synopsis": "After rigorously training for three years, the ordinary Saitama has gained immense strength which allows him to take out anyone and anything with just one punch. He decides to put his new skill to...",
+      "chapter": 233
+    },
+    {
+      "title": "Tokyo Ghoul",
+      "slug": "tokyo-ghoul-108",
+      "genres": [
+        "action",
+        "drama",
+        "horror",
+        "mystery",
+        "psychological",
+        "seinen",
+        "supernatural"
+      ],
+      "cover": "https://img.mreadercdn.com/_m/500x800/100/8f/c1/8fc1b7f767cfec035ba57d79c40f8c20/8fc1b7f767cfec035ba57d79c40f8c20.jpg",
+      "synopsis": "Lurking within the shadows of Tokyo are frightening beings known as \"ghouls,\" who satisfy their hunger by feeding on humans once night falls. An organization known as the Commission of Counter Ghoul...",
+      "chapter": 143
+    },
+    {
+      "title": "Blue Exorcist",
+      "slug": "blue-exorcist-772",
+      "genres": [
+        "action",
+        "adventure",
+        "demons",
+        "drama",
+        "fantasy",
+        "school",
+        "shounen",
+        "supernatural"
+      ],
+      "cover": "https://img.mreadercdn.com/_m/500x800/100/2b/81/2b81acfc5ad30cc046274d672bd643eb/2b81acfc5ad30cc046274d672bd643eb.jpg",
+      "synopsis": "After a fight with his foster father Shirou Fujimoto, Rin Okumura's life is transformed overnight when Rin is revealed to be the son of the demon lord Satan, king of the demonic realm of Gehenna. Soon...",
+      "chapter": 154
+    },
+    {
+      "title": "Yashahime: Princess Half-Demon",
+      "slug": "yashahime-princess-half-demon-63890",
+      "genres": [
+        "action",
+        "adventure",
+        "comedy",
+        "drama",
+        "fantasy",
+        "historical",
+        "horror",
+        "shounen"
+      ],
+      "cover": "https://img.mreadercdn.com/_m/500x800/100/0b/c9/0bc9bd08736e1eab86b9c5b23e6c5a6f/0bc9bd08736e1eab86b9c5b23e6c5a6f.jpg",
+      "synopsis": "Can the three teenage daughters of demon dog half-brothers Inuyasha and Sesshomaru save their parents, themselves, and both realms from the menace of the seven mystical Rainbow Pearls?\n\nLiving in...",
+      "chapter": 38
+    },
+    {
+      "title": "Zom 100: Bucket List of the Dead",
+      "slug": "zom-100-bucket-list-of-the-dead-2235",
+      "genres": [
+        "action",
+        "adventure",
+        "comedy",
+        "drama",
+        "horror",
+        "seinen",
+        "supernatural"
+      ],
+      "cover": "https://img.mreadercdn.com/_m/500x800/100/61/e8/61e8a1b873ca219b71b4fba096c2845f/61e8a1b873ca219b71b4fba096c2845f.jpg",
+      "synopsis": "After three years of working for a black company, Akira was exhausted both mentally and physically. But one morning, what he saw on his usual way to work was nothing but a town full of zombies. How...",
+      "chapter": 71
+    }
+  ]
+}
+
