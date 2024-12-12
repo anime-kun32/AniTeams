@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Sign-In</title>
+  <title>Google Sign-In with Session</title>
   
   <!-- Custom CSS -->
   <style>
@@ -43,7 +43,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Google Sign-In</h1>
+    <h1>Google Sign-In with Session</h1>
     <button id="googleSignIn">Sign in with Google</button>
     <button id="signOut" style="display:none;">Sign Out</button>
     <div id="userDetails"></div>
@@ -55,16 +55,9 @@
     import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 
     // Firebase configuration
-   const firebaseConfig = {
-  apiKey: "AIzaSyChVz9Wzx2I-FjziR0teB39QgspINxUXYw",
-  authDomain: "comment-ab863.firebaseapp.com",
-  databaseURL: "https://comment-ab863-default-rtdb.firebaseio.com",
-  projectId: "comment-ab863",
-  storageBucket: "comment-ab863.appspot.com",
-  messagingSenderId: "671930104341",
-  appId: "1:671930104341:web:2a43daa2e6cc4e9ec3ac1c",
-  measurementId: "G-LJ1RYM3C1M"
-};
+    const firebaseConfig = {
+      // ... your Firebase config
+    };
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
@@ -75,6 +68,21 @@
     const signInButton = document.getElementById("googleSignIn");
     const signOutButton = document.getElementById("signOut");
     const userDetails = document.getElementById("userDetails");
+
+    // Function to create a session (you'll need to implement this)
+    const createSession = (uid) => {
+      // 1. Generate a unique session ID (you can use a library like 'uuid')
+      const sessionId = generateUniqueId(); // Replace with your session ID generation logic
+
+      // 2. Store session data in local storage
+      localStorage.setItem("sessionId", sessionId);
+      localStorage.setItem("uid", uid);
+
+      // 3. Set session expiration (30 days)
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 30);
+      localStorage.setItem("sessionExpiration", expirationDate.getTime());
+    };
 
     // Sign-In with Google
     signInButton.addEventListener("click", () => {
@@ -88,6 +96,9 @@
           `;
           signInButton.style.display = "none";
           signOutButton.style.display = "block";
+
+          // Create a session after successful sign-in
+          createSession(user.uid);
         })
         .catch((error) => {
           console.error("Error during sign-in:", error);
@@ -101,10 +112,41 @@
           userDetails.innerHTML = "";
           signInButton.style.display = "block";
           signOutButton.style.display = "none";
+
+          // Clear session data from local storage
+          localStorage.removeItem("sessionId");
+          localStorage.removeItem("uid");
+          localStorage.removeItem("sessionExpiration");
         })
         .catch((error) => {
           console.error("Error during sign-out:", error);
         });
+    });
+
+    // Check for existing session on page load
+    window.addEventListener("load", () => {
+      const sessionId = localStorage.getItem("sessionId");
+      const uid = localStorage.getItem("uid");
+      const expirationTime = localStorage.getItem("sessionExpiration");
+
+      if (sessionId && uid && expirationTime) {
+        const now = new Date().getTime();
+        if (now < parseInt(expirationTime)) {
+          // Session is valid
+          userDetails.innerHTML = `
+            <p>Welcome back!</p>
+            <p>Session ID: ${sessionId}</p>
+            <p>UID: ${uid}</p>
+          `;
+          signInButton.style.display = "none";
+          signOutButton.style.display = "block";
+        } else {
+          // Session has expired
+          localStorage.removeItem("sessionId");
+          localStorage.removeItem("uid");
+          localStorage.removeItem("sessionExpiration");
+        }
+      }
     });
   </script>
 </body>
