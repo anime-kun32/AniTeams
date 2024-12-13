@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comic Book Reader</title>
+  <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1e1e1e, #2c2c2c);
+      color: #fff;
+      overflow: hidden;
+    }
+
+    #comic-container {
+      overflow: auto;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: auto;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
+    img.loaded {
+      opacity: 1;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-top: 5px solid #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      position: absolute;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #controls-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 10px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: opacity 0.5s;
+    }
+
+    button.fullscreen-btn {
+      background: #555;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    button.fullscreen-btn:hover {
+      background: #777;
+    }
+
+    #progress-bar {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+      width: 80%;
+    }
+
+    .progress-chunk {
+      flex: 1;
+      height: 5px;
+      margin: 0 2px;
+      background: #444;
+      transition: background 0.3s;
+    }
+
+    .progress-chunk.completed {
+      background: #6a0dad;
+    }
+
+    #chapter-sidebar {
+      position: fixed;
+      top: 0;
+      left: -300px;
+      width: 300px;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: left 0.3s;
+      padding: 20px;
+    }
+
+    #chapter-sidebar.open {
+      left: 0;
+    }
+
+    #chapter-sidebar::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #chapter-sidebar::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 4px;
+    }
+
+    #chapter-sidebar::-webkit-scrollbar-thumb:hover {
+      background: #777;
+    }
+
+    #chapter-sidebar .chapter {
+      width: 100%;
+      margin: 8px 0;
+      cursor: pointer;
+      padding: 10px;
+      background: #333;
+      border-radius: 5px;
+      text-align: center;
+      transition: background 0.3s;
+    }
+
+    #chapter-sidebar .chapter.active {
+      background: #6a0dad;
+    }
+
+    #toggle-chapter-sidebar {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      width: 50px;
+      height: 50px;
+      background: #555;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    #toggle-chapter-sidebar:hover {
+      background: #777;
+    }
+
+    #nav-buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .nav-btn {
+      background: #555;
+      border: none;
+      color: white;
+      padding: 10px;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .nav-btn:hover {
+      background: #777;
+    }
+  </style>
+</head>
+<body>
+  <div id="comic-container">
+    <div class="spinner" id="loading-spinner"></div>
+    <img id="comic-image" data-src="" alt="Comic Page">
+  </div>
+
+  <div id="controls-container">
+    <div id="progress-bar"></div>
+    <button class="fullscreen-btn" id="fullscreen">⛶</button>
+    <div id="nav-buttons">
+      <button class="nav-btn" id="prev-btn">« Prev</button>
+      <button class="nav-btn" id="next-btn">Next »</button>
+    </div>
+  </div>
+
+  <button id="toggle-chapter-sidebar">☰</button>
+  <div id="chapter-sidebar"></div>
+
+  <script>
+    const comicId = '259dfd8a-f06a-4825-8fa6-a2dcd7274230'; // Replace with the actual comic ID
+    let currentPage = 1;
+    let totalPages = 0;
+    let currentChapterId = null;
+    let pages = [];
+
+    const comicContainer = document.getElementById('comic-container');
+    const imageElement = document.getElementById('comic-image');
+    const controlsContainer = document.getElementById('controls-container');
+    const fullscreenButton = document.getElementById('fullscreen');
+    const progressBar = document.getElementById('progress-bar');
+    const chapterSidebar = document.getElementById('chapter-sidebar');
+    const toggleChapterSidebarButton = document.getElementById('toggle-chapter-sidebar');
+    const prevButton = document.getElementById('prev-btn');
+    const nextButton = document.getElementById('next-btn');
+    const loadingSpinner = document.getElementById('loading-spinner');
+
+    function showLoading() {
+      loadingSpinner.style.display = 'block';
+      imageElement.classList.remove('loaded');
+    }
+
+    function hideLoading() {
+      loadingSpinner.style.display = 'none';
+      imageElement.classList.add('loaded');
+    }
+
+    function preloadImages(pageUrls) {
+      pageUrls.forEach((url) => {
+        const img = new Image();
+        img.src = url;
+      });
+    }
+
+    async function fetchChapters() {
+      try {
+        const response = await fetch(`https://api-consumet-org-gamma.vercel.app/manga/mangadex/info/${comicId}`);
+        const data = await response.json();
+
+        if (data.chapters && Array.isArray(data.chapters)) {
+          displayChapters(data.chapters);
+        } else {
+          console.error('Error: API response does not contain a "chapters" array.');
+        }
+      } catch (error) {
+        console.error('Error fetching chapters:', error);
+      }
+    }
+
+    function displayChapters(chapters) {
+      chapterSidebar.innerHTML = '';
+      chapters.forEach(chapter => {
+        const chapterElement = document.createElement('div');
+        chapterElement.className = 'chapter';
+        chapterElement.textContent = chapter.title;
+        chapterElement.addEventListener('click', () => {
+          currentChapterId = chapter.id;
+          fetchPagesForChapter(currentChapterId);
+          setActiveChapter(chapterElement);
+          toggleChapterSidebar();
+        });
+        chapterSidebar.appendChild(chapterElement);
+      });
+    }
+
+    async function fetchPagesForChapter(chapterId) {
+      try {
+        const response = await fetch(`https://api-consumet-org-gamma.vercel.app/manga/mangadex/read/${chapterId}`);
+        pages = await response.json();
+        totalPages = pages.length;
+        preloadImages(pages.map(page => page.img));
+        displayPages(pages);
+      } catch (error) {
+        console.error('Error fetching pages:', error);
+      }
+    }
+
+    function displayPages(pages) {
+      comicContainer.scrollTop = 0;
+      imageElement.src = '';
+      imageElement.dataset.src = pages[0].img;
+      currentPage = 1;
+      updateReader();
+      populateProgressBar(pages.length);
+    }
+
+    function updateReader() {
+      if (currentPage > 0 && currentPage <= totalPages) {
+        showLoading();
+        imageElement.onload = hideLoading;
+        imageElement.src = pages[currentPage - 1].img;
+        updateProgressBar();
+      }
+    }
+
+    function populateProgressBar(totalPages) {
+      progressBar.innerHTML = '';
+      for (let i = 0; i < totalPages; i++) {
+        const chunk = document.createElement('div');
+        chunk.classList.add('progress-chunk');
+        progressBar.appendChild(chunk);
+      }
+    }
+
+    function updateProgressBar() {
+      const progressChunks = document.querySelectorAll('.progress-chunk');
+      progressChunks.forEach((chunk, index) => {
+        chunk.classList.toggle('completed', index < currentPage);
+      });
+    }
+
+    function setActiveChapter(chapterElement) {
+      const activeChapter = document.querySelector('.chapter.active');
+      if (activeChapter) activeChapter.classList.remove('active');
+      chapterElement.classList.add('active');
+    }
+
+    function toggleChapterSidebar() {
+      chapterSidebar.classList.toggle('open');
+    }
+
+    fullscreenButton.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement) {
+        controlsContainer.style.opacity = '1';
+      }
+    });
+
+    prevButton.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        updateReader();
+      }
+    });
+
+    nextButton.addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        updateReader();
+      }
+    });
+
+    toggleChapterSidebarButton.addEventListener('click', toggleChapterSidebar);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft' && currentPage > 1) {
+        currentPage--;
+        updateReader();
+      } else if (event.key === 'ArrowRight' && currentPage < totalPages) {
+        currentPage++;
+        updateReader();
+      }
+    });
+
+    fetchChapters();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+  <script>eruda.init();</script>
+</body
+</html>
