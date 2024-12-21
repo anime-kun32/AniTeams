@@ -6,8 +6,10 @@
 }
 
 body {
-    background-color: transparent;
     font-family: 'Poppins', sans-serif;
+    background-color: #000000;
+}
+
 }
 
 /* Header Styling */
