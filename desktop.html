@@ -262,7 +262,7 @@
     }
 
     // Fetch anime data from the API
-    fetch('https://ani-teams.vercel.app/sample.json')
+    fetch('https://aniwatch-api-net.vercel.app/api/v2/hianime/home')
         .then(response => response.json())
         .then(data => {
             const spotlightAnimes = data.data.spotlightAnimes;
