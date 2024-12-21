@@ -268,157 +268,340 @@ header {
 /*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /* -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /* Slide section beign */
- {
-    box-sizing: border-box;
-}
-
-body, html {
+body {
+    background: #121212;
+    font-family: 'Montserrat', Arial, sans-serif;
+    color: #fff;
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    font-family: "Poppins";
-    background-color: #121212;
-    color: #FFBADE;
-    overflow-y: auto;
+    -webkit-text-size-adjust: none;
 }
 
-.slider-container {
+/* Global Swiper Styles */
+.swiper {
     position: relative;
     display: flex;
     width: 100%;
     height: 600px;
-    margin: 0 auto;
     overflow: hidden;
+    z-index: 1;
 }
 
-/* Responsive height for slider */
 @media screen and (max-width: 1400px) {
-    .slider-container {
+    .swiper {
         height: 570px;
     }
 }
+
+@media screen and (max-width: 1299px) {
+    .swiper {
+        height: 500px;
+    }
+}
+
 @media screen and (max-width: 759px) {
-    .slider-container {
+    .swiper {
         height: 350px;
     }
 }
 
-/* Slide styling */
+/* Ensure all slides are positioned and use opacity for the fade effect */
 .slide {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0; /* Hide with opacity */
+    opacity: 0;
     transition: opacity 1s ease-in-out;
+    z-index: 0;
+}
+
+/* The currently active slide */
+.fade-in {
+    opacity: 1;
+    z-index: 1;
+}
+
+/* The transitioning-out slide */
+.fade-out {
+    opacity: 0;
+    z-index: 0;
 }
 
 
-/* Overlay */
-.img-overlay::before {
+/* Image Container Styles */
+.img-container::before {
     content: "";
+    z-index: 1;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, #202125 0%, rgba(32,33,37,0.6) 40%, rgba(32,33,37,0) 60%, rgba(32,33,37,0) 80%, #202125 100%);
-    z-index: 1;
+    background: linear-gradient(90deg, #202125 0, rgba(32, 33, 37, 0.6) 40%, rgba(32, 33, 37, 0) 60%, rgba(32, 33, 37, 0) 80%, #202125 100%);
 }
 
-/* Image */
-.slider-image {
+.img-container::after {
+    content: "";
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    background: linear-gradient(0deg, #202125 0, rgba(32, 33, 37, 0) 50%, #202125 100%);
+}
+
+@media screen and (max-width: 759px) {
+    .img-container::after {
+        background: linear-gradient(0deg, #202125 0, rgba(32, 33, 37, 0) 82%);
+    }
+
+    .img-container::before {
+        opacity: 0;
+    }
+}
+
+/* Image Styles */
+.img {
     width: 100%;
     height: 100%;
+    position: absolute;
     object-fit: cover;
-    position: absolute;
 }
 
-/* Content area */
+@media screen and (max-width: 759px) {
+    .img {
+        opacity: 0.5;
+    }
+}
+
+/* Content Container Styles */
 .content {
+    z-index: 1;
+    width: 600px;
+    height: 100%;
     position: absolute;
-    bottom: 2em;
-    left: 2em;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
     color: #cae962;
-    z-index: 2;
+    left: 2em;
+    bottom: 2em;
+    padding-bottom: 3em;
+    bottom: 0 !important;
 }
 
-/* Title */
+@media screen and (max-width: 1200px) {
+    .content {
+        width 50%;
+    }
+}
+
+@media screen and (max-width: 759px) {
+    .content {
+        width: 100%;
+        padding-right: 100px;
+        box-shadow: none;
+        background: rgb(0, 0, 0, 0);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .content {
+        padding-right: 10px;
+        left: 10px;
+    }
+}
+
+/* Rank Styles */
+.rank {
+    color: #cae962;
+    font-size: 14px;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+
+@media screen and (max-width: 1200px) {
+    .rank {
+        font-size: 1px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .rank {
+        font-size: 10px;
+    }
+}
+
+/* Title Styles */
 .title {
     font-family: "Ubuntu", sans-serif;
     color: #fff;
-    font-size: 50px;
-    margin-bottom: 20px;
     letter-spacing: 2px;
+    margin-bottom: 20px;
+    font-size: 50px;
+}
+
+@media screen and (max-width: 1200px) {
+    .title {
+        font-size: 30px;
+        line-height: 1.1em;
+        -webkit-line-clamp: 2;
+    }
+}
+
+@media screen and (max-width: 759px) {
+    .title {
+        font-size: 30px;
+        line-height: 1.1em;
+        -webkit-line-clamp: 2;
+        margin-bottom: 5px;
+    }
 }
 
 @media screen and (max-width: 480px) {
     .title {
-        font-size: 8vw; /* Adjust for smaller screens */
+        font-size: 25px;
+        margin-bottom: 0px;
     }
 }
 
-/* Description */
+/* Icons Styles */
+.icons {
+    display: flex;
+    gap: 1em;
+    font-size: 14px;
+    align-items: center;
+    margin: 0 1em; /* Add margin to ensure icons do not touch the screen edges */
+}
+
+@media screen and (max-width: 759px) {
+    .icons {
+        display: none;
+    }
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+    color: #fff;
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.icon-span {
+    display: inline-block;
+    padding: 3px 4px;
+    background: #cae962;
+    color: #111;
+    border-radius: 5px;
+    line-height: 1em;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+/* Description Styles */
 .description {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-family: "Poppins", sans-serif;
     color: #fff;
     font-size: 16px;
-    font-family: "Poppins", sans-serif;
-    margin: 1em 0;
+    margin: 2em 0;
 }
 
-/* Buttons */
-.watch-button, .details-button {
-    padding: 0.7rem 1em;
-    border-radius: 30px;
-    font-family: "Ubuntu", sans-serif;
-    font-size: 18px;
-    display: inline-block;
-    margin-right: 10px;
+@media screen and (max-width: 1299px) {
+    .description {
+        line-height: 1.1em;
+        -webkit-line-clamp: 2;
+    }
 }
 
-.watch-button {
-    background-color: #7354e7;
-    color: #111;
-    text-decoration: none;
-}
-
-.watch-button:hover {
-    color: white;
-    background-color: black;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.watch-button:active {
-    background-color: rgb(255, 24, 24);
-    color: white;
-}
-
-.details-button {
-    background-color: #4a4b51;
-    color: #fff;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.details-button:hover {
-    background-color: black;
-    transition: background-color 0.3s ease;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.details-button:active {
-    background-color: green;
-}
-
-/* Responsive adjustments for buttons */
 @media screen and (max-width: 480px) {
     .description {
         font-size: 13px;
-    }
-    .watch-button, .details-button {
-        font-size: 12px;
+        width: 80%;
     }
 }
+
+/* Watch Button Styles */
+.watch-btn {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+@media screen (max-width: 320px) {
+    .watch-btn {
+        flex-wrap: wrap;
+    }
+}
+
+.watch-link {
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+    padding: 0.7rem 1em;
+    background-color: #cae962;
+    color: #111;
+    font-size: 18px;
+    border-radius: 30px;
+    font-family: "Ubuntu", sans-serif;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 1200px) {
+    .watch-link {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .watch-link {
+        font-size: 12px;
+        padding-inline: 1.2rem;
+    }
+}
+
+.detail-link {
+    display: flex;
+    align-items: center;
+    padding: 0.7rem 1em;
+    background-color: #4a4b51;
+    color: #fff;
+    gap: 0.3em;
+    font-size: 18px;
+    border-radius: 30px;
+    font-family: "Ubuntu", sans-serif;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 1200px) {
+    .detail-link {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .detail-link {
+        font-size: 12px;
+        padding-inline: 1.2rem;
+    }
+}
+
+/* Fade In/Out Effects */
+.fade {
+    display: none;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+
 /* Slide section end */
 /*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
