@@ -244,7 +244,7 @@
  <section class="spotlight-slideshow">
     <div class="swiper">
         <div class="slideshow-container" id="slideshow-container">
-            <!-- Anime cards will be inserted here -->
+            
         </div>
         <div class="navigation">
             <span class="prev">&#10094;</span>
@@ -309,11 +309,11 @@
                 const watchBtn = document.createElement('div');
                 watchBtn.classList.add('watch-btn');
                 const watchLink = document.createElement('a');
-                watchLink.href = `anime-info.php?animeId=${anime.id}`;
+                watchLink.href = `watch.html?id=${anime.id}`;
                 watchLink.classList.add('watch-link');
                 watchLink.textContent = 'Watch Now';
                 const detailLink = document.createElement('a');
-                detailLink.href = `anime-info.php?animeId=${anime.id}`;
+                detailLink.href = `details.html?id=${anime.id}`;
                 detailLink.classList.add('detail-link');
                 detailLink.textContent = 'More Info';
                 watchBtn.appendChild(watchLink);
