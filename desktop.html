@@ -241,9 +241,128 @@
         // Load genres on page load
         window.onload = fetchGenres;
   </script>
-  <div class="slider-container" id="slider-container">
-   <!-- Slides will be populated here dynamically -->
-  </div>
+ <section class="spotlight-slideshow">
+    <div class="swiper">
+        <div class="slideshow-container" id="slideshow-container">
+            <!-- Anime cards will be inserted here -->
+        </div>
+        <div class="navigation">
+            <span class="prev">&#10094;</span>
+            <span class="next">&#10095;</span>
+        </div>
+    </div>
+</section>
+<script>
+    let currentSlide = 0;
+    const slideshowContainer = document.getElementById('slideshow-container');
+    
+    // Function to truncate the description text
+    function truncateDescription(description, length = 100) {
+        return description.length > length ? description.substring(0, length) + '...' : description;
+    }
+
+    // Fetch anime data from the API
+    fetch('https://ani-teams.vercel.app/sample.json')
+        .then(response => response.json())
+        .then(data => {
+            const spotlightAnimes = data.data.spotlightAnimes;
+
+            spotlightAnimes.forEach(anime => {
+                const slide = document.createElement('div');
+                slide.classList.add('slide');
+
+                const imgContainer = document.createElement('div');
+                imgContainer.classList.add('img-container');
+                const img = document.createElement('img');
+                img.src = anime.poster;
+                img.alt = anime.name;
+                img.classList.add('img');
+                imgContainer.appendChild(img);
+
+                const content = document.createElement('div');
+                content.classList.add('content');
+
+                const rank = document.createElement('div');
+                rank.classList.add('rank');
+                rank.textContent = `Rank: #${anime.rank}`;
+
+                const title = document.createElement('h3');
+                title.classList.add('title');
+                title.textContent = anime.name;
+
+                const description = document.createElement('div');
+                description.classList.add('description');
+                description.textContent = truncateDescription(anime.description, 100);
+
+                const icons = document.createElement('div');
+                icons.classList.add('icons');
+                if (anime.type) {
+                    const icon = document.createElement('div');
+                    icon.classList.add('icon');
+                    const iconSpan = document.createElement('span');
+                    iconSpan.classList.add('icon-span');
+                    iconSpan.textContent = anime.type;
+                    icon.appendChild(iconSpan);
+                    icons.appendChild(icon);
+                }
+
+                const watchBtn = document.createElement('div');
+                watchBtn.classList.add('watch-btn');
+                const watchLink = document.createElement('a');
+                watchLink.href = `anime-info.php?animeId=${anime.id}`;
+                watchLink.classList.add('watch-link');
+                watchLink.textContent = 'Watch Now';
+                const detailLink = document.createElement('a');
+                detailLink.href = `anime-info.php?animeId=${anime.id}`;
+                detailLink.classList.add('detail-link');
+                detailLink.textContent = 'More Info';
+                watchBtn.appendChild(watchLink);
+                watchBtn.appendChild(detailLink);
+
+                content.appendChild(rank);
+                content.appendChild(title);
+                content.appendChild(description);
+                content.appendChild(icons);
+                content.appendChild(watchBtn);
+
+                slide.appendChild(imgContainer);
+                slide.appendChild(content);
+
+                slideshowContainer.appendChild(slide);
+            });
+
+            // Now that all slides are loaded, start the slideshow
+            const slides = document.querySelectorAll('.slide');
+            const totalSlides = slides.length;
+
+            // Function to update the slide position with fade effect
+            function updateSlidePosition() {
+                slides.forEach((slide, index) => {
+                    if (index === currentSlide) {
+                        slide.classList.add('fade-in');
+                        slide.classList.remove('fade-out');
+                    } else {
+                        slide.classList.add('fade-out');
+                        slide.classList.remove('fade-in');
+                    }
+                });
+            }
+
+            // Function to move to the next slide
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlidePosition();
+            }
+
+            // Auto slide every 5 seconds
+            setInterval(nextSlide, 5000);
+
+            // Initialize the slideshow
+            updateSlidePosition();
+        })
+        .catch(error => console.error('Error fetching anime data:', error));
+</script>
+
   <p>
    <span class="trending">
     Trending
