@@ -9,8 +9,8 @@ body {
   background-repeat: no-repeat;
   backdrop-filter: blur(30px); /* Stronger blur effect for the entire page */
   background-color: rgba(0, 0, 0, 0.7); /* Subtle overlay for better contrast */
-  height: 100vw; /* Full-page height */
-  width: 100vw; /* Full-page width */
+  height: 100%; /* Full-page height */
+  width: 100%; /* Full-page width */
   display: flex;
   flex-direction: column;
   align-items: center;
