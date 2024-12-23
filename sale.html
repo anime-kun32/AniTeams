@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AniTeams - Watch</title>
+  
+  <!-- Artplayer CSS -->
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+      background: #000; /* Background color if needed */
+    }
+
+    .artplayer-app {
+      width: 100%;
+      height: 100%;
+      max-width: 1240px; /* Maximum width of the player */
+      max-height: 605px; /* Maximum height of the player */
+      background: #000; /* Background color */
+      box-sizing: border-box; /* Include padding and border in element's total width and height */
+    }
+
+    /* Media queries for different screen sizes */
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px; /* Optional padding for smaller screens */
+      }
+
+      .artplayer-app {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        padding: 10px; /* Optional padding for medium screens */
+      }
+
+      .artplayer-app {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+  </style>
+
+  <!-- Artplayer Script -->
+  <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
+  
+  <!-- HLS.js Script -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  
+  <!-- Chromecast Plugin Script -->
+  <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-chromecast/dist/artplayer-plugin-chromecast.js"></script>
+  
+  <!-- VTT Thumbnail Plugin Script -->
+  <script src="https://cdn.jsdelivr.net/npm/artplayer-plugin-vtt-thumbnail/dist/artplayer-plugin-vtt-thumbnail.js"></script>
+</head>
+<body>
+  <!-- Container for the Artplayer -->
+  <div class="container">
+    <div class="artplayer-app"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const baseApiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/episode/sources';
+      let category = 'dub';
+      let art = null;
+
+      const getQueryParam = (param) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+      };
+
+      const id = getQueryParam('id');
+      if (!id) {
+        console.error('No ID provided in URL');
+        return;
+      }
+
+      const fetchVideoData = (category) => {
+        const apiUrl = `${baseApiUrl}?animeEpisodeId=${id}&server=hd-1&category=${category}`;
+        console.log(`Fetching video data from: ${apiUrl}`);
+        return fetch(apiUrl)
+          .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+          })
+          .then(data => {
+            if (data.status === 502) return null;
+            return {
+              sources: data.data.sources,
+              tracks: data.data.tracks,
+            };
+          })
+          .catch(error => console.error('Error fetching API data:', error));
+      };
+
+      const initializePlayer = async (data) => {
+        if (!data || !data.sources) {
+          console.error('Invalid data received from API:', data);
+          return;
+        }
+
+        const videoSource = data.sources[0].url;
+
+        if (art) art.destroy();
+
+        // Initialize the player
+        art = new Artplayer({
+          container: '.artplayer-app',
+          url: videoSource,
+          type: 'm3u8',
+          screenshot: true,
+          setting: true,
+          autoplay: true,
+          fullscreen: true,
+          fullscreenWeb: true,
+          airplay: true,
+          playsInline: true,
+          miniProgressBar: true,
+          pip: true,
+          plugins: [artplayerPluginChromecast({})],
+          settings: [], // We'll add quality settings dynamically
+          customType: {
+            m3u8: (video, url) => {
+              if (Hls.isSupported()) {
+                const hls = new Hls();
+
+                // Load the HLS stream
+                hls.loadSource(url);
+                hls.attachMedia(video);
+
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                  const availableLevels = hls.levels.map((level, index) => ({
+                    html: `${level.height}p`, // Quality label
+                    value: index,            // Level index
+                    default: hls.currentLevel === index,
+                  }));
+
+                  // Add quality settings dynamically
+                  art.setting.add({
+                    html: 'Quality',
+                    selector: [
+                      { html: 'Auto', value: -1, default: hls.autoLevelEnabled },
+                      ...availableLevels,
+                    ],
+                    onSelect: (item) => {
+                      hls.currentLevel = item.value; // Change the quality
+                      return item.html;
+                    },
+                  });
+
+                  video.play(); // Start playback
+                });
+
+                hls.on(Hls.Events.LEVEL_SWITCHED, (event, data) => {
+                  const quality = hls.levels[data.level].height;
+                  art.notice.show(`Switched to ${quality}p`);
+                });
+
+                // Error handling
+                hls.on(Hls.Events.ERROR, (event, data) => {
+                  console.error('HLS.js error:', data);
+                });
+              } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+                video.addEventListener('loadedmetadata', () => video.play());
+              } else {
+                art.notice.show('This browser does not support HLS playback');
+              }
+            },
+          },
+          moreVideoAttr: {
+            'webkit-playsinline': true,
+            'playsinline': true,
+          },
+        });
+      };
+
+      fetchVideoData(category).then(data => {
+        if (!data) {
+          const otherCategory = category === 'sub' ? 'dub' : 'sub';
+          fetchVideoData(otherCategory).then(data => {
+            if (!data) {
+              alert(`Error loading both ${category} and ${otherCategory}`);
+            } else {
+              initializePlayer(data);
+            }
+          });
+        } else {
+          initializePlayer(data);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
