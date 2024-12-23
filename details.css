@@ -1,4 +1,4 @@
-/* Body Styles - Ensure full background is heavily blurred */
+/* Body Styles - Full-page blur with background fill */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -7,43 +7,45 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  backdrop-filter: blur(25px); /* Increased blur for the entire page */
-  background-color: rgba(255, 255, 255, 0.1); /* Light overlay to brighten the page */
-  overflow-x: hidden;
-  height: 100vh;
+  backdrop-filter: blur(30px); /* Stronger blur effect for the entire page */
+  background-color: rgba(0, 0, 0, 0.7); /* Subtle overlay for better contrast */
+  height: 100vw; /* Full-page height */
+  width: 100vw; /* Full-page width */
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+  overflow-x: hidden;
 }
 
-/* Poster Styling - Center and enhance */
+/* Poster Styling - Center and refine */
 #poster {
   display: block;
   max-width: 300px;
   height: auto;
-  margin: 20px auto; /* Centers the poster */
+  margin: 20px auto;
   border-radius: 10px;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.7); /* Adds a shadow for better visibility */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.8); /* Shadow for better visibility */
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 #poster:hover {
   transform: scale(1.05); /* Slight zoom effect on hover */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 1);
 }
 
-/* Center title */
+/* Title styling */
 h1 {
   text-align: center;
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin: 20px 0;
 }
 
-/* Stats section adjustments */
+/* Stats section styling */
 .stats {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 30px;
   margin-bottom: 20px;
 }
 
@@ -62,14 +64,14 @@ h1 {
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .btn {
-  padding: 10px 20px;
+  padding: 12px 25px;
   border: none;
   border-radius: 5px;
-  font-size: 1rem;
+  font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -77,6 +79,7 @@ h1 {
 .btn-watch {
   background-color: #6a5acd;
   color: white;
+  text-decoration: none;
 }
 
 .btn-watch:hover {
@@ -93,14 +96,12 @@ h1 {
 }
 
 /* Description container adjustments */
-.description-container {
-  margin: 0 auto 20px;
-  max-width: 800px;
-  text-align: center;
-}
-
 .description-text {
-  margin-bottom: 10px;
+  max-width: 90%;
+  margin: 0 auto 20px;
+  text-align: center;
+  line-height: 1.6;
+  font-size: 1rem;
 }
 
 .read-toggle {
@@ -111,18 +112,19 @@ h1 {
 
 /* More info section styling */
 .more-info {
-  max-width: 800px;
-  margin: 0 auto 20px;
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.6); /* Background for readability */
-  border-radius: 10px;
+  max-width: 90%;
+  margin: 20px auto;
+  padding: 15px;
+  line-height: 1.8;
+  font-size: 1rem;
 }
 
 .more-info div {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .more-info span:first-child {
   font-weight: bold;
   color: #cccccc;
-}
+  }
+  
