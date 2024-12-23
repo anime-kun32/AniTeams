@@ -1,301 +1,112 @@
-
-/* Portrait Mode Styles */
-@media screen and (orientation: portrait) {
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    color: #ffffff;
-    background: #121212 url('background.jpg') no-repeat center center fixed;
-    background-size: cover;
-    backdrop-filter: blur(10px);
-  }
-
-  #container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: rgba(0, 0, 0, 0.8);
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  }
-
-  .poster {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    margin: 0 auto 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  }
-
-  h1 {
-    text-align: center;
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-  }
-
-  .stats {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-  }
-
-  .icon {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .icon i {
-    color: #ffcc00;
-  }
-
-  .buttons {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-  }
-
-  .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-
-  .btn-watch {
-    background-color: #6a5acd;
-    color: white;
-  }
-
-  .btn-watch:hover {
-    background-color: #7b68ee;
-  }
-
-  .btn-bookmark {
-    background-color: #444444;
-    color: white;
-  }
-
-  .btn-bookmark:hover {
-    background-color: #666666;
-  }
-
-  .description-container {
-    margin-bottom: 20px;
-  }
-
-  .description-text {
-    margin-bottom: 10px;
-  }
-
-  .read-toggle {
-    color: #cccccc;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  .more-info {
-    background-color: #1e1e1e;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-  }
-
-  .more-info div {
-    margin-bottom: 10px;
-  }
-
-  .more-info span:first-child {
-    font-weight: bold;
-    color: #cccccc;
-  }
-
-  .seasons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    overflow-x: auto;
-  }
-
-  .episode-card {
-    background-color: #1e1e1e;
-    border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-    color: #ffffff;
-    flex: 0 0 120px;
-    max-width: 120px;
-  }
-
-  .episode-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
-  }
-
-  .episode-card h3 {
-    font-size: 0.9rem;
-    margin: 0;
-  }
+/* Body Styles - Ensure background image is full page and blurred */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #ffffff;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  backdrop-filter: blur(10px);
+  overflow-x: hidden;
 }
 
-/* Landscape Mode Styles */
-@media screen and (orientation: landscape) {
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    color: #ffffff;
-    background: #121212 url('background.jpg') no-repeat center center fixed;
-    background-size: cover;
-    backdrop-filter: blur(10px);
-  }
-
-  #container {
-    display: flex;
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: rgba(0, 0, 0, 0.8);
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  }
-
-  .poster {
-    max-width: 40%;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    margin-right: 20px;
-  }
-
-  .right-content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  h1 {
-    text-align: left;
-    font-size: 2rem;
-    margin-bottom: 15px;
-  }
-
-  .stats {
-    display: flex;
-    justify-content: flex-start;
-    gap: 20px;
-    margin-bottom: 20px;
-  }
-
-  .icon {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .icon i {
-    color: #ffcc00;
-  }
-
-  .buttons {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-
-  .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-
-  .btn-watch {
-    background-color: #6a5acd;
-    color: white;
-    text-decoration: none;
-  }
-
-  .btn-watch:hover {
-    background-color: #7b68ee;
-  }
-
-  .btn-bookmark {
-    background-color: #444444;
-    color: white;
-  }
-
-  .btn-bookmark:hover {
-    background-color: #666666;
-  }
-
-  .description-container {
-    margin-bottom: 20px;
-  }
-
-  .description-text {
-    margin-bottom: 10px;
-  }
-
-  .read-toggle {
-    color: #cccccc;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  .more-info {
-    background-color: #1e1e1e;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
-  }
-
-  .more-info div {
-    margin-bottom: 10px;
-  }
-
-  .more-info span:first-child {
-    font-weight: bold;
-    color: #cccccc;
-  }
-
-  .seasons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    overflow-x: auto;
-  }
-
-  .episode-card {
-    background-color: #1e1e1e;
-    border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-    color: #ffffff;
-    flex: 0 0 120px;
-    max-width: 120px;
-  }
-
-  .episode-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
-  }
-
-  .episode-card h3 {
-    font-size: 0.9rem;
-    margin: 0;
-  }
+/* Remove the container */
+#container {
+  display: contents;
 }
 
-      
+/* Center title */
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin: 20px 0;
+}
+
+/* Stats section adjustments */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.icon i {
+  color: #ffcc00;
+}
+
+/* Buttons styling */
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-watch {
+  background-color: #6a5acd;
+  color: white;
+}
+
+.btn-watch:hover {
+  background-color: #7b68ee;
+}
+
+.btn-bookmark {
+  background-color: #444444;
+  color: white;
+}
+
+.btn-bookmark:hover {
+  background-color: #666666;
+}
+
+/* Description container adjustments */
+.description-container {
+  margin: 0 auto 20px;
+  max-width: 800px;
+  text-align: center;
+}
+
+.description-text {
+  margin-bottom: 10px;
+}
+
+.read-toggle {
+  color: #cccccc;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* More info section styling */
+.more-info {
+  max-width: 800px;
+  margin: 0 auto 20px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.6); /* Background for readability */
+  border-radius: 10px;
+}
+
+.more-info div {
+  margin-bottom: 10px;
+}
+
+.more-info span:first-child {
+  font-weight: bold;
+  color: #cccccc;
+  }
