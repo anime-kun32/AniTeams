@@ -1,4 +1,4 @@
-/* Body Styles - Ensure background image is centered and heavily blurred */
+/* Body Styles - Ensure full background is heavily blurred */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -7,9 +7,13 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  backdrop-filter: blur(20px); /* Increased blur */
+  backdrop-filter: blur(25px); /* Increased blur for the entire page */
   background-color: rgba(255, 255, 255, 0.1); /* Light overlay to brighten the page */
   overflow-x: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Poster Styling - Center and enhance */
