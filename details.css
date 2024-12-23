@@ -1,4 +1,4 @@
-/* Body Styles - Ensure background image is full page and blurred */
+/* Body Styles - Ensure background image is centered and heavily blurred */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -7,13 +7,25 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(20px); /* Increased blur */
+  background-color: rgba(255, 255, 255, 0.1); /* Light overlay to brighten the page */
   overflow-x: hidden;
 }
 
-/* Remove the container */
-#container {
-  display: contents;
+/* Poster Styling - Center and enhance */
+#poster {
+  display: block;
+  max-width: 300px;
+  height: auto;
+  margin: 20px auto; /* Centers the poster */
+  border-radius: 10px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.7); /* Adds a shadow for better visibility */
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+#poster:hover {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.9);
 }
 
 /* Center title */
@@ -109,4 +121,4 @@ h1 {
 .more-info span:first-child {
   font-weight: bold;
   color: #cccccc;
-  }
+}
