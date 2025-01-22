@@ -2,9 +2,10 @@ let slideIndex = 0;
 const sliderContainer = document.getElementById("slider-container");
 
 // Fetch data from the API
+import api from './config.js';
 async function fetchAnimes() {
     try {
-        const response = await fetch('https://aniwatch-api-net.vercel.app/api/v2/hianime/home'); 
+        const response = await fetch(api); 
         const data = await response.json();
         if (data.success) {
             const spotlightAnimes = data.data.spotlightAnimes;
