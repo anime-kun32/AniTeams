@@ -477,57 +477,56 @@ header {
     <div id="episodes"></div>
   </div>
 
-  <script type="module">
-    import api from './config.js';
-    // Extract the anime ID from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const animeId = urlParams.get("id") || "defaultAnimeId";
+ <script type="module">
+        import {details} from './config.js';
+        
+        // Extract the anime ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const animeId = urlParams.get("id") || "defaultAnimeId";
 
-    // Correct API URL for fetching episodes
-   
+        // Correct API URL for fetching episodes
+        const apiUrl = `${details}/${animeId}/episodes`; // Adjust based on your API structure
 
-    // Fetch and populate episodes
-    fetch(api)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.success) {
-          const episodesContainer = document.getElementById("episodes");
-          data.data.episodes.forEach((episode, index) => {
-            const episodeCard = document.createElement("div");
-            episodeCard.className = "episode-card";
-            episodeCard.innerHTML = `
-              <div class="episode-number">${episode.number}</div>
-              <div class="episode-title">${episode.title} ${
-                episode.isFiller ? '<span class="filler">(Filler)</span>' : ""
-              }</div>
-            `;
+        // Fetch and populate episodes
+        fetch(apiUrl)
+           then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.success && data.data && Array.isArray(data.data.episodes)) {
+                    const episodesContainer = document.getElementById("episodes");
+                    data.data.episodes.forEach((episode, index) => {
+                        const episodeCard = document.createElement("div");
+                        episodeCard.className = "episode-card";
+                        episodeCard.innerHTML = `
+                            <div class="episode-number">${episode.number}</div>
+                            <div class="episode-title">${episode.title} ${episode.isFiller ? '<span class="filler">(Filler)</span>' : ""}</div>
+                        `;
 
-            // Set active class on click
-            episodeCard.onclick = () => {
-              const iframe = document.getElementById("animeIframe");
-              iframe.src = `./player.html?id=${episode.episodeId}`;
-              document.querySelectorAll(".episode-card").forEach(card => card.classList.remove("active"));
-              episodeCard.classList.add("active");
-            };
+                        // Set active class on click
+                        episodeCard.onclick = () => {
+                            const iframe = document.getElementById("animeIframe");
+                            iframe.src = `./player.html?id=${episode.episodeId}`;
+                            document.querySelectorAll(".episode-card").forEach(card => card.classList.remove("active"));
+                            episodeCard.classList.add("active");
+                        };
 
-            episodesContainer.appendChild(episodeCard);
+                        episodesContainer.appendChild(episodeCard);
 
-            // Automatically set the first episode as active
-            if (index === 0) {
-              episodeCard.click();
-            }
-          });
-        } else {
-          console.error("Failed to load episodes");
-        }
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  </script>
+                        // Automatically set the first episode as active
+                        if (index === 0) {
+                            episodeCard.click();
+                        }
+                    });
+                } else {
+                    console.error("Failed to load episo: Invalid data format", data);
+                }
+            })
+            .catch((error) => console.error("Error fetching data:", error));
+    </script>
   <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
 </body>
