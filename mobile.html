@@ -216,7 +216,7 @@
         }
 
         // Fetch Genres from API and Populate Sidebar
-   import api from './config.js'
+   import { api } from './config.js';
         async function fetchGenres() {
             try {
                 const response = await fetch(api); // Replace with your API URL
@@ -255,7 +255,7 @@
     </div>
 </section>
 <script type="module">
- import api from './config.js'
+ import { api } from './config.js';
     let currentSlide = 0;
     const slideshowContainer = document.getElementById('slideshow-container');
     
@@ -378,7 +378,7 @@
     <div class="cardcontainer" id="cardContainer"></div>
 </div>
 <script type="module">
-import api from './config.js';
+import { api } from './config.js';;
 async function fetchTrendingAnimes() {
     try {
         const response = await fetch(api);
@@ -438,7 +438,7 @@ fetchTrendingAnimes();
   </div>
   <script type="module">
    // Import the API URL from config.js
-import api from './config.js'; 
+import { api } from './config.js';; 
    async function fetchAnimeData() {
             try {
                 const response = await fetch(api);
