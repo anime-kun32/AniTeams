@@ -413,12 +413,12 @@ function fetchAndDisplayTrendingAnime() {
   </p>
   <div class="card-container">
   </div>
-  <script>
+  <script type="module">
+   import api from './config.js';
    async function fetchAnimeData() {
-            const apiUrl = "https://aniwatch-api-net.vercel.app/api/v2/hianime/home"; // Replace with your actual API URL
 
             try {
-                const response = await fetch(apiUrl);
+                const response = await fetch(api);
                 const data = await response.json();
 
                 if (data.success) {
@@ -657,6 +657,7 @@ function fetchAndDisplayTrendingAnime() {
  <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
  </body>
