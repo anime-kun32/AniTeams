@@ -1,9 +1,9 @@
 
-import api from './config.js'; 
+import {details} from './config.js'; 
 
 const urlParams = new URLSearchParams(window.location.search);
 const animeId = urlParams.get("id") || "defaultAnimeId";
-const apiUrl = `${api}/anime/${animeId}`; 
+const apiUrl = `${details}/${animeId}`; 
 
 
 fetch(apiUrl)
