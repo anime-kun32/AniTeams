@@ -223,14 +223,16 @@ document.addEventListener('DOMContentLoaded', () => {
     <input type="hidden" id="genre-ids" name="genres" value="1">
     <!-- Genre items will be populated here dynamically -->
 </div>
-   <script>
+   <script type="module">
+       import { api } from './config.js';
+
     document.addEventListener("DOMContentLoaded", () => {
-        const apiUrl = 'https://aniwatch-api-net.vercel.app/api/v2/hianime/home';
+       
         const selectedGenres = new Set();
         const genreList = document.getElementById('genre-list');
 
         // Fetch genres from the API
-        fetch(apiUrl)
+        fetch(api)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -397,7 +399,9 @@ function onFilterButtonClick() {
             80%, 100% { content: ''; }
         }</style>
   <script>
-    apiUrl = "https://aniwatch-api-net.vercel.app/api/v2/hianime/search";
+ <script type="module">
+    import api from './config.js'; // Import default export
+    import { search } from './config.js'; // Import named export
 
     const fetchParamsFromUrl = () => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -409,7 +413,7 @@ function onFilterButtonClick() {
             sort: urlParams.get('sort') || '',
             season: urlParams.get('season') || '',
             sub_or_dub: urlParams.get('language') || 'sub',
-            status: urlParams.get('status') || '',
+            status urlParams.get('status') || '',
             rating: urlParams.get('rated') || '',
             score: urlParams.get('score') || '',
             start_date: `${urlParams.get('start-date-year')}-${urlParams.get('start-date-month')}-${urlParams.get('start-date-day')}`
@@ -418,7 +422,7 @@ function onFilterButtonClick() {
 
     const fetchAnimeData = async () => {
         const params = fetchParamsFromUrl();
-        const url = `${apiUrl}?q=${params.query}&page=${params.page}&gen=${params.genres}&type=${params.type}&sort=${params.sort}&season=${params.season}&language=${params.sub_or_dub}&status=${params.status}&rated=${params.rating}&score=${params.score}&start_date=${params.start_date}`;
+        const url = `${search}?q=${params.query}&page=${params.page}&gen=${params.genres}&type=${params.type}&sort=${params.sort}&season=${params.season}&language=${params.sub_or_dub}&status=${params.status}&rated=${params.rating}&score=${params.score}&start_date=${params.start_date}`;
         
         const loader = document.getElementById('loader');
         const animeList = document.getElementById('anime-list');
@@ -437,7 +441,7 @@ function onFilterButtonClick() {
                     card.innerHTML = `
                         <div class="poster">
                             <img src="${anime.poster}" alt="${anime.name} Poster" class="image" />
-                            <a href="details.html?id=${anime.id}" class="overlay">
+                            <a href="details.html?id=${anime.id}"="overlay">
                                 <img src="play-buttton.png" alt="Play" class="play-button" />
                             </a>
                             <div class="info-left">
@@ -447,7 +451,7 @@ function onFilterButtonClick() {
                                 <div class="btn-episode">DUB ${anime.episodes.dub}</div>
                             </div>
                         </div>
-                <div class="details">
+                        <div class="details">
                             <h3 class="name">${anime.name}</h3>
                             <p class="jname">${anime.jname}</p>
                         </div>
@@ -469,6 +473,7 @@ function onFilterButtonClick() {
         fetchAnimeData();
     }
 </script>
+
 
 </div>
     </main>
