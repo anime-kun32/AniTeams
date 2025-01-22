@@ -1,6 +1,10 @@
+
+import api from './config.js'; 
+
 const urlParams = new URLSearchParams(window.location.search);
 const animeId = urlParams.get("id") || "defaultAnimeId";
-const apiUrl = `https://aniwatch-api-net.vercel.app/api/v2/hianime/anime/${animeId}`;
+const apiUrl = `${api}/anime/${animeId}`; 
+
 
 fetch(apiUrl)
   .then((response) => response.json())
