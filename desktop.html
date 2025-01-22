@@ -207,7 +207,7 @@
     </div>
    </ul>
   </aside>
-  <script>
+  <script type="module">
    // JavaScript to Toggle Sidebar
         function toggleMenu() {
             document.getElementById("sideMenu").classList.toggle("open");
@@ -215,9 +215,10 @@
         }
 
         // Fetch Genres from API and Populate Sidebar
+   import api from './config.js'
         async function fetchGenres() {
             try {
-                const response = await fetch('https://aniwatch-api-net.vercel.app/api/v2/hianime/home'); // Replace with your API URL
+                const response = await fetch(api); // Replace with your API URL
                 const result = await response.json();
                 
                 if (result.success && result.data.genres) {
@@ -252,7 +253,8 @@
         </div>
     </div>
 </section>
-<script>
+<script type="module">
+ import api from './config.js'
     let currentSlide = 0;
     const slideshowContainer = document.getElementById('slideshow-container');
     
@@ -262,7 +264,7 @@
     }
 
     // Fetch anime data from the API
-    fetch('https://aniwatch-api-net.vercel.app/api/v2/hianime/home')
+    fetch(api)
         .then(response => response.json())
         .then(data => {
             const spotlightAnimes = data.data.spotlightAnimes;
@@ -373,15 +375,14 @@
     <!-- Anime cards will be dynamically inserted here by JavaScript -->
    </div>
   </section>
-  <script>
+  <script type="module">
+   import api from './config.js'
    document.addEventListener("DOMContentLoaded", function () {
     fetchAndDisplayTrendingAnime();
 });
 
 function fetchAndDisplayTrendingAnime() {
-    const apiUrl = "https://aniwatch-api-net.vercel.app/api/v2/hianime/home";// replace with your deployed version of the aniwatch api 
-
-    fetch(apiUrl)
+    fetch(api)
         .then(response => response.json())
         .then(data => {
             if (data.success && data.data.trendingAnimes) {
