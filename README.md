@@ -13,3 +13,6 @@ Welcome to AniTeams . An Anime streaming website , uses [Aniwatch](https://githu
 - [ ] skip intro and outro
 - [ ] Manga readinig api (in progress)
 - [ ] Anilist authentication
+# Depyment instrcutions 
+- Make sure you have deployed your version of the [Aniwatch APi](https://github.com/ghoshRitesh12/aniwatch-api)
+- update the config.js file wiht oyur deployed version 
