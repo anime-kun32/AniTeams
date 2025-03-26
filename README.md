@@ -73,7 +73,8 @@ Using npm:
 npm run dev
 ```
 ## Coming soon !!
-- [ ] sign up and registration 
+- [ ] sign up and registration
+- [ ] PWA support 
 - [ ] full anilist integration with anilist
 - [ ] Bookmark
 - [ ] resume watching
