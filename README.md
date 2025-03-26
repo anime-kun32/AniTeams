@@ -4,7 +4,7 @@
 
 
 
-Welcome to AniTeams verison 2 ! A modern anime streaming platform built with Next.js 15 and Tailwind CSS, featuring AniList integration, episode bookmarking, skip intro/outro functionality, and more.
+Welcome to AniTeams verison 2 ! A modern anime streaming platform built with Next.js 15 and Tailwind CSS, featuring AniList integration, anime bookmarking, skip intro/outro functionality, and more.
 
 ## Features
 
