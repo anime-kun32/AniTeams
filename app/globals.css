@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #000000;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-in-out;
+}
+
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background-color: #000000; /* Black background */
+  color: #ffffff; /* White text for contrast */
+}
+
+/* Thin scrollbar styles */
+.scrollbar-thin {
+  scrollbar-width: thin; /* For Firefox */
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #4b5563; /* Dark gray for the thumb */
+  border-radius: 9999px; /* Fully rounded */
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #1f2937; /* Darker gray for the track */
+}
+
+/* Optional: Add hover effect for the scrollbar thumb */
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280; /* Lighter gray on hover */
+}
+
+/*episode guide.js*/
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #4b4b4b;
+  border-radius: 10px;
+}
+
+
