@@ -2,9 +2,9 @@
 
 export async function fetchAniListToken(authCode) {
   const ANI_API_URL = "https://anilist.co/api/v2/oauth/token";
-  const CLIENT_ID = "24943";
-  const CLIENT_SECRET = "26bGSEuNY3D4wvkWujotlZGWHV2dNRnnG9EgabB4"; 
-  const REDIRECT_URI = "https://aniteams-v2.vercel.app/callback";
+  const CLIENT_ID = process.env.NEXT_PUBLIC_ANILIST_CLIENT_ID;
+  const CLIENT_SECRET = process.env.NEXT_PUBLIC_ANILIST_CLIENT_SECRET;
+  const REDIRECT_URI = `${process.env.NEXT_PUBLIC_DEPLOYMENT_URL}/callback`;
 
   try {
     const res = await fetch(ANI_API_URL, {
@@ -13,7 +13,7 @@ export async function fetchAniListToken(authCode) {
       body: JSON.stringify({
         grant_type: "authorization_code",
         client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET, 
+        client_secret: CLIENT_SECRET,
         redirect_uri: REDIRECT_URI,
         code: authCode,
       }),
