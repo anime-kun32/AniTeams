@@ -8,8 +8,8 @@ import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
-const ANILIST_CLIENT_ID = "24943";
-const REDIRECT_URI = "https://aniteams-v2.vercel.app/callback"; 
+const ANILIST_CLIENT_ID = process.env.NEXT_PUBLIC_ANILIST_CLIENT_ID;
+const REDIRECT_URI = `${process.env.NEXT_PUBLIC_DEPLOYMENT_URL}/callback`;
 const ANILIST_AUTH_URL = `https://anilist.co/api/v2/oauth/authorize?client_id=${ANILIST_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code`;
 
 const handleLoginRedirect = () => {
@@ -38,7 +38,7 @@ function SearchModal({ onClose }) {
   useEffect(() => {
     if (query.length > 2) {
       setLoading(true);
-      fetch(`https://anime-kun32.vercel.app/meta/anilist/${query}`)
+      fetch(`${process.env.NEXT_PUBLIC_CONSUMET_BASE_URL}/meta/anilist/${query}`)
         .then(res => res.json())
         .then(data => {
           setResults(data.results || []);
@@ -99,7 +99,7 @@ function SearchModal({ onClose }) {
 
 function AvatarDropdown() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userAvatar, setUserAvatar] = useState("/default-avatar.png"); 
+  const [userAvatar, setUserAvatar] = useState("/default-avatar.png");
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
