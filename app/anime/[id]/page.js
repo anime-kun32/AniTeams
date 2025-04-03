@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import EpisodeGuide from "../../components/details/EpisodeGuide";
-import CharacterVoiceStaff from "../../components/details/CharacterVoiceStaff";
+import CharacterVoiceStaff from "../../components/CharacterVoiceStaff";
 
 const AnimeDetails = () => {
   const { id } = useParams();
