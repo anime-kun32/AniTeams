@@ -32,9 +32,9 @@ export default function Hero() {
   return (
     <div className="relative w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
       {loading ? (
-    
         <div className="relative w-full h-full bg-gray-900 animate-pulse">
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent h-1/2 bottom-0" />
+          <div className="absolute inset-0 bg-gradient-to-l from-black/80 via-black/50 to-transparent h-full w-2/5" />
+          <div className="absolute top-0 left-0 w-full h-1/6 bg-gradient-to-b from-black/70 to-transparent" />
           <div className="absolute bottom-5 left-5 space-y-4 w-3/4">
             <div className="bg-gray-700 h-8 w-1/2 rounded-md" />
             <div className="bg-gray-700 h-6 w-1/3 rounded-md" />
@@ -48,13 +48,13 @@ export default function Hero() {
           <div className="relative w-full h-full">
             {randomAnime.trailer ? (
               <iframe
-                src={`https://www.youtube.com/embed/${randomAnime.trailer.id}?autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&rel=0`}
+                src={`https://www.youtube.com/embed/${randomAnime.trailer.id}?autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&rel=0&showinfo=0`}
                 frameBorder="0"
                 allow="autoplay; encrypted-media"
                 className="absolute inset-0 w-full h-full"
                 title={randomAnime.title.userPreferred}
                 allowFullScreen
-                style={{ width: '100%', height: '100%' }}
+                style={{ width: '100%', height: '115%' }} // Increased aspect ratio
               />
             ) : (
               <Image
@@ -67,7 +67,8 @@ export default function Hero() {
               />
             )}
 
-            <div className="absolute inset-0 bg-gradient-to-tr from-black via-black/80 to-transparent" />
+            <div className="absolute inset-y-0 left-0 w-2/5 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+            <div className="absolute top-0 left-0 w-full h-1/6 bg-gradient-to-b from-black/70 to-transparent" />
 
             {/* Information Overlay */}
             <div className="absolute bottom-5 left-5 text-white z-20 max-w-lg space-y-3">
@@ -89,14 +90,14 @@ export default function Hero() {
                   </span>
                 )}
               </div>
-<p className="hidden md:block text-sm line-clamp-3 text-gray-300">
-  {randomAnime.description
-    .replace(/<br\s*\/?>/g, "")
-    .split(" ")
-    .slice(0, 10)
-    .join(" ")}...
-</p>
 
+              <p className="hidden md:block text-sm line-clamp-3 text-gray-300">
+                {randomAnime.description
+                  .replace(/<br\s*\/?>/g, "")
+                  .split(" ")
+                  .slice(0, 10)
+                  .join(" ")}...
+              </p>
 
               {/* Release Date */}
               <div className="mt-2 flex items-center space-x-2 text-xs text-gray-400">
