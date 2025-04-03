@@ -66,7 +66,8 @@ export async function fetchAnimeData(animeId) {
 
     // Check if the response is successful
     if (!res.ok) {
-      console.error(`Error: Received status code ${res.status}`);
+      const errorText = await res.text(); // Get the error response text
+      console.error(`Error: Received status code ${res.status} with message: ${errorText}`);
       throw new Error(`Anime data fetch error: ${res.status}`);
     }
 
@@ -76,7 +77,7 @@ export async function fetchAnimeData(animeId) {
     // Log the received data
     console.log("Received data:", data);
 
-    // Ensure the structure is correct
+    
     if (!data?.data?.Media) {
       console.error("Error: Invalid response structure");
       throw new Error("Invalid response structure");
