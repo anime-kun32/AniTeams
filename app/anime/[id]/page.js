@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import EpisodeGuide from '../../components/details/EpisodeGuide';
+import EpisodeGuide from "../../components/details/EpisodeGuide";
+import CharacterVoiceStaff from "../../components/details/CharacterVoiceStaff";
 
 const AnimeDetails = () => {
   const { id } = useParams();
@@ -80,8 +81,8 @@ const AnimeContent = ({ anime, id }) => {
         className="banner relative h-80 w-full bg-cover bg-center"
         style={{
           backgroundImage: `url(${anime.cover})`,
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
+          backgroundPosition: "center",
+          backgroundSize: "cover",
         }}
       >
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black to-transparent"></div>
@@ -128,10 +129,13 @@ const AnimeContent = ({ anime, id }) => {
           </button>
         </div>
 
-    <div className="mt-4 flex flex-col items-start">
-  <EpisodeGuide animeId={id} />
-</div>
+        <div className="mt-4 flex flex-col items-start">
+          <EpisodeGuide animeId={id} />
+        </div>
 
+        <div className="mt-4 flex flex-col items-start">
+          <CharacterVoiceStaff animeId={id} />
+        </div>
 
         {anime.trailer?.id && (
           <div className="mt-6">
