@@ -13,7 +13,7 @@ const EpisodeGuide = ({ animeId, epnum, progress }) => {
     const fetchData = async () => {
       try {
         const episodesListResponse = await fetch(
-          `https://hianime-mapper-six.vercel.app/anime/info/${animeId}`
+          `${process.env.NEXT_PUBLIC_HIANIME_MAPPER_URL}/anime/info/${animeId}`
         );
         const api1Data = await episodesListResponse.json();
 
