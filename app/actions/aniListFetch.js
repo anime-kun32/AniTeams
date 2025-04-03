@@ -1,6 +1,5 @@
 "use server";
 
-// Function to fetch anime data from AniList GraphQL API
 export async function fetchAnimeData(animeId) {
   const ANI_GRAPHQL_URL = "https://graphql.anilist.co";
   const API_QUERY = `
@@ -38,7 +37,6 @@ export async function fetchAnimeData(animeId) {
               image {
                 large
               }
-              role
             }
           }
         }
@@ -49,7 +47,6 @@ export async function fetchAnimeData(animeId) {
   try {
     console.log(`Preparing to fetch data for animeId: ${animeId}`);
 
-    // Make the API request to AniList
     const res = await fetch(ANI_GRAPHQL_URL, {
       method: "POST",
       headers: {
@@ -64,29 +61,21 @@ export async function fetchAnimeData(animeId) {
 
     console.log(`Fetch request sent to ${ANI_GRAPHQL_URL} with animeId: ${animeId}`);
 
-    // Check if the response is successful
     if (!res.ok) {
-      const errorText = await res.text(); // Get the error response text
-      console.error(`Error: Received status code ${res.status} with message: ${errorText}`);
+      console.error(`Error: Received status code ${res.status}`);
       throw new Error(`Anime data fetch error: ${res.status}`);
     }
 
-    // Parse the response JSON
     const data = await res.json();
-
-    // Log the received data
     console.log("Received data:", data);
 
-    
     if (!data?.data?.Media) {
       console.error("Error: Invalid response structure");
       throw new Error("Invalid response structure");
     }
 
-    // Return the anime data
     return data.data.Media;
   } catch (error) {
-    // Log the error if something goes wrong
     console.error("Failed to fetch anime data:", error);
     return null;
   }
