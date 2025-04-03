@@ -67,16 +67,14 @@ export default function CharacterVoiceStaff({ animeId }) {
         <div className="mt-4 space-y-4">
           <div>
             <h3 className="text-purple-400 text-xl font-semibold">Characters & Voice Actors</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
+            <div className="flex overflow-x-auto mt-2 space-x-4">
               {data.characters.edges.map(({ node, voiceActors }) => (
-                <div key={node.id} className="flex items-center space-x-3 bg-gray-800 p-2 rounded-lg">
-                  <img src={node.image.large} alt={node.name.full} className="w-12 h-12 rounded-full" />
-                  <div>
-                    <p className="text-white font-medium">{node.name.full}</p>
-                    {voiceActors[0] && (
-                      <p className="text-purple-400 text-sm">{voiceActors[0].name.full}</p>
-                    )}
-                  </div>
+                <div key={node.id} className="flex flex-col items-center bg-gray-800 p-2 rounded-lg">
+                  <img src={node.image.large} alt={node.name.full} className="w-16 h-16 rounded-full" />
+                  <p className="text-white font-medium mt-2">{node.name.full}</p>
+                  {voiceActors[0] && (
+                    <p className="text-purple-400 text-sm">{voiceActors[0].name.full}</p>
+                  )}
                 </div>
               ))}
             </div>
@@ -84,14 +82,12 @@ export default function CharacterVoiceStaff({ animeId }) {
 
           <div>
             <h3 className="text-purple-400 text-xl font-semibold">Staff</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
+            <div className="flex overflow-x-auto mt-2 space-x-4">
               {data.staff.edges.map(({ node }) => (
-                <div key={node.id} className="flex items-center space-x-3 bg-gray-800 p-2 rounded-lg">
-                  <img src={node.image.large} alt={node.name.full} className="w-12 h-12 rounded-full" />
-                  <div>
-                    <p className="text-white font-medium">{node.name.full}</p>
-                    <p className="text-gray-400 text-sm">{node.role}</p>
-                  </div>
+                <div key={node.id} className="flex flex-col items-center bg-gray-800 p-2 rounded-lg">
+                  <img src={node.image.large} alt={node.name.full} className="w-16 h-16 rounded-full" />
+                  <p className="text-white font-medium mt-2">{node.name.full}</p>
+                  <p className="text-gray-400 text-sm">{node.role}</p>
                 </div>
               ))}
             </div>
