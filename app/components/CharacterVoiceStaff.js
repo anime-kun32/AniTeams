@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { fetchAnimeData } from '../actions/aniListFetch'; 
 
 export default function CharacterVoiceStaff({ animeId }) {
   const defaultId = 16498;
@@ -12,79 +13,23 @@ export default function CharacterVoiceStaff({ animeId }) {
 
   useEffect(() => {
     async function fetchData() {
-      let retries = 3;
       const id = animeId || defaultId;
-      while (retries > 0) {
-        try {
-          console.log(`Fetching data for animeId: ${id}`);
-          const response = await fetch('https://graphql.anilist.co', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify({
-              query: `
-                query ($id: Int) {
-                  Media(id: $id) {
-                    characters(perPage: 10) {
-                      edges {
-                        node {
-                          id
-                          name {
-                            full
-                          }
-                          image {
-                            large
-                          }
-                        }
-                        voiceActors(language: JAPANESE) {
-                          id
-                          name {
-                            full
-                          }
-                          image {
-                            large
-                          }
-                        }
-                      }
-                    }
-                    staff(perPage: 5) {
-                      edges {
-                        node {
-                          id
-                          name {
-                            full
-                          }
-                          image {
-                            large
-                          }
-                          role
-                        }
-                      }
-                    }
-                  }
-                }
-              `,
-              variables: { id },
-            }),
-          });
-          if (!response.ok) throw new Error(`Network error: ${response.status}`);
-          const json = await response.json();
-          if (!json.data || !json.data.Media) throw new Error('Invalid response structure');
-          setData(json.data.Media);
-          setError(null);
-          setLoading(false);
-          return;
-        } catch (err) {
-          console.error('Fetch error:', err);
-          retries -= 1;
-          if (retries === 0) {
-            setError('Failed to fetch data. Please check your connection or try again later.');
-            setLoading(false);
-          } else {
-            await new Promise(res => setTimeout(res, 2000)); // Retry after 2 seconds
-          }
+      setLoading(true);
+      try {
+        const animeData = await fetchAnimeData(id);
+        if (!animeData) {
+          throw new Error('Failed to fetch anime data');
         }
+        setData(animeData);
+        setError(null);
+        setLoading(false);
+      } catch (err) {
+        console.error('Fetch error:', err);
+        setError('Failed to fetch data. Please check your connection or try again later.');
+        setLoading(false);
       }
     }
+
     fetchData();
   }, [animeId]);
 
