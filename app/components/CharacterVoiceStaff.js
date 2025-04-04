@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
 import { fetchAnimeData } from '../actions/aniListFetch'; 
 
 export default function CharacterVoiceStaff({ animeId }) {
@@ -9,7 +8,6 @@ export default function CharacterVoiceStaff({ animeId }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -55,45 +53,32 @@ export default function CharacterVoiceStaff({ animeId }) {
   if (error) return <p className="text-red-400">{error}</p>;
 
   return (
-    <div className="bg-gray-900 p-4 rounded-lg shadow-md">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex justify-between items-center text-white font-semibold text-lg border-b-2 border-purple-500 pb-2"
-      >
-        Character Voice & Staff
-        {isOpen ? <ChevronUp className="text-purple-500" /> : <ChevronDown className="text-purple-500" />}
-      </button>
-      {isOpen && (
-        <div className="mt-4 space-y-4">
-          <div>
-            <h3 className="text-purple-400 text-xl font-semibold">Characters & Voice Actors</h3>
-            <div className="flex overflow-x-auto mt-2 space-x-4">
-              {data.characters.edges.map(({ node, voiceActors }) => (
-                <div key={node.id} className="flex flex-col items-center bg-gray-800 p-2 rounded-lg">
-                  <img src={node.image.large} alt={node.name.full} className="w-16 h-16 rounded-full" />
-                  <p className="text-white font-medium mt-2">{node.name.full}</p>
-                  {voiceActors[0] && (
-                    <p className="text-purple-400 text-sm">{voiceActors[0].name.full}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-purple-400 text-xl font-semibold">Staff</h3>
-            <div className="flex overflow-x-auto mt-2 space-x-4">
-              {data.staff.edges.map(({ node }) => (
-                <div key={node.id} className="flex flex-col items-center bg-gray-800 p-2 rounded-lg">
-                  <img src={node.image.large} alt={node.name.full} className="w-16 h-16 rounded-full" />
-                  <p className="text-white font-medium mt-2">{node.name.full}</p>
-                  <p className="text-gray-400 text-sm">{node.role}</p>
-                </div>
-              ))}
-            </div>
+    <div className="bg-gray-900 py-6">
+      <div className="px-4">
+        <h2 className="text-white text-2xl font-semibold mb-4">Characters & Voice Actors</h2>
+        <div className="w-full overflow-x-auto whitespace-nowrap">
+          <div className="flex gap-6">
+            {data.characters.edges.map(({ node, voiceActors }) => (
+              <div key={node.id} className="flex flex-col items-center shrink-0">
+                <img src={node.image.large} alt={node.name.full} className="w-32 h-32 rounded-full object-cover border-4 border-purple-500 shadow-lg" />
+                <span className="mt-2 text-white text-center text-sm">{node.name.full}</span>
+              </div>
+            ))}
           </div>
         </div>
-      )}
+
+        <h2 className="text-white text-2xl font-semibold mt-10 mb-4">Staff</h2>
+        <div className="w-full overflow-x-auto whitespace-nowrap">
+          <div className="flex gap-6">
+            {data.staff.edges.map(({ node }) => (
+              <div key={node.id} className="flex flex-col items-center shrink-0">
+                <img src={node.image.large} alt={node.name.full} className="w-32 h-32 rounded-full object-cover border-4 border-purple-500 shadow-lg" />
+                <span className="mt-2 text-white text-center text-sm">{node.name.full}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
