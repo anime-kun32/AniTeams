@@ -56,8 +56,8 @@ export default function CharacterVoiceStaff({ animeId }) {
     <div className="bg-gray-900 py-6">
       <div className="px-4">
         <h2 className="text-white text-2xl font-semibold mb-4">Characters & Voice Actors</h2>
-        <div className="w-full overflow-x-auto whitespace-nowrap">
-          <div className="flex gap-6">
+        <div className="w-full overflow-x-hidden">
+          <div className="flex flex-wrap gap-6 justify-center">
             {data.characters.edges.map(({ node, voiceActors }) => (
               <div key={node.id} className="flex flex-col items-center shrink-0">
                 <img src={node.image.large} alt={node.name.full} className="w-32 h-32 rounded-full object-cover border-4 border-purple-500 shadow-lg" />
@@ -68,8 +68,8 @@ export default function CharacterVoiceStaff({ animeId }) {
         </div>
 
         <h2 className="text-white text-2xl font-semibold mt-10 mb-4">Staff</h2>
-        <div className="w-full overflow-x-auto whitespace-nowrap">
-          <div className="flex gap-6">
+        <div className="w-full overflow-x-hidden">
+          <div className="flex flex-wrap gap-6 justify-center">
             {data.staff.edges.map(({ node }) => (
               <div key={node.id} className="flex flex-col items-center shrink-0">
                 <img src={node.image.large} alt={node.name.full} className="w-32 h-32 rounded-full object-cover border-4 border-purple-500 shadow-lg" />
