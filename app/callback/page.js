@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { fetchAniListToken } from "../actions/anilist";
 
 export default function CallbackPage() {
   const router = useRouter();
@@ -13,12 +12,21 @@ export default function CallbackPage() {
     const authCode = urlParams.get("code");
 
     if (authCode) {
-      fetchAniListToken(authCode).then((token) => {
-        if (token) {
-          Cookies.set("anilistAuthToken", token, { expires: 30 });
-          router.push("/");
-        }
-      });
+      fetch("/api/anilist/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: authCode }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.access_token) {
+            Cookies.set("anilistAuthToken", data.access_token, { expires: 30 });
+            router.push("/");
+          } else {
+            console.error("No access token in response", data);
+          }
+        })
+        .catch((err) => console.error("Fetch error:", err));
     }
   }, []);
 
