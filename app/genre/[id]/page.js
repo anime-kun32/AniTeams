@@ -9,52 +9,22 @@ const GenrePage = () => {
   const [animeData, setAnimeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [year, setYear] = useState("");
   const [season, setSeason] = useState("");
-  const [episodes, setEpisodes] = useState([0, 100]);
+  const [episodeRange, setEpisodeRange] = useState("1-100");
 
   const { id } = useParams();
 
-  // Fetch genres from AniList API
-  useEffect(() => {
-    const fetchGenres = async () => {
-      try {
-        const query = `
-          query {
-            GenreList {
-              genre
-            }
-          }
-        `;
-        const response = await fetch("https://graphql.anilist.co", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ query }),
-        });
-        const data = await response.json();
-        if (data?.data?.GenreList) {
-          setGenres(data.data.GenreList.map((item) => item.genre));
-        }
-      } catch (error) {
-        console.error("Error fetching genres:", error);
-      }
-    };
-    fetchGenres();
-  }, []);
-
-  // Fetch anime based on selected filters
+  // Fetch anime data based on filters (genres, year, season, episode range)
   useEffect(() => {
     if (id) {
       setLoading(true);
       const fetchAnime = async () => {
         const query = `
-          query ($genre: String, $page: Int, $year: Int, $season: String, $episodes: [Int]) {
+          query ($genre: String, $page: Int, $year: Int, $season: String, $episodes: String) {
             Page(page: $page, perPage: 10) {
-              media(genre: $genre, seasonYear: $year, season: $season, episodes_greater: $episodes[0], episodes_lesser: $episodes[1], type: ANIME) {
+              media(genre: $genre, seasonYear: $year, season: $season, episodes_greater: $episodes.split("-")[0], episodes_lesser: $episodes.split("-")[1], type: ANIME) {
                 id
                 title {
                   romaji
@@ -76,7 +46,7 @@ const GenrePage = () => {
             }
           }
         `;
-        const variables = { genre: id, page, year, season, episodes };
+        const variables = { genre: id, page, year, season, episodes: episodeRange };
         const response = await fetch("https://graphql.anilist.co", {
           method: "POST",
           headers: {
@@ -104,7 +74,7 @@ const GenrePage = () => {
       };
       fetchAnime();
     }
-  }, [id, page, year, season, episodes]);
+  }, [id, page, year, season, episodeRange]);
 
   const handleGenreSelect = (genre) => {
     setSelectedGenres((prev) => {
@@ -117,13 +87,9 @@ const GenrePage = () => {
 
   return (
     <div className="bg-black text-white py-6 px-8 overflow-x-hidden">
-      <h1 className="text-4xl font-bold text-center text-indigo-500 mb-10">
-        Anime Genre: {id}
-      </h1>
-
       {/* Genre Buttons with horizontal scroll */}
       <div className="flex flex-wrap gap-4 justify-start overflow-x-auto mb-10 pb-4">
-        {genres.map((genre) => (
+        {["Action", "Adventure", "Fantasy", "Comedy", "Drama", "Sci-Fi"].map((genre) => (
           <button
             key={genre}
             className={`px-6 py-3 rounded-full text-sm font-semibold border-2 border-gray-700 transition-all duration-300 ease-in-out ${
@@ -168,23 +134,18 @@ const GenrePage = () => {
             <option value="fall">Fall</option>
           </select>
 
-          {/* Episode Range */}
-          <div className="flex gap-4">
-            <input
-              type="number"
-              value={episodes[0]}
-              onChange={(e) => setEpisodes([parseInt(e.target.value), episodes[1]])}
-              className="px-4 py-2 rounded-lg bg-gray-800 text-white border-2 border-gray-700"
-              placeholder="Min Episodes"
-            />
-            <input
-              type="number"
-              value={episodes[1]}
-              onChange={(e) => setEpisodes([episodes[0], parseInt(e.target.value)])}
-              className="px-4 py-2 rounded-lg bg-gray-800 text-white border-2 border-gray-700"
-              placeholder="Max Episodes"
-            />
-          </div>
+          {/* Episode Range Dropdown */}
+          <select
+            value={episodeRange}
+            onChange={(e) => setEpisodeRange(e.target.value)}
+            className="px-4 py-2 rounded-lg bg-gray-800 text-white border-2 border-gray-700"
+          >
+            <option value="1-12">1-12</option>
+            <option value="1-24">1-24</option>
+            <option value="1-100">1-100</option>
+            <option value="12-24">12-24</option>
+            <option value="24-100">24-100</option>
+          </select>
         </div>
       </div>
 
