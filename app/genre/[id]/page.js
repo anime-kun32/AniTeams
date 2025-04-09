@@ -1,7 +1,5 @@
-"use client"
-
 import { useState, useEffect } from "react";
-import { useSearchParams, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import AnimeCard from "../../components/AnimeCard";
 import AnimeCardSkeleton from "../../components/AnimeCardSkeleton";
 
@@ -11,10 +9,12 @@ const GenrePage = () => {
   const [page, setPage] = useState(1);
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
+  const [year, setYear] = useState("");
+  const [season, setSeason] = useState("");
+  const [episodes, setEpisodes] = useState([0, 100]);
 
-  // Use useParams to get the dynamic 'id' part of the URL (genre)
   const { id } = useParams();
-  
+
   // Fetch genres from AniList API
   useEffect(() => {
     const fetchGenres = async () => {
@@ -38,15 +38,15 @@ const GenrePage = () => {
     fetchGenres();
   }, []);
 
-  // Fetch anime based on selected genre and page
+  // Fetch anime based on selected filters
   useEffect(() => {
     if (id) {
       setLoading(true);
       const fetchAnime = async () => {
         const query = `
-          query ($genre: String, $page: Int) {
+          query ($genre: String, $page: Int, $year: Int, $season: String, $episodes: [Int]) {
             Page(page: $page, perPage: 10) {
-              media(genre: $genre, type: ANIME) {
+              media(genre: $genre, seasonYear: $year, season: $season, episodes_greater: $episodes[0], episodes_lesser: $episodes[1], type: ANIME) {
                 id
                 title {
                   romaji
@@ -68,7 +68,7 @@ const GenrePage = () => {
             }
           }
         `;
-        const variables = { genre: id, page };
+        const variables = { genre: id, page, year, season, episodes };
         const response = await fetch("https://graphql.anilist.co", {
           method: "POST",
           headers: {
@@ -94,7 +94,7 @@ const GenrePage = () => {
       };
       fetchAnime();
     }
-  }, [id, page]);
+  }, [id, page, year, season, episodes]);
 
   const handleGenreSelect = (genre) => {
     setSelectedGenres((prev) => {
@@ -106,14 +106,21 @@ const GenrePage = () => {
   };
 
   return (
-    <div className="bg-gray-900 text-white p-6">
-      <h1 className="text-3xl mb-6">Genre: {id}</h1>
-      
-      <div className="flex flex-wrap gap-4 mb-8">
+    <div className="bg-black text-white py-6 px-8">
+      <h1 className="text-4xl font-bold text-center text-indigo-500 mb-10">
+        Anime Genre: {id}
+      </h1>
+
+      {/* Genre Buttons */}
+      <div className="flex flex-wrap gap-4 justify-center mb-10">
         {genres.map((genre) => (
           <button
             key={genre}
-            className={`px-4 py-2 rounded-lg text-white border ${selectedGenres.includes(genre) ? 'bg-purple-600' : 'bg-gray-700'} transition-colors`}
+            className={`px-6 py-3 rounded-full text-sm font-semibold border-2 border-gray-700 transition-all duration-300 ease-in-out ${
+              selectedGenres.includes(genre)
+                ? "bg-purple-600 text-white"
+                : "bg-gray-800 text-gray-400 hover:bg-purple-600 hover:text-white"
+            }`}
             onClick={() => handleGenreSelect(genre)}
           >
             {genre}
@@ -121,26 +128,95 @@ const GenrePage = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {/* Filters: Year, Season, and Episode Range */}
+      <div className="flex justify-between mb-8">
+        <div className="flex gap-4">
+          {/* Year Dropdown */}
+          <select
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            className="px-4 py-2 rounded-lg bg-gray-800 text-white border-2 border-gray-700"
+          >
+            <option value="">Select Year</option>
+            {[2023, 2022, 2021].map((yr) => (
+              <option key={yr} value={yr}>
+                {yr}
+              </option>
+            ))}
+          </select>
+
+          {/* Season Dropdown */}
+          <select
+            value={season}
+            onChange={(e) => setSeason(e.target.value)}
+            className="px-4 py-2 rounded-lg bg-gray-800 text-white border-2 border-gray-700"
+          >
+            <option value="">Select Season</option>
+            <option value="winter">Winter</option>
+            <option value="spring">Spring</option>
+            <option value="summer">Summer</option>
+            <option value="fall">Fall</option>
+          </select>
+
+          {/* Episode Range */}
+          <div className="flex gap-4">
+            <input
+              type="number"
+              value={episodes[0]}
+              onChange={(e) => setEpisodes([parseInt(e.target.value), episodes[1]])}
+              className="px-4 py-2 rounded-lg bg-gray-800 text-white border-2 border-gray-700"
+              placeholder="Min Episodes"
+            />
+            <input
+              type="number"
+              value={episodes[1]}
+              onChange={(e) => setEpisodes([episodes[0], parseInt(e.target.value)])}
+              className="px-4 py-2 rounded-lg bg-gray-800 text-white border-2 border-gray-700"
+              placeholder="Max Episodes"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Anime Cards */}
+      <div className="pb-10 mt-5 grid grid-cols-3 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 auto-rows-[1fr] 2xl:grid-cols-7 3xl:grid-cols-8">
         {loading ? (
-          Array.from({ length: 10 }).map((_, index) => <AnimeCardSkeleton key={index} />)
+          Array.from({ length: 10 }).map((_, index) => (
+            <AnimeCardSkeleton key={index} />
+          ))
         ) : (
-          animeData.map((anime) => <AnimeCard key={anime.id} data={anime} />)
+          animeData.map((anime) => (
+            <AnimeCard key={anime.id} data={anime} />
+          ))
         )}
       </div>
 
-      {/* Pagination Controls */}
-      <div className="mt-8 flex justify-between">
+      {/* Pagination */}
+      <div className="mt-10 flex justify-center gap-4">
         <button
           onClick={() => setPage((prev) => prev - 1)}
           disabled={page === 1}
-          className="px-4 py-2 bg-gray-700 text-white rounded-lg disabled:bg-gray-600"
+          className="px-6 py-2 bg-gray-800 text-white rounded-lg disabled:bg-gray-600 hover:bg-purple-600"
         >
           Previous
         </button>
+
+        {/* Page Numbers */}
+        {[1, 2, 3, 4, 5].map((pageNum) => (
+          <button
+            key={pageNum}
+            onClick={() => setPage(pageNum)}
+            className={`px-6 py-2 rounded-lg text-white border-2 border-gray-700 transition-all duration-300 ease-in-out ${
+              page === pageNum ? "bg-purple-600" : "bg-gray-800 hover:bg-purple-600"
+            }`}
+          >
+            {pageNum}
+          </button>
+        ))}
+
         <button
           onClick={() => setPage((prev) => prev + 1)}
-          className="px-4 py-2 bg-gray-700 text-white rounded-lg"
+          className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-purple-600"
         >
           Next
         </button>
