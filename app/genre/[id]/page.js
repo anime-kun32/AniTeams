@@ -88,11 +88,11 @@ const GenrePage = () => {
   return (
     <div className="bg-black text-white py-6 px-8 overflow-x-hidden">
       {/* Genre Buttons with horizontal scroll */}
-      <div className="flex flex-wrap gap-4 justify-start overflow-x-auto mb-10 pb-4">
+      <div className="flex flex-wrap gap-2 justify-start overflow-x-auto mb-10 pb-4">
         {["Action", "Adventure", "Fantasy", "Comedy", "Drama", "Sci-Fi"].map((genre) => (
           <button
             key={genre}
-            className={`px-6 py-3 rounded-full text-sm font-semibold border-2 border-gray-700 transition-all duration-300 ease-in-out ${
+            className={`px-4 py-2 rounded-full text-xs font-semibold border-2 border-gray-700 transition-all duration-300 ease-in-out ${
               selectedGenres.includes(genre)
                 ? "bg-purple-600 text-white"
                 : "bg-gray-800 text-gray-400 hover:bg-purple-600 hover:text-white"
@@ -163,7 +163,7 @@ const GenrePage = () => {
       </div>
 
       {/* Pagination */}
-      <div className="mt-10 flex justify-center gap-4">
+      <div className="mt-10 flex justify-center gap-4 overflow-x-auto">
         <button
           onClick={() => setPage((prev) => prev - 1)}
           disabled={page === 1}
