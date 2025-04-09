@@ -20,22 +20,28 @@ const GenrePage = () => {
   // Fetch genres from AniList API
   useEffect(() => {
     const fetchGenres = async () => {
-      const query = `
-        query {
-          GenreList {
-            genre
+      try {
+        const query = `
+          query {
+            GenreList {
+              genre
+            }
           }
+        `;
+        const response = await fetch("https://graphql.anilist.co", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query }),
+        });
+        const data = await response.json();
+        if (data?.data?.GenreList) {
+          setGenres(data.data.GenreList.map((item) => item.genre));
         }
-      `;
-      const response = await fetch("https://graphql.anilist.co", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query }),
-      });
-      const data = await response.json();
-      setGenres(data.data.GenreList.map((item) => item.genre));
+      } catch (error) {
+        console.error("Error fetching genres:", error);
+      }
     };
     fetchGenres();
   }, []);
@@ -79,19 +85,21 @@ const GenrePage = () => {
           body: JSON.stringify({ query, variables }),
         });
         const data = await response.json();
-        const transformedData = data.data.Page.media.map((anime) => ({
-          id: anime.id,
-          image: anime.coverImage.large,
-          title: {
-            english: anime.title.english,
-            romaji: anime.title.romaji,
-          },
-          status: anime.status,
-          releaseDate: `${anime.startDate.year}-${anime.startDate.month}-${anime.startDate.day}`,
-          totalEpisodes: anime.episodes,
-          rating: anime.averageScore / 10, // Normalize rating to 0-1 scale
-        }));
-        setAnimeData(transformedData);
+        if (data?.data?.Page?.media) {
+          const transformedData = data.data.Page.media.map((anime) => ({
+            id: anime.id,
+            image: anime.coverImage.large,
+            title: {
+              english: anime.title.english,
+              romaji: anime.title.romaji,
+            },
+            status: anime.status,
+            releaseDate: `${anime.startDate.year}-${anime.startDate.month}-${anime.startDate.day}`,
+            totalEpisodes: anime.episodes,
+            rating: anime.averageScore / 10, // Normalize rating to 0-1 scale
+          }));
+          setAnimeData(transformedData);
+        }
         setLoading(false);
       };
       fetchAnime();
@@ -108,13 +116,13 @@ const GenrePage = () => {
   };
 
   return (
-    <div className="bg-black text-white py-6 px-8">
+    <div className="bg-black text-white py-6 px-8 overflow-x-hidden">
       <h1 className="text-4xl font-bold text-center text-indigo-500 mb-10">
         Anime Genre: {id}
       </h1>
 
-      {/* Genre Buttons */}
-      <div className="flex flex-wrap gap-4 justify-center mb-10">
+      {/* Genre Buttons with horizontal scroll */}
+      <div className="flex flex-wrap gap-4 justify-start overflow-x-auto mb-10 pb-4">
         {genres.map((genre) => (
           <button
             key={genre}
