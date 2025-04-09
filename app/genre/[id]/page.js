@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import AnimeCard from "../../../components/AnimeCard";
-import AnimeCardSkeleton from "../../../components/AnimeCardSkeleton";
+import AnimeCard from "../../components/AnimeCard";
+import AnimeCardSkeleton from "../../components/AnimeCardSkeleton";
 
 const GenrePage = () => {
   const [animeData, setAnimeData] = useState([]);
