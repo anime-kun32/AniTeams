@@ -8,6 +8,8 @@ const genres = [
   { name: 'Sci-Fi', slug: 'sci-fi', image: '/images/sci-fi.jpg' },
   { name: 'Shounen', slug: 'shounen', image: '/images/shounen.jpg' },
   { name: 'Ecchi', slug: 'ecchi', image: '/images/ecchi.jpg' },
+{ name: 'Mystery', slug: 'mystery', image: '/images/mystery.jpg' },
+
 ]
 
 export default function GenreQuickAccess() {
