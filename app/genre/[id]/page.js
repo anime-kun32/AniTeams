@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react";
 import { useSearchParams, useParams } from "next/navigation";
 import AnimeCard from "../../components/AnimeCard";
