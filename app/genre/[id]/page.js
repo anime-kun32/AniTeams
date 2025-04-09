@@ -1,7 +1,5 @@
-"use client"
-
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { useSearchParams, useParams } from "next/navigation";
 import AnimeCard from "../../components/AnimeCard";
 import AnimeCardSkeleton from "../../components/AnimeCardSkeleton";
 
@@ -12,9 +10,9 @@ const GenrePage = () => {
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
 
-  const router = useRouter();
-  const { id } = router.query; // Genre id from URL
-
+  // Use useParams to get the dynamic 'id' part of the URL (genre)
+  const { id } = useParams();
+  
   // Fetch genres from AniList API
   useEffect(() => {
     const fetchGenres = async () => {
