@@ -72,6 +72,8 @@ Using npm:
 ```bash
 npm run dev
 ```
+app should now be running on `http://localhost:3000`.
+
 ## Coming soon !!
 - [ ] sign up and registration
 - [ ] PWA support 
@@ -80,7 +82,6 @@ npm run dev
 - [ ] resume watching
 - [ ] And lots more !! Any more features mention in issues or make a pull request 
 
-app should now be running on `http://localhost:3000`.
 
 ### issues and contribution 
 As always any issues or contributions you want to make list them or make a pull request . 
