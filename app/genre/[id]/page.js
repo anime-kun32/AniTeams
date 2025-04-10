@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import AnimeCard from "../../components/AnimeCard";
@@ -7,9 +5,9 @@ import AnimeCardSkeleton from "../../components/AnimeCardSkeleton";
 
 const allGenres = [
   "Action", "Adventure", "Cars", "Comedy", "Drama", "Fantasy", "Historical",
-  "Horror", "Mecha", "Music", "Mystery", "Psychological", "Romance",
+  "Horror", "Isekai", "Mecha", "Music", "Mystery", "Psychological", "Romance",
   "Sci-Fi", "Slice of Life", "Sports", "Supernatural", "Thriller",
-  "Ecchi","Mahou Shoujo", "Martial Arts", "Military",
+  "Ecchi", "Hentai", "Mahou Shoujo", "Martial Arts", "Military",
   "Parody", "Police", "Samurai", "School", "Shoujo", "Shounen",
   "Space", "Super Power", "Vampire", "Yaoi", "Yuri"
 ];
@@ -22,17 +20,18 @@ const GenrePage = () => {
   const [year, setYear] = useState("");
   const [season, setSeason] = useState("");
   const [episodeRange, setEpisodeRange] = useState("1-100");
+  const [country, setCountry] = useState("");
 
   const { id } = useParams();
 
   useEffect(() => {
-    if (id || selectedGenres.length > 0) {
+    if (id || selectedGenres.length > 0 || year || season || country) {
       setLoading(true);
       const [minEpisodes, maxEpisodes] = episodeRange.split("-").map(Number);
 
       const fetchAnime = async () => {
         const query = `
-          query ($genres: [String], $page: Int, $year: Int, $season: MediaSeason, $minEpisodes: Int, $maxEpisodes: Int) {
+          query ($genres: [String], $page: Int, $year: Int, $season: MediaSeason, $minEpisodes: Int, $maxEpisodes: Int, $country: CountryCode) {
             Page(page: $page, perPage: 18) {
               media(
                 genre_in: $genres,
@@ -40,6 +39,7 @@ const GenrePage = () => {
                 season: $season,
                 episodes_greater: $minEpisodes,
                 episodes_lesser: $maxEpisodes,
+                countryOfOrigin: $country,
                 type: ANIME,
                 sort: POPULARITY_DESC
               ) {
@@ -72,6 +72,7 @@ const GenrePage = () => {
           season: season || null,
           minEpisodes,
           maxEpisodes,
+          country: country || null,
         };
 
         const response = await fetch("https://graphql.anilist.co", {
@@ -105,7 +106,7 @@ const GenrePage = () => {
 
       fetchAnime();
     }
-  }, [id, selectedGenres, page, year, season, episodeRange]);
+  }, [id, selectedGenres, page, year, season, episodeRange, country]);
 
   const handleGenreSelect = (genre) => {
     setSelectedGenres((prev) =>
@@ -171,6 +172,16 @@ const GenrePage = () => {
           <option value="1-100">1-100</option>
           <option value="12-24">12-24</option>
           <option value="24-100">24-100</option>
+        </select>
+
+        <select
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+          className="px-4 py-2 rounded-lg bg-gray-800 text-white border-2 border-gray-700"
+        >
+          <option value="">Country</option>
+          <option value="JP">Japan</option>
+          <option value="CN">China</option>
         </select>
       </div>
 
