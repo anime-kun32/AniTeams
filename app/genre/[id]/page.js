@@ -1,9 +1,16 @@
-"use client"
-
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import AnimeCard from "../../components/AnimeCard";
 import AnimeCardSkeleton from "../../components/AnimeCardSkeleton";
+
+const allGenres = [
+  "Action", "Adventure", "Cars", "Comedy", "Drama", "Fantasy", "Historical",
+  "Horror", "Mecha", "Music", "Mystery", "Psychological", "Romance",
+  "Sci-Fi", "Slice of Life", "Sports", "Supernatural", "Thriller",
+  "Ecchi","Mahou Shoujo", "Martial Arts", "Military",
+  "Parody", "Police", "Samurai", "School", "Shoujo", "Shounen",
+  "Space", "Super Power", "Vampire", "Yaoi", "Yuri"
+];
 
 const GenrePage = () => {
   const [animeData, setAnimeData] = useState([]);
@@ -17,21 +24,22 @@ const GenrePage = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    if (id) {
+    if (id || selectedGenres.length > 0) {
       setLoading(true);
       const [minEpisodes, maxEpisodes] = episodeRange.split("-").map(Number);
 
       const fetchAnime = async () => {
         const query = `
-          query ($genre: String, $page: Int, $year: Int, $season: MediaSeason, $minEpisodes: Int, $maxEpisodes: Int) {
-            Page(page: $page, perPage: 10) {
+          query ($genres: [String], $page: Int, $year: Int, $season: MediaSeason, $minEpisodes: Int, $maxEpisodes: Int) {
+            Page(page: $page, perPage: 18) {
               media(
-                genre: $genre,
+                genre_in: $genres,
                 seasonYear: $year,
                 season: $season,
                 episodes_greater: $minEpisodes,
                 episodes_lesser: $maxEpisodes,
-                type: ANIME
+                type: ANIME,
+                sort: POPULARITY_DESC
               ) {
                 id
                 title {
@@ -56,7 +64,7 @@ const GenrePage = () => {
         `;
 
         const variables = {
-          genre: id,
+          genres: selectedGenres.length ? selectedGenres : [id],
           page,
           year: year ? parseInt(year) : null,
           season: season || null,
@@ -87,13 +95,15 @@ const GenrePage = () => {
             rating: anime.averageScore / 10,
           }));
           setAnimeData(transformedData);
+        } else {
+          setAnimeData([]);
         }
         setLoading(false);
       };
 
       fetchAnime();
     }
-  }, [id, page, year, season, episodeRange]);
+  }, [id, selectedGenres, page, year, season, episodeRange]);
 
   const handleGenreSelect = (genre) => {
     setSelectedGenres((prev) =>
@@ -105,21 +115,19 @@ const GenrePage = () => {
     <div className="bg-black text-white py-6 px-8 overflow-x-hidden">
       {/* Genre Buttons */}
       <div className="flex flex-wrap gap-2 mb-10 pb-4">
-        {["Action", "Adventure", "Fantasy", "Comedy", "Drama", "Sci-Fi"].map(
-          (genre) => (
-            <button
-              key={genre}
-              className={`px-3 py-1 rounded-full text-sm font-semibold border-2 border-gray-700 transition-all duration-300 ease-in-out ${
-                selectedGenres.includes(genre)
-                  ? "bg-purple-600 text-white"
-                  : "bg-gray-800 text-gray-400 hover:bg-purple-600 hover:text-white"
-              }`}
-              onClick={() => handleGenreSelect(genre)}
-            >
-              {genre}
-            </button>
-          )
-        )}
+        {allGenres.map((genre) => (
+          <button
+            key={genre}
+            className={`px-3 py-1 rounded-full text-sm font-semibold border-2 border-gray-700 transition-all duration-300 ease-in-out ${
+              selectedGenres.includes(genre)
+                ? "bg-purple-600 text-white"
+                : "bg-gray-800 text-gray-400 hover:bg-purple-600 hover:text-white"
+            }`}
+            onClick={() => handleGenreSelect(genre)}
+          >
+            {genre}
+          </button>
+        ))}
       </div>
 
       {/* Filters */}
@@ -130,11 +138,13 @@ const GenrePage = () => {
           className="px-4 py-2 rounded-lg bg-gray-800 text-white border-2 border-gray-700"
         >
           <option value="">Select Year</option>
-          {[2025, 2024, 2023, 2022, 2021].map((yr) => (
-            <option key={yr} value={yr}>
-              {yr}
-            </option>
-          ))}
+          {Array.from({ length: 2026 - 1970 }, (_, i) => 1970 + i)
+            .reverse()
+            .map((yr) => (
+              <option key={yr} value={yr}>
+                {yr}
+              </option>
+            ))}
         </select>
 
         <select
