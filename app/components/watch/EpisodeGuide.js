@@ -22,7 +22,7 @@ const EpisodeGuide = ({ animeId }) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `https://hianime-mapper-six.vercel.app/anime/info/${animeId}`
+                    `${process.env.NEXT_PUBLIC_HIANIME_MAPPER_URL}/anime/info/${animeId}`
         );
         const apiData = await response.json();
 
