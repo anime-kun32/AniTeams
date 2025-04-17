@@ -1,17 +1,17 @@
 import Hero from './components/hero';
-import Header from './components/Header'; 
-import Eruda from "./components/Eruda";
-import AnimeSelector from "./components/AnimeSelector";  
-import GenreQuickAccess from './components/GenreQuickAccess';  
+import Header from './components/Header';
+import AnimeSelector from "./components/AnimeSelector";
+import GenreQuickAccess from './components/GenreQuickAccess';
+import OnAir from './components/OnAir';  
 
 export default function Home() {
   return (
     <main>
-      <Eruda />
       <Header />
       <Hero />
-      <GenreQuickAccess />  
-      <AnimeSelector />  
+      <GenreQuickAccess />
+      <AnimeSelector />
+      <OnAir />  
     </main>
   );
 }
