@@ -1,8 +1,8 @@
-![Logo](public/aniteams-logo.png)
+<p align="center">
+  <img src="public/aniteams-logo.png" alt="AniTeams Logo" width="200" />
+</p>
 
-# AniTeams - Anime Streaming Website
-
-
+<h1 align="center">AniTeams - Anime Streaming Website</h1>
 
 Welcome to AniTeams verison 2 ! A modern anime streaming platform built with Next.js 15 and Tailwind CSS, featuring AniList integration, anime bookmarking, skip intro/outro functionality, and more.
 
@@ -12,7 +12,7 @@ Welcome to AniTeams verison 2 ! A modern anime streaming platform built with Nex
 - **Bookmarking**: Save your favorite episodes (bookmarking is currently local and not linked to AniList yet).
 - **Skip Intro/Outro**: Skip anime intros and outros for a smoother experience.
 - **ArtPlayer**: still use our trusty old player   [Click here to view the source code of the player](https://github.com/anime-kun32/aniteams-player).
-  
+
 ## Repositories Used
 
    - [hianime-mapper](https://github.com/IrfanKhan66/hianime-mapper)- For episode data 
@@ -46,16 +46,15 @@ Using npm:
 ```bash
 npm install
 ```
+
 ### 4. make sure you fill up the .env.example and rename to env . This is required 
+
 ```.env
 NEXT_PUBLIC_API_BASE_URL=https://youraniwatch-api.com # https://github.com/ghoshRitesh12/aniwatch-api
 NEXT_PUBLIC_CONSUMET_BASE_URL=https://your-consumet.com # your consumet api url base 
 NEXT_PUBLIC_ANILIST_CLIENT_ID=your-anilist-client-id
 NEXT_PUBLIC_DEPLOYMENT_URL=https://http://localhost:3000 # your prodoction url 
-
 ```
-
-
 
 ### 5. Run the Development Server
 
@@ -72,7 +71,8 @@ Using npm:
 ```bash
 npm run dev
 ```
-app should now be running on `http://localhost:3000`.
+
+App should now be running on `http://localhost:3000`.
 
 ## Coming soon !!
 - [ ] sign up and registration
@@ -81,7 +81,6 @@ app should now be running on `http://localhost:3000`.
 - [ ] Bookmark
 - [ ] resume watching
 - [ ] And lots more !! Any more features mention in issues or make a pull request 
-
 
 ### issues and contribution 
 As always any issues or contributions you want to make list them or make a pull request . 
