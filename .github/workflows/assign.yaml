@@ -17,16 +17,15 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
 
-            // Assign issue
-            await github.rest.issues.addAssignees({
+            
+             github.rest.issues.addAssignees({
               owner,
               repo,
               issue_number: issueNumber,
               assignees: ['anime-kun32']
             });
 
-            // Send a comment with a mention
-            await github.rest.issues.createComment({
+             github.rest.issues.createComment({
               owner,
               repo,
               issue_number: issueNumber,
