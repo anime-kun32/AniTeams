@@ -15,7 +15,7 @@ const AnimeDetails = () => {
 
     const fetchAnimeDetails = async () => {
       const primaryUrl = `${process.env.NEXT_PUBLIC_CONSUMET_BASE_URL}/meta/anilist/data/${id}`;
-      const fallbackUrl = `${process.env.NEXT_PUBLIC_HIANIME_MAPPER_URL}/anime/info/${id}`
+      const fallbackUrl = `${process.env.NEXT_PUBLIC_HIANIME_MAPPER_URL}/anime/info/${id}`;
 
       try {
         let response = await fetch(primaryUrl);
@@ -33,7 +33,28 @@ const AnimeDetails = () => {
           let fallbackResponse = await fetch(fallbackUrl);
           if (!fallbackResponse.ok) throw new Error("Failed to fetch from fallback API");
           const fallbackData = await fallbackResponse.json();
-          setAnime(fallbackData.data);
+
+         
+          const data = fallbackData.data;
+          const normalized = {
+            id: data.id,
+            title: data.title,
+            image: data.coverImage?.large || "",
+            cover: data.bannerImage || "",
+            description: data.description || "",
+            genres: data.genres || [],
+            type: data.format || "Unknown",
+            totalEpisodes: data.episodes || "N/A",
+            duration: data.duration || "N/A",
+            rating: data.averageScore || "N/A",
+            studios: [], // not provided
+            season: data.season || "Unknown",
+            startDate: data.startDate || {},
+            status: data.status || "Unknown",
+            trailer: data.trailer || null,
+          };
+
+          setAnime(normalized);
         } catch (fallbackError) {
           console.error("Error fetching from fallback API:", fallbackError);
         }
