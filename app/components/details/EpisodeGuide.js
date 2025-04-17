@@ -1,46 +1,54 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Spinner } from "@nextui-org/react";
 
 const EpisodeGuide = ({ animeId, epnum, progress }) => {
   const [episodeData, setEpisodeData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const episodesListResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_HIANIME_MAPPER_URL}/anime/info/${animeId}`
-        );
-        const api1Data = await episodesListResponse.json();
+        const [episodesListRes, episodeDetailsRes] = await Promise.all([
+          fetch(`${process.env.NEXT_PUBLIC_HIANIME_MAPPER_URL}/anime/info/${animeId}`),
+          fetch(`https://api.ani.zip/mappings?anilist_id=${animeId}`)
+        ]);
 
-        const episodeDetailsResponse = await fetch(
-          `https://api.ani.zip/mappings?anilist_id=${animeId}`
-        );
-        const api2Data = await episodeDetailsResponse.json();
+        const api1Data = await episodesListRes.json();
+        const api2Data = await episodeDetailsRes.json();
 
-        if (Array.isArray(api1Data?.data?.episodesList) && api2Data?.episodes) {
-          const mergedData = api1Data.data.episodesList.map((episode) => {
-            const details = api2Data.episodes[episode.number] || {};
-            return {
-              episodeId: episode.id,
-              title: details.title?.en || `Episode ${episode.number}`,
-              synopsis: details.overview || "No synopsis available.",
-              image: details.image || "/placeholder.jpg",
-              airDate: details.airDate || "Unknown Air Date",
-              number: episode.number,
-            };
-          });
+        const episodeList = Array.isArray(api1Data?.data?.episodesList)
+          ? api1Data.data.episodesList
+          : [];
 
-          setEpisodeData(mergedData);
-        } else {
-          setError("Unexpected API response structure.");
-        }
-      } catch (error) {
-        setError("Failed to fetch episode data.");
+        const detailsMap = api2Data?.episodes || {};
+
+        const mergedData = episodeList.map((episode) => {
+          const details = detailsMap[episode.number] || {};
+          return {
+            episodeId: episode.id || `ep-${episode.number}`,
+            title: details.title?.en || `Episode ${episode.number}`,
+            synopsis: details.overview || "No synopsis available.",
+            image: details.image || "/placeholder.jpg",
+            airDate: details.airDate || "Unknown Air Date",
+            number: episode.number,
+          };
+        });
+
+        setEpisodeData(mergedData);
+      } catch {
+        // If everything fails, use fallback placeholder data
+        setEpisodeData([
+          {
+            episodeId: "fallback-1",
+            title: "Episode 1",
+            synopsis: "No synopsis available.",
+            image: "/placeholder.jpg",
+            airDate: "Unknown Air Date",
+            number: 1,
+          },
+        ]);
       }
       setLoading(false);
     };
@@ -63,14 +71,6 @@ const EpisodeGuide = ({ animeId, epnum, progress }) => {
             </div>
           </div>
         ))}
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-red-500">{error}</p>
       </div>
     );
   }
