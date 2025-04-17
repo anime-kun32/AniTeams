@@ -15,7 +15,7 @@ const AnimeDetails = () => {
 
     const fetchAnimeDetails = async () => {
       const primaryUrl = `${process.env.NEXT_PUBLIC_CONSUMET_BASE_URL}/meta/anilist/data/${id}`;
-      const fallbackUrl = `${process.env.NEXT_PUBLIC_HIANIME_MAPPER_URL}/anime/info/${animeId}`
+      const fallbackUrl = `${process.env.NEXT_PUBLIC_HIANIME_MAPPER_URL}/anime/info/${id}`
 
       try {
         let response = await fetch(primaryUrl);
