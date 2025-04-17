@@ -1,0 +1,31 @@
+name: Auto Assign and Notify on New Issue
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  assign_and_notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign issue to anime-kun32 and notify
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.payload.issue.number;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            await github.rest.issues.addAssignees({
+              owner,
+              repo,
+              issue_number: issueNumber,
+              assignees: ['anime-kun32']
+            });
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: issueNumber,
+              body: 'Hey @anime-kun32, a new issue just came in and has been assigned to you!'
+            });
