@@ -14,6 +14,7 @@ const EpisodeGuide = ({ animeId, epnum, progress }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch from the new API
         const res = await fetch(`https://no-drab.vercel.app/meta/anilist/info/${animeId}`);
         const data = await res.json();
 
@@ -21,36 +22,56 @@ const EpisodeGuide = ({ animeId, epnum, progress }) => {
           const mapped = data.episodes.map((ep) => {
             const [slug, episodeStr] = ep.id.split("$episode$");
             return {
-              episodeId: `${slug}?ep=${episodeStr}`,
+              episodeId: `${slug}?ep=${episodeStr}`, // e.g. "zenshu-19445?ep=131402"
               title: ep.title || `Episode ${ep.number}`,
-              synopsis: ep.description || "No synopsis available.",
-              image: ep.image || "/placeholder.jpg",
-              airDate: ep.createdAt || "Unknown Air Date",
               number: ep.number,
             };
           });
-          setEpisodeData(mapped);
-          setLoading(false);
-          return;
+
+          // Fetch episode data from API 2 for image and synopsis
+          const episodeDetailsResponse = await fetch(
+            `https://api.ani.zip/mappings?anilist_id=${animeId}`
+          );
+          const api2Data = await episodeDetailsResponse.json();
+
+          if (api2Data?.episodes) {
+            const mergedData = mapped.map((episode) => {
+              const details = api2Data.episodes[episode.number] || {};
+              return {
+                ...episode,
+                image: details.image || "/placeholder.jpg",
+                synopsis: details.overview || "No synopsis available.",
+              };
+            });
+
+            setEpisodeData(mergedData);
+            setLoading(false);
+            return;
+          } else {
+            throw new Error("Failed to fetch episode details from API 2.");
+          }
+        } else {
+          throw new Error("Failed to fetch episodes from the new API.");
         }
-
-        throw new Error("New API failed");
       } catch (err) {
+        // Fallback to hianime-mapper API
         try {
-          const [episodesListResponse, episodeDetailsResponse] = await Promise.all([
-            fetch(`${process.env.NEXT_PUBLIC_HIANIME_MAPPER_URL}/anime/info/${animeId}`),
-            fetch(`https://api.ani.zip/mappings?anilist_id=${animeId}`),
-          ]);
-
+          const episodesListResponse = await fetch(
+            `${process.env.NEXT_PUBLIC_HIANIME_MAPPER_URL}/anime/info/${animeId}`
+          );
           const api1Data = await episodesListResponse.json();
+
+          const episodeDetailsResponse = await fetch(
+            `https://api.ani.zip/mappings?anilist_id=${animeId}`
+          );
           const api2Data = await episodeDetailsResponse.json();
 
           if (Array.isArray(api1Data?.data?.episodesList) && api2Data?.episodes) {
             const mergedData = api1Data.data.episodesList.map((episode) => {
               const details = api2Data.episodes[episode.number] || {};
               return {
-                episodeId: episode.url.split("/watch/")[1],
-                title: details.title?.en || `Episode ${episode.number}`,
+                episodeId: episode.id,
+                title: episode.title || `Episode ${episode.number}`,
                 synopsis: details.overview || "No synopsis available.",
                 image: details.image || "/placeholder.jpg",
                 airDate: details.airDate || "Unknown Air Date",
