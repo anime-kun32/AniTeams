@@ -22,15 +22,15 @@ const EpisodeGuide = ({ animeId }) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_HIANIME_MAPPER_URL}/anime/info/${animeId}`
+          `${process.env.NEXT_PUBLIC_CONSUMET_BASE_URL}/meta/anilist/info/${animeId}`
         );
         const apiData = await response.json();
 
-        if (Array.isArray(apiData?.data?.episodesList)) {
+        if (Array.isArray(apiData?.data?.episodes)) {
           setEpisodeData(
-            apiData.data.episodesList.map((episode) => ({
-              episodeId: episode.id, 
-              title: `Episode ${episode.number}`,
+            apiData.data.episodes.map((episode) => ({
+              id: `${episode.id.split("$episode$")[0]}?ep=${episode.id.split("$episode$")[1]}`,
+              title: episode.title || `Episode ${episode.number}`,
               number: episode.number,
             }))
           );
@@ -74,17 +74,16 @@ const EpisodeGuide = ({ animeId }) => {
         className="h-[800px] overflow-y-auto space-y-2 scrollbar-thin scrollbar-track-gray-900 scrollbar-thumb-gray-700"
       >
         {episodeData.map((episode) => {
-          const fullEpisodeId = `watch/${episode.episodeId}&anilist=${animeId}`;
-          const isCurrent = currentEpisodeIdentifier === `${animeId}?ep=${episode.episodeId}`;
+          const isCurrent = currentEpisodeIdentifier === episode.id;
 
           return (
             <Link
-              key={episode.episodeId}
-              href={`/${fullEpisodeId}`}
+              key={episode.id}
+              href={`/watch/${episode.id}&anilist=${animeId}`}
               className={`flex items-center justify-between p-4 text-white rounded-md transition-all duration-300 ${
                 isCurrent
                   ? "border-l-4 border-purple-500 bg-opacity-90 relative"
-                  : "hover:bg-gray-800 bg-opacity-70" // Darker for non-active
+                  : "hover:bg-gray-800 bg-opacity-70"
               }`}
             >
               <span className="text-base font-medium">{episode.title}</span>
