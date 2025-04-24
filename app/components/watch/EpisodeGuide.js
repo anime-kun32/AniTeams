@@ -26,9 +26,9 @@ const EpisodeGuide = ({ animeId }) => {
         );
         const apiData = await response.json();
 
-        if (Array.isArray(apiData?.data?.episodes)) {
+        if (Array.isArray(apiData?.episodes)) {
           setEpisodeData(
-            apiData.data.episodes.map((episode) => {
+            apiData.episodes.map((episode) => {
               const urlObj = new URL(episode.url);
               const cleanId = `${urlObj.pathname.replace("/watch/", "")}${urlObj.search}`;
               return {
@@ -40,7 +40,8 @@ const EpisodeGuide = ({ animeId }) => {
         } else {
           setError("Unexpected API response structure.");
         }
-      } catch {
+      } catch (err) {
+        console.error(err);
         setError("Failed to fetch episode data.");
       }
       setLoading(false);
