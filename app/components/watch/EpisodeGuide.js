@@ -28,11 +28,14 @@ const EpisodeGuide = ({ animeId }) => {
 
         if (Array.isArray(apiData?.data?.episodes)) {
           setEpisodeData(
-            apiData.data.episodes.map((episode) => ({
-              id: `${episode.id.split("$episode$")[0]}?ep=${episode.id.split("$episode$")[1]}`,
-              title: episode.title || `Episode ${episode.number}`,
-              number: episode.number,
-            }))
+            apiData.data.episodes.map((episode) => {
+              const urlObj = new URL(episode.url);
+              const cleanId = `${urlObj.pathname.replace("/watch/", "")}${urlObj.search}`;
+              return {
+                id: cleanId,
+                title: episode.title || `Episode ${episode.number}`,
+              };
+            })
           );
         } else {
           setError("Unexpected API response structure.");
