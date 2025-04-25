@@ -21,7 +21,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '18' 
+        node-version: '18'  # You can specify the version of Node.js you're using
 
     # Install dependencies
     - name: Install dependencies
@@ -36,4 +36,22 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: next-build-output
-        path: .next  
+        path: .next  # This is the default output folder for Next.js builds
+
+  download-artifact:
+    runs-on: ubuntu-latest
+
+    needs: build  
+
+    steps:
+    # Download the artifact from the previous job
+    - name: Download build artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: next-build-output
+
+    # Optional: Use or process the downloaded artifact
+    - name: Extract and use build artifact
+      run: |
+        tar -xvzf next-build-output.tar.gz  # Or process the downloaded files as needed
+        echo "Build artifact downloaded successfully!"
