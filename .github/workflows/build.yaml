@@ -1,0 +1,39 @@
+name: Build and Upload Artifact
+
+on:
+  push:
+    branches:
+      - main  # You can change this to any branch you want
+  pull_request:
+    branches:
+      - main  # Same here, adjust as needed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the code
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Set up Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18' 
+
+    # Install dependencies
+    - name: Install dependencies
+      run: npm install
+
+    # Build the project
+    - name: Build project
+      run: npm run build
+
+    # Upload build output as an artifact
+    - name: Upload build output as an artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: next-build-output
+        path: .next  
