@@ -82,9 +82,9 @@ app should now be running on `http://localhost:3000`.
 - [x] full anilist integration with anilist
 - [x] Bookmark
 - [x] resume watching
-- [ ] based on the name "AniTeams" , commmunity ssetup
+- [ ] based on the name "AniTeams" , community integration , user will be able to comment on episodes and also make posts as well.
 - [ ] settings page 
-- [] And lots more !! Any more features mention in issues or make a pull request 
+- [ ] And lots more !! Any more features mention in issues or make a pull request 
 
 
 ### issues and contribution 
