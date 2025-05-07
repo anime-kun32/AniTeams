@@ -103,6 +103,6 @@ make sure you fill the required variables
 
 
 ### issues and contribution 
-As always any issues or contributions you want to make list them or make a pull request . 
+As always any issues or contributions you want to make list them or make a pull request.
 
 #  Enjoy using the app and Welcome to AniTeams-v2 !!
