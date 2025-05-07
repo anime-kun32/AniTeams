@@ -121,7 +121,7 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-900 text-white px-4 p-20 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-900 text-white px-4 pt-20 py-12">
       <div className="max-w-6xl mx-auto">
         {loading ? (
           <div className="animate-pulse space-y-6">
