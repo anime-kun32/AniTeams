@@ -82,6 +82,7 @@ app should now be running on `http://localhost:3000`.
 - [x] full anilist integration with anilist
 - [x] Bookmark
 - [x] resume watching
+- [ ] new anime provider : Animekai 
 - [ ] based on the name "AniTeams" , community integration , user will be able to comment on episodes and also make posts as well.
 - [ ] settings page 
 - [ ] And lots more !! Any more features mention in issues or make a pull request 
