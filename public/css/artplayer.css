@@ -1,0 +1,127 @@
+.art-volume-panel {
+  padding-bottom: 20px !important;
+}
+.art-settings {
+  margin-bottom: 20px !important;
+}
+@media screen and (max-width: 370px) {
+  .art-progress {
+    padding-bottom: 5px !important;
+  }
+  .art-controls-left .art-control {
+    justify-content: flex-start !important;
+  }
+  .art-controls-right .art-control {
+    justify-content: flex-end !important;
+  }
+  .art-controls-right .art-control svg {
+    width: 22px;
+    height: 22px;
+  }
+  .art-controls-left .art-control svg {
+    width: 22px;
+    height: 22px;
+  }
+  .art-state .art-icon svg {
+    width: 50px;
+    height: 50px;
+  }
+}
+@media screen and (max-width: 350px) {
+  .art-controls-right .art-control svg {
+    width: 20px;
+    height: 20px;
+  }
+  .art-controls-left .art-control svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+ html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: #000;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .artplayer-app {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 768px) {
+            .artplayer-app {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .artplayer-app {
+                width: 100%;
+                height: 100%;
+            }
+        }
+.art-chapters {
+  gap: 0px !important;
+}
+
+.art-chapter {
+  position: relative;
+  height: 100%; /* Ensure it takes the full height */
+}
+
+.art-chapter-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+}
+
+.art-chapter[data-title="Intro"] {
+  background-color: #fdd253; 
+}
+
+.art-chapter[data-title="Outro"] {
+  background-color: #fdd253; 
+}
+
+@media screen and (max-width: 470px) and (max-height: 607px) {
+.art-control.art-control-fast-forward {
+display: none !important;
+}
+}
+
+@media screen and (max-width: 470px) and (max-height: 607px) {
+.art-control.art-control-rewind {
+display: none !important;
+}
+}
+@media screen and (max-width: 470px) and (max-height: 607px) {
+.art-control.art-control-playAndPause {
+display: none;
+}
+}
+
+
+
+@media screen and (max-width: 470px) and (max-height: 607px) {
+.art-layer.art-layer-layer1 {
+display: block;
+}
+}
+
+
