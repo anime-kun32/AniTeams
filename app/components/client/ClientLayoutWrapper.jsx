@@ -12,6 +12,9 @@ export default function ClientLayoutWrapper({ children }) {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
 
   useEffect(() => {
+    const hasDismissed = localStorage.getItem("installDismissed");
+    if (hasDismissed) return;
+
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -41,6 +44,7 @@ export default function ClientLayoutWrapper({ children }) {
   };
 
   const handleDismissBanner = () => {
+    localStorage.setItem("installDismissed", "true");
     setShowInstallBanner(false);
   };
 
