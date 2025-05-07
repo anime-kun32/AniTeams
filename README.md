@@ -9,15 +9,17 @@ Welcome to AniTeams verison 2 ! A modern anime streaming platform built with Nex
 ## Features
 
 - **AniList Integration**: Link your AniList account to view your saved anime .
-- **Bookmarking**: Save your favorite episodes (bookmarking is currently local and not linked to AniList yet).
+- **Bookmarking**: Save your favorite anime from anilist 
 - **Skip Intro/Outro**: Skip anime intros and outros for a smoother experience.
-- **ArtPlayer**: still use our trusty old player   [Click here to view the source code of the player](https://github.com/anime-kun32/aniteams-player).
+- **Vidstackk**: Now uses Vidstack player with features like skip intro and outro.
+- **Resume watching**: A new feature implemented , allows you to resume where you last left off.
+- **login and signup**: Allows you login and signup with firebase implementation , customizable avater in the account page.
   
 ## Repositories Used
 
    - [hianime-mapper](https://github.com/IrfanKhan66/hianime-mapper)- For episode data 
    - [aniwatch-api](https://github.com/ghoshRitesh12/aniwatch-api) - For streaming source 
-   - [api.consumet.org](https://github.com/consumet/api.consumet.org) - For anime data 
+   - [api.consumet.org](https://github.com/consumet/api.consumet.org) - For anime data
 
 ## Installation Steps
 
@@ -75,12 +77,14 @@ npm run dev
 app should now be running on `http://localhost:3000`.
 
 ## Coming soon !!
-- [ ] sign up and registration
-- [ ] PWA support 
-- [ ] full anilist integration with anilist
-- [ ] Bookmark
-- [ ] resume watching
-- [ ] And lots more !! Any more features mention in issues or make a pull request 
+- [x] sign up and registration
+- [x] PWA support 
+- [x] full anilist integration with anilist
+- [x] Bookmark
+- [x] resume watching
+- [ ] based on the name "AniTeams" , commmunity ssetup
+- [ ] settings page 
+- [] And lots more !! Any more features mention in issues or make a pull request 
 
 
 ### issues and contribution 
