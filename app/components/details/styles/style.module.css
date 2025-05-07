@@ -1,0 +1,264 @@
+/* .epimgcontainer{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    gap: 10px;
+    align-items: center;
+    max-height: 35rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+} */
+/* .epimageitem{
+    position: relative;
+    cursor: pointer;
+} */
+.epimgdiv{
+    width: 100%;
+    flex: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #18181b;
+    position: relative;
+}
+.epimage{
+    background-color: #18181b;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 16/9;
+    border-radius: 8px;
+    transition: all 300ms ease!important;
+}
+.epimage:hover{
+    transform:scale(1.05);
+    opacity: 0.6;
+}
+.epimgnumber{
+    position: absolute;
+    bottom: 6px;
+    left: 6px;
+    background-color: rgba(0,0,0,0.6);
+    padding: 3px 6px;
+    font-size: 13px;
+    border-radius: 6px;
+}
+
+@media(min-width:1700px){
+    .epimgcontainer{
+        grid-template-columns: repeat(5, auto);
+    }
+}
+
+
+@media (max-width:1150px) {
+    .epimgcontainer{
+        grid-template-columns: repeat(3, auto);
+    }
+}
+
+@media (max-width:768px) {
+    .epimgcontainer{
+        grid-template-columns: repeat(2, auto);
+    }
+}
+
+
+/* epnumlist */
+
+.epnumlistcontainer{
+    width: 100%;
+    overflow-x: hidden;
+    margin: 10px auto;
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); 
+    gap: 10px;
+    /* border: 1px solid white; */
+}
+
+.epdiv{
+    /* background-color: #18181b; */
+    display: inline-block;
+    padding: 8px 0;
+    border-radius: 10px;
+    font-size: 15px;
+    color: #ffffffb2;
+    width: 50px;
+    text-align: center;
+    margin: 5px;
+    border: none;
+    outline: none;
+}
+
+.selectedEpnum{
+    background-color: #4d148c;
+    color: white;
+}
+.selectedEpnum:hover{
+    background-color: #4d148c!important;
+}
+
+.epdiv:hover{
+    background-color: #41414a;
+}
+
+@media(max-width:900px){
+    .epdiv{
+        width: 45px;
+        margin: 3px;
+    }
+
+    .epnumlistcontainer{
+        gap: 6px;
+        max-height: 205px!important;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        margin: 8px 2px 0 2px;
+        grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); 
+    }
+}
+
+
+/* Epimgcontent */
+
+.epimgcondiv{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 42rem!important;
+}
+.epimgcondiv::-webkit-scrollbar{
+    display: none;
+}
+
+.epimageconitem{
+    align-items: center;
+    flex-direction: row;
+    background-color: #18181b;
+    border-radius: 8px;
+}
+
+/* .selectedEpimgcon{
+    border: 2px solid rgb(255, 255, 255,1);
+    transform: scale(0.990);
+    transition: all .3s ease-in-out!important; 
+    pointer-events: none;
+    background-color: rgba(0,0,0,0.3);
+} */
+/* .selectedEpimgcon.epimageconitem .epimgplayico {
+    display: block !important;
+}
+.selectedEpimgcon .epimgcon{
+    opacity: 0.5;
+} */
+.epcondiv {
+    width: 230px;
+    border-radius: 8px;
+    position: relative;
+    height: 124px;
+    margin: 0 20px 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.epimgcon {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.epimgplayico {
+    position: absolute;
+}
+
+
+/* .epimageconitem:hover .epimgplayico{
+    display: block;
+    transition: all 300ms ease-in-out!important;
+}
+
+.epimageconitem:hover{
+    transform: scale(0.992);
+    transition: all 300ms ease-in-out!important; 
+    background-color: #27272c;
+} */
+
+/* .epimageconitem:hover .epimgcon{
+    opacity: 0.6;
+} */
+
+.epimgright{
+    width: 75%;
+    display: flex;
+    padding-right: 10px;
+    flex-direction: column;
+}
+
+.epimgtitle{
+    font-size: 18px;
+    padding: 5px 0;
+}
+
+.epimgdescription{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+   -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 13.5px;
+    color: #ffffffb2;
+}
+
+@media(min-width:1400px){
+    .epimgcondiv{
+        max-height: 50rem;
+    }
+    
+}
+
+@media(max-width:1400px){
+    .epimgright{
+        max-width: 60%;
+    }
+}
+
+@media(max-width:750px){
+    .epimgright{
+        max-width: 50%;
+    }
+    .epimgdescription{
+        -webkit-line-clamp: 2;
+    }
+
+}
+
+@media(max-width:565px){
+    .epimgcondiv{
+        max-height: 25rem!important;
+    }
+    .epimgright{
+        max-width: 60%;
+    }
+    .epcondiv{
+        width: 180px;
+        height: 90px;
+    }
+    .epimgtitle{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+       -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        font-size: 15px;
+        padding: 0;
+        margin: 6px 0;
+    }
+    .epimgdescription{
+        font-size: 13px;
+    }
+}
