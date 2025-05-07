@@ -53,10 +53,11 @@ npm install
 NEXT_PUBLIC_API_BASE_URL=https://youraniwatch-api.com # https://github.com/ghoshRitesh12/aniwatch-api
 NEXT_PUBLIC_CONSUMET_BASE_URL=https://your-consumet.com # your consumet api url base 
 NEXT_PUBLIC_ANILIST_CLIENT_ID=your-anilist-client-id
-NEXT_PUBLIC_DEPLOYMENT_URL=https://http://localhost:3000 # your prodoction url 
+NEXT_PUBLIC_DEPLOYMENT_URL=https://http://localhost:3000 # your prodoction url
+FIREBASE_SERVICE_ACCOUNT_KEY=
 
 ```
-
+The FIREBASE_SERVICE_ACCOUNT_KEY is required , get it from firebase and then compress it to a single line.
 
 
 ### 5. Run the Development Server
@@ -75,6 +76,19 @@ Using npm:
 npm run dev
 ```
 app should now be running on `http://localhost:3000`.
+
+ or 
+
+ ## 🚀 Deploy AniTeams to Vercel
+
+Click the button below to instantly deploy AniTeams to Vercel.  
+
+make sure you fill the required variables 
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/anime-kun32/AniTeams&env=FIREBASE_API_KEY)
+
+
+ 
 
 ## Coming soon !!
 - [x] sign up and registration
