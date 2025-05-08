@@ -1,7 +1,15 @@
 'use client';
 
-import { MediaPlayer, MediaProvider, Track, useMediaPlayer } from '@vidstack/react';
-import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/layouts/default';
+import {
+  MediaPlayer,
+  MediaProvider,
+  Track,
+  useMediaPlayer,
+} from '@vidstack/react';
+import {
+  defaultLayoutIcons,
+  DefaultVideoLayout,
+} from '@vidstack/react/player/layouts/default';
 import { useEffect, useRef, useState } from 'react';
 import Cookies from 'js-cookie';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -25,9 +33,15 @@ function SkipSVGButton({ onClick, label }) {
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.3 }}
     >
-      <svg xmlns="http://www.w3.org/2000/svg" className="skip-button-svg" viewBox="0 0 200 60">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="skip-button-svg"
+        viewBox="0 0 200 60"
+      >
         <rect className="skip-button-rect" width="200" height="60" />
-        <text x="50%" y="50%" className="skip-button-text">{label}</text>
+        <text x="50%" y="50%" className="skip-button-text">
+          {label}
+        </text>
       </svg>
     </motion.div>
   );
@@ -75,7 +89,7 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
     const fetchSource = async () => {
       try {
         const res = await axios.get('/api/player', {
-          params: { id, server, category }
+          params: { id, server, category },
         });
 
         const data = res.data?.data;
@@ -121,18 +135,22 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
         return;
       }
       try {
-        const res = await axios.post('https://graphql.anilist.co', {
-          query: `
-            query ($id: Int) {
-              Media(id: $id) {
-                bannerImage
+        const res = await axios.post(
+          'https://graphql.anilist.co',
+          {
+            query: `
+              query ($id: Int) {
+                Media(id: $id) {
+                  bannerImage
+                }
               }
-            }
-          `,
-          variables: { id: parseInt(anilistId) }
-        }, {
-          headers: { 'Content-Type': 'application/json' }
-        });
+            `,
+            variables: { id: parseInt(anilistId) },
+          },
+          {
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
 
         const banner = res.data?.data?.Media?.bannerImage;
         setBannerImage(banner || null);
@@ -218,7 +236,11 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
         {bannerImage === undefined ? (
           <div className="w-full h-full bg-black" />
         ) : bannerImage ? (
-          <img src={bannerImage} alt="Banner" className="absolute inset-0 w-full h-full object-cover" />
+          <img
+            src={bannerImage}
+            alt="Banner"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
         ) : (
           <div className="w-full h-full bg-gray-800" />
         )}
@@ -251,10 +273,18 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
 
   const { sources, tracks, headers, intro, outro } = sourceData;
   const proxyUrl = `https://gogoanime-and-hianime-proxy-ten.vercel.app/m3u8-proxy?url=${encodeURIComponent(sources[0].url)}`;
-  const thumbnailTrack = tracks?.find(t => t.kind === 'thumbnails')?.file;
+  const thumbnailTrack = tracks?.find((t) => t.kind === 'thumbnails')?.file;
 
   return (
     <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden z-10">
+      <style jsx global>{`
+        ::cue {
+          line-height: 1.4;
+          font-size: 1.1rem;
+          bottom: 20%;
+        }
+      `}</style>
+
       <MediaPlayer
         title={romajiTitle}
         src={proxyUrl}
@@ -266,20 +296,26 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
         onTimeUpdate={handleTimeUpdate}
         onReady={handlePlayerReady}
         className="text-white"
+        fullscreenOrientation="portrait"
       >
-        <MediaProvider />
-        {Array.isArray(tracks) && tracks.map((track, i) =>
-          track?.file ? (
-            <Track
-              key={i}
-              src={track.file}
-              kind={track.kind || 'subtitles'}
-              label={track.label || `Track ${i + 1}`}
-              lang={track.lang || 'en'}
-              default={track.default || false}
-            />
-          ) : null
-        )}
+        <MediaProvider
+          playsinline
+          disableRemotePlayback
+          disablePictureInPicture
+        />
+        {Array.isArray(tracks) &&
+          tracks.map((track, i) =>
+            track?.file ? (
+              <Track
+                key={i}
+                src={track.file}
+                kind={track.kind || 'subtitles'}
+                label={track.label || `Track ${i + 1}`}
+                lang={track.lang || 'en'}
+                default={track.default || false}
+              />
+            ) : null
+          )}
         <SkipButtons intro={intro} outro={outro} />
         <DefaultVideoLayout
           thumbnails={thumbnailTrack}
