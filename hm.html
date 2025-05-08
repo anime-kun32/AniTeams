@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Player with Subtitles</title>
+</head>
+<body>
+
+<div class="anime-details spad">
+<div class="container">
+<div class="row">
+<div class="col-lg-12">
+<div class="anime__video__player">
+<video id="player" controls crossorigin="true">
+<!-- Video source will be set by JavaScript -->
+<!-- Subtitles track -->
+<track id="subtitles" kind="subtitles" src="" default>
+</video>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+// Define the array of video and subtitle sources
+const sourcesArray = [
+{
+"videoSource": "https://tt57.biananset.net/_v7/f6576991bc30c7691273a4b614032e81785dcc0f77bfe6e96b2a582fac7152d6dd6bc2fae06901c6ab0046691ed1d453ec17caf4eea81a692a3d1b4f43cfef65c95488d3fecf19fe89bd7afd56e9b560ee149438c501e4562f62038c748d00834f719d58ee70f52fcca34002aa6b61cfd110a90ea83b65ac1226c910209b32f8/master.m3u8'",
+"subtitleSource": "https://s.megastatics.com/subtitle/d6461dacd896e3a813ca3c9783e4af15/d6461dacd896e3a813ca3c9783e4af15.vtt"
+}
+// You can add more video and subtitle objects here
+];
+
+// Function to fetch VTT file and convert it to JSON
+function convertVTTtoJSON(vttUrl) {
+return fetch(vttUrl)
+.then(response => response.text())
+.then(vttText => {
+return vttText
+.split(/\r?\n\r?\n/)
+.filter(Boolean)
+.map(part => {
+const [time, ...textLines] = part.split('\n');
+const [start, end] = time.split(' --> ');
+return { start, end, text: textLines.join(' ') };
+});
+})
+.catch(error => console.error('Error fetching or parsing VTT file:', error));
+}
+
+// Load the first video and subtitles pair from the array
+const sources = sourcesArray[0];
+const video = document.getElementById('player');
+video.src = sources.videoSource; // Set the video source
+
+// HLS.js setup for the video
+if (Hls.isSupported()) {
+var hls = new Hls();
+hls.attachMedia(video);
+hls.loadSource(sources.videoSource);
+hls.on(Hls.Events.MANIFEST_PARSED, function () {
+video.play();
+});
+} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+video.addEventListener('loadedmetadata', function () {
+video.play();
+});
+}
+
+// Fetch and process the VTT file, then set as track source
+convertVTTtoJSON(sources.subtitleSource).then(captionsJson => {
+// Create a Blob from the WebVTT string and set as track source
+const webVTTString = captionsJson.map(caption => `${caption.start} --> ${caption.end}\n${caption.text}`).join('\n\n');
+const blob = new Blob([webVTTString], { type: 'text/vtt' });
+const trackElement = document.getElementById('subtitles');
+trackElement.src = URL.createObjectURL(blob);
+});
+
+</script>
+</body>
+</html>
