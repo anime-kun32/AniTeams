@@ -32,6 +32,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
       </body>
