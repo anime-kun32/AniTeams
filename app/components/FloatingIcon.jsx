@@ -10,18 +10,14 @@ import {
   ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/24/solid";
 
-const ANILIST_CLIENT_ID = process.env.NEXT_PUBLIC_ANILIST_CLIENT_ID;
-const REDIRECT_URI = `${process.env.NEXT_PUBLIC_DEPLOYMENT_URL}/callback`;
-const ANILIST_AUTH_URL = `https://anilist.co/api/v2/oauth/authorize?client_id=${ANILIST_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code`;
-
 const FloatingIcon = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const token = Cookies.get("anilistAuthToken");
-    setIsAuthenticated(!!token);
+    const uid = Cookies.get("uid");
+    setIsAuthenticated(!!uid);
   }, []);
 
   const toggleMenu = () => {
@@ -29,7 +25,7 @@ const FloatingIcon = () => {
   };
 
   const handleLogout = () => {
-    Cookies.remove("anilistAuthToken");
+    Cookies.remove("uid");
     router.refresh();
   };
 
@@ -50,7 +46,7 @@ const FloatingIcon = () => {
             {isAuthenticated ? (
               <>
                 <button
-                  onClick={() => router.push("/profile")}
+                  onClick={() => router.push("/account")}
                   className="flex items-center gap-2 text-gray-300 hover:text-white"
                 >
                   <UserIcon className="h-5 w-5" />
@@ -80,13 +76,13 @@ const FloatingIcon = () => {
               </>
             ) : (
               <>
-                <a
-                  href={ANILIST_AUTH_URL}
+                <button
+                  onClick={() => router.push("/login")}
                   className="flex items-center gap-2 text-blue-400 hover:text-blue-600"
                 >
                   <UserIcon className="h-5 w-5" />
-                  Sign in with AniList
-                </a>
+                  Sign In
+                </button>
                 <button
                   onClick={() => router.push("/")}
                   className="flex items-center gap-2 text-gray-300 hover:text-white"
