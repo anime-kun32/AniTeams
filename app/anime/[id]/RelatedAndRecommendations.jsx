@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import AnimeCard from './AnimeCard';
-import AnimeCardSkeleton from './AnimeCardSkeleton';
+import AnimeCard from '@components/AnimeCard';
+import AnimeCardSkeleton from '@components/AnimeCardSkeleton';
 
 const RelatedAndRecommendations = ({
   animeId,
