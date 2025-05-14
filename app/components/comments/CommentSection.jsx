@@ -103,13 +103,14 @@ export default function CommentSection({ id }) {
       <div className="space-y-4">
         {comments.map((c) => (
           <div key={c.id} className="flex gap-3 items-start">
-            <Image
-              src={user?.avatar || c.profilePic || '/default-avatar.jpg'} // Use user's avatar or default if missing
-              alt={c.username}
-              width={40}
-              height={40}
-              className="rounded-full object-cover"
-            />
+            <img
+  src={c.profilePic || '/default-avatar.jpg'}
+  alt="test"
+  width={40}
+  height={40}
+  className="rounded-full object-cover"
+/>
+
             <div className="flex-1">
               <div className="text-sm font-semibold">{c.username}</div>
               <div className="text-sm text-gray-300 mb-1">{c.text}</div>
@@ -172,13 +173,14 @@ export default function CommentSection({ id }) {
               <div className="mt-4 space-y-4 ml-10">
                 {c.replies?.map((r) => (
                   <div key={r.id} className="flex gap-3 items-start">
-                    <Image
-                      src={r.profilePic || '/default-avatar.jpg'} // Use a default profile pic if no reply pic
-                      alt={r.username}
-                      width={32}
-                      height={32}
-                      className="rounded-full object-cover"
-                    />
+                   <img
+  src={c.profilePic || '/default-avatar.jpg'}
+  alt="test"
+  width={40}
+  height={40}
+  className="rounded-full object-cover"
+/>
+
                     <div className="flex-1">
                       <div className="text-sm font-semibold">{r.username}</div>
                       <div className="text-sm text-gray-300 mb-1">{r.text}</div>
