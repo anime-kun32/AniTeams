@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import Cookies from 'js-cookie'  // Add this for cookie access
+import Cookies from 'js-cookie'  
 
 export default function CommentSection({ id }) {
   const [comments, setComments] = useState([])
