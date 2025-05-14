@@ -52,7 +52,8 @@ export async function POST(req, { params }) {
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (err) {
-    console.error('[COMMENT_POST_ERROR]',Response.json({ error: err.message }, { status: 500 });
+    console.error('[COMMENT_POST_ERROR]', err);
+    return NextResponse.json({ error: err.message }, { status: 500 }); // Fixed this line
   }
 }
 
