@@ -12,15 +12,28 @@ export default function CommentSection({ id }) {
   const [replyText, setReplyText] = useState('')
   const [user, setUser] = useState(null)
 
-  const fetchUser = async () => {
-    try {
-      const res = await fetch('/api/user')
-      const data = await res.json()
-      if (res.ok) setUser(data)
-    } catch (err) {
-      console.error('Failed to fetch user:', err)
+
+const fetchUser = async () => {
+  const uid = Cookies.get('uid')
+  if (!uid) return
+
+  try {
+    const res = await fetch('/api/account', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uid }),
+    })
+
+    const data = await res.json()
+    if (res.ok && data.success) {
+      setUser(data.user)
+    } else {
+      console.error('Failed to load user:', data.error)
     }
+  } catch (err) {
+    console.error('Fetch user error:', err)
   }
+}
 
   const fetchComments = async () => {
     const res = await fetch(`/api/comments/${id}`)
