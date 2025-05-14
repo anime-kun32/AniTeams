@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Cookies from 'js-cookie'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 
@@ -11,8 +10,17 @@ export default function CommentSection({ id }) {
   const [loading, setLoading] = useState(false)
   const [replyingTo, setReplyingTo] = useState(null)
   const [replyText, setReplyText] = useState('')
+  const [user, setUser] = useState(null)
 
-  const uid = Cookies.get('uid')
+  const fetchUser = async () => {
+    try {
+      const res = await fetch('/api/user')
+      const data = await res.json()
+      if (res.ok) setUser(data)
+    } catch (err) {
+      console.error('Failed to fetch user:', err)
+    }
+  }
 
   const fetchComments = async () => {
     const res = await fetch(`/api/comments/${id}`)
@@ -55,6 +63,7 @@ export default function CommentSection({ id }) {
   }
 
   useEffect(() => {
+    fetchUser()
     fetchComments()
   }, [])
 
