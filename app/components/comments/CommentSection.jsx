@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import Cookies from 'js-cookie'  // Add this for cookie access
 
 export default function CommentSection({ id }) {
   const [comments, setComments] = useState([])
@@ -12,28 +13,27 @@ export default function CommentSection({ id }) {
   const [replyText, setReplyText] = useState('')
   const [user, setUser] = useState(null)
 
+  const fetchUser = async () => {
+    const uid = Cookies.get('uid')
+    if (!uid) return
 
-const fetchUser = async () => {
-  const uid = Cookies.get('uid')
-  if (!uid) return
+    try {
+      const res = await fetch('/api/user-info', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uid }),
+      })
 
-  try {
-    const res = await fetch('/api/user-info', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ uid }),
-    })
-
-    const data = await res.json()
-    if (res.ok && data.success) {
-      setUser(data.user)
-    } else {
-      console.error('Failed to load user:', data.error)
+      const data = await res.json()
+      if (res.ok && data.success) {
+        setUser(data.user)
+      } else {
+        console.error('Failed to load user:', data.error)
+      }
+    } catch (err) {
+      console.error('Fetch user error:', err)
     }
-  } catch (err) {
-    console.error('Fetch user error:', err)
   }
-}
 
   const fetchComments = async () => {
     const res = await fetch(`/api/comments/${id}`)
@@ -82,6 +82,7 @@ const fetchUser = async () => {
 
   return (
     <div className="space-y-6 mt-8 text-white">
+      {/* User profile picture for comments */}
       <div className="relative">
         <input
           value={text}
@@ -98,11 +99,12 @@ const fetchUser = async () => {
         </button>
       </div>
 
+      {/* Display comments */}
       <div className="space-y-4">
         {comments.map((c) => (
           <div key={c.id} className="flex gap-3 items-start">
             <Image
-              src={c.profilePic}
+              src={user?.avatar || c.profilePic || '/default-avatar.jpg'} // Use user's avatar or default if missing
               alt={c.username}
               width={40}
               height={40}
@@ -171,7 +173,7 @@ const fetchUser = async () => {
                 {c.replies?.map((r) => (
                   <div key={r.id} className="flex gap-3 items-start">
                     <Image
-                      src={r.profilePic}
+                      src={r.profilePic || '/default-avatar.jpg'} // Use a default profile pic if no reply pic
                       alt={r.username}
                       width={32}
                       height={32}
