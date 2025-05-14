@@ -8,7 +8,11 @@ export async function POST(req, { params }) {
     const { id } = params;
     const { text, parentId } = await req.json();
     const cookieStore = cookies();
-    const uid = cookieStore.get('uid')?. NextResponse.json({ error: 'Missing UID or text' }, { status: 400 });
+    const uid = cookieStore.get('uid');
+
+    // Check if uid or text is missing
+    if (!uid || !text) {
+      return NextResponse.json({ error: 'Missing UID or text' }, { status: 400 });
     }
 
     const userDoc = await db.collection('users').doc(uid).get();
@@ -29,6 +33,7 @@ export async function POST(req, { params }) {
     };
 
     if (parentId) {
+      // Add the comment as a reply
       await db
         .collection('comments')
         .doc(id)
@@ -37,6 +42,7 @@ export async function POST(req, { params }) {
         .collection('replies')
         .add(commentData);
     } else {
+      // Add the comment as a main thread
       await db
         .collection('comments')
         .doc(id)
@@ -46,8 +52,7 @@ export async function POST(req, { params }) {
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (err) {
-    console.error('[COMMENT_POST_ERROR]', err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error('[COMMENT_POST_ERROR]',Response.json({ error: err.message }, { status: 500 });
   }
 }
 
