@@ -152,6 +152,42 @@ export default function CommentSection({ id }) {
                   </div>
                 </motion.div>
               )}
+
+              {/* REPLIES */}
+              <div className="mt-4 space-y-4 ml-10">
+                {c.replies?.map((r) => (
+                  <div key={r.id} className="flex gap-3 items-start">
+                    <Image
+                      src={r.profilePic}
+                      alt={r.username}
+                      width={32}
+                      height={32}
+                      className="rounded-full object-cover"
+                    />
+                    <div className="flex-1">
+                      <div className="text-sm font-semibold">{r.username}</div>
+                      <div className="text-sm text-gray-300 mb-1">{r.text}</div>
+
+                      <div className="flex gap-4 text-xs text-gray-400">
+                        <motion.button
+                          whileTap={{ scale: 1.2 }}
+                          onClick={() => handleReact(r.id, 'like')}
+                          className="hover:text-purple-400"
+                        >
+                          👍 ({r.likes?.length || 0})
+                        </motion.button>
+                        <motion.button
+                          whileTap={{ scale: 1.2 }}
+                          onClick={() => handleReact(r.id, 'dislike')}
+                          className="hover:text-purple-400"
+                        >
+                          👎 ({r.dislikes?.length || 0})
+                        </motion.button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         ))}
