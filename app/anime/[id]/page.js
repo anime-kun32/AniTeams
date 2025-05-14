@@ -6,6 +6,7 @@ import jsCookie from 'js-cookie'
 import { motion, AnimatePresence } from 'framer-motion'
 import EpisodeGuide from '@components/details/EpisodeGuide'
 import CharacterVoiceStaff from '@components/CharacterVoiceStaff'
+import RelatedAndRecommendations from './RelatedAndRecommendations'
 
 const AnimeDetails = () => {
   const { id } = useParams()
@@ -265,6 +266,10 @@ const AnimeContent = ({ anime, id, handleSelectList, selectedList, submitting, d
             ></iframe>
           </div>
         )}
+         
+<div className="mt-6">
+  <RelatedAndRecommendations animeId={id} />
+</div>
       </div>
     </>
   )
