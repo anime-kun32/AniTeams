@@ -8,7 +8,7 @@ export async function POST(req, { params }) {
     const { id } = params;
     const { text, parentId } = await req.json();
     const cookieStore = cookies();
-    const uid = cookieStore.get('uid');
+    const uid = cookieStore.get('uid')?.value;
 
     // Check if uid or text is missing
     if (!uid || !text) {
