@@ -20,7 +20,7 @@ export async function POST(req, { params }) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
- const { username, profilePic = '' } = userDoc.data();
+const { username, avatar: profilePic } = userDoc.data();
 
     const commentData = {
       uid,
