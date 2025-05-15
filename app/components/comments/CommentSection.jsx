@@ -104,7 +104,7 @@ export default function CommentSection({ id }) {
         {comments.map((c) => (
           <div key={c.id} className="flex gap-3 items-start">
             <img
-  src={c.profilePic || '/default-avatar.jpg'}
+  src={c.profilePic || 'https://pic.re/image'}
   alt="test"
   width={40}
   height={40}
@@ -174,7 +174,7 @@ export default function CommentSection({ id }) {
                 {c.replies?.map((r) => (
                   <div key={r.id} className="flex gap-3 items-start">
                    <img
-  src={c.profilePic || '/default-avatar.jpg'}
+  src={c.profilePic || 'https://pic.re/image'}
   alt="test"
   width={40}
   height={40}
