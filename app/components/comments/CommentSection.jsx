@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import Cookies from 'js-cookie'  
+import Cookies from 'js-cookie'
 
 export default function CommentSection({ id }) {
   const [comments, setComments] = useState([])
@@ -82,7 +82,7 @@ export default function CommentSection({ id }) {
 
   return (
     <div className="space-y-6 mt-8 text-white">
-      {/* User profile picture for comments */}
+      {/* Input field */}
       <div className="relative">
         <input
           value={text}
@@ -99,17 +99,18 @@ export default function CommentSection({ id }) {
         </button>
       </div>
 
-      {/* Display comments */}
+      {/* Comment list */}
       <div className="space-y-4">
         {comments.map((c) => (
           <div key={c.id} className="flex gap-3 items-start">
-            <img
-  src={c.profilePic || 'https://pic.re/image'}
-  alt="test"
-  width={40}
-  height={40}
-  className="rounded-full object-cover"
-/>
+            <div className="w-10 h-10 relative">
+              <Image
+                src={c.profilePic || '/default-avatar.jpg'}
+                alt="avatar"
+                fill
+                className="rounded-full object-cover"
+              />
+            </div>
 
             <div className="flex-1">
               <div className="text-sm font-semibold">{c.username}</div>
@@ -169,17 +170,18 @@ export default function CommentSection({ id }) {
                 </motion.div>
               )}
 
-              {/* REPLIES */}
+              {/* Replies */}
               <div className="mt-4 space-y-4 ml-10">
                 {c.replies?.map((r) => (
                   <div key={r.id} className="flex gap-3 items-start">
-                   <img
-  src={c.profilePic || 'https://pic.re/image'}
-  alt="test"
-  width={40}
-  height={40}
-  className="rounded-full object-cover"
-/>
+                    <div className="w-10 h-10 relative">
+                      <Image
+                        src={r.profilePic || '/default-avatar.jpg'}
+                        alt="avatar"
+                        fill
+                        className="rounded-full object-cover"
+                      />
+                    </div>
 
                     <div className="flex-1">
                       <div className="text-sm font-semibold">{r.username}</div>
