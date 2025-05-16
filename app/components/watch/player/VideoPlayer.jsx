@@ -296,7 +296,7 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
         onTimeUpdate={handleTimeUpdate}
         onReady={handlePlayerReady}
         className="text-white"
-        fullscreenOrientation="portrait"
+        fullscreenOrientation="landscape"
       >
         <MediaProvider
           playsinline
