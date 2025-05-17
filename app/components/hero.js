@@ -185,16 +185,17 @@ export default function Hero() {
                   More Info
                 </Link>
 
-                <button
-                  onClick={handleToggle}
-                  className="rounded-full bg-white text-black p-2 hover:scale-110 transition"
-                >
-                  {muted ? (
-                    <SpeakerXMarkIcon className="h-5 w-5" />
-                  ) : (
-                    <SpeakerWaveIcon className="h-5 w-5" />
-                  )}
-                </button>
+               <button
+  onClick={handleToggle}
+  className="rounded-full bg-transparent text-white p-2 hover:scale-110 transition border border-white"
+>
+  {muted ? (
+    <SpeakerXMarkIcon className="h-5 w-5" />
+  ) : (
+    <SpeakerWaveIcon className="h-5 w-5" />
+  )}
+</button>
+
               </div>
             </div>
           </div>
