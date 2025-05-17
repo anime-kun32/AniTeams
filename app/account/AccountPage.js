@@ -49,6 +49,7 @@ const avatarList = [
     "https://cdn.noitatnemucod.net/avatar/100x100/tha/15.jpg",
     "https://cdn.noitatnemucod.net/avatar/100x100/tha/16.jpg",
     "https://cdn.noitatnemucod.net/avatar/100x100/tha/17.jpg",
+    "/Sonic.png",
 ]
 
 export default function AccountPage() {
