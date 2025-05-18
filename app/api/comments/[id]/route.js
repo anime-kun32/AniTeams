@@ -2,15 +2,19 @@ import { cookies } from 'next/headers';
 import { db } from '@lib/firebaseAdmin';
 import { NextResponse } from 'next/server';
 
-// Handle posting a comment
+// POST: Add a comment
 export async function POST(req, { params }) {
   try {
-    const { id } = params;
+    const { id: animeSlug } = params;
+    const { searchParams } = new URL(req.url);
+    const episodeId = searchParams.get('ep');
+
+    const formattedId = animeSlug && episodeId ? `${animeSlug}?ep=${episodeId}` : animeSlug;
+
     const { text, parentId } = await req.json();
     const cookieStore = cookies();
     const uid = cookieStore.get('uid')?.value;
 
-    // Check if uid or text is missing
     if (!uid || !text) {
       return NextResponse.json({ error: 'Missing UID or text' }, { status: 400 });
     }
@@ -20,7 +24,7 @@ export async function POST(req, { params }) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-const { username, avatar: profilePic } = userDoc.data();
+    const { username, avatar: profilePic } = userDoc.data();
 
     const commentData = {
       uid,
@@ -32,39 +36,33 @@ const { username, avatar: profilePic } = userDoc.data();
       timestamp: Date.now(),
     };
 
+    const threadsRef = db.collection('comments').doc(formattedId).collection('threads');
+
     if (parentId) {
-      // Add the comment as a reply
-      await db
-        .collection('comments')
-        .doc(id)
-        .collection('threads')
-        .doc(parentId)
-        .collection('replies')
-        .add(commentData);
+      await threadsRef.doc(parentId).collection('replies').add(commentData);
     } else {
-      // Add the comment as a main thread
-      await db
-        .collection('comments')
-        .doc(id)
-        .collection('threads')
-        .add(commentData);
+      await threadsRef.add(commentData);
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (err) {
     console.error('[COMMENT_POST_ERROR]', err);
-    return NextResponse.json({ error: err.message }, { status: 500 }); // Fixed this line
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
-// Handle fetching comments
-export async function GET(_req, { params }) {
+// GET: Fetch comments
+export async function GET(req, { params }) {
   try {
-    const { id } = params;
+    const { id: animeSlug } = params;
+    const { searchParams } = new URL(req.url);
+    const episodeId = searchParams.get('ep');
+
+    const formattedId = animeSlug && episodeId ? `${animeSlug}?ep=${episodeId}` : animeSlug;
 
     const threadSnapshot = await db
       .collection('comments')
-      .doc(id)
+      .doc(formattedId)
       .collection('threads')
       .orderBy('timestamp', 'desc')
       .get();
@@ -73,7 +71,7 @@ export async function GET(_req, { params }) {
       threadSnapshot.docs.map(async (doc) => {
         const repliesSnapshot = await db
           .collection('comments')
-          .doc(id)
+          .doc(formattedId)
           .collection('threads')
           .doc(doc.id)
           .collection('replies')
