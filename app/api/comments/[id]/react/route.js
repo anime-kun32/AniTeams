@@ -1,11 +1,15 @@
 import { db } from '@lib/firebaseAdmin'
 import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 
 export async function POST(req, { params }) {
   try {
     const { commentId, type } = await req.json()
-    const { id } = params 
-    const uid = req.cookies.get('uid')?.value
+    const { id } = params
+
+    const cookieStore = cookies()
+    const uid = cookieStore.get('uid')?.value
+
     if (!uid) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -26,11 +30,9 @@ export async function POST(req, { params }) {
     const likes = new Set(comment.likes || [])
     const dislikes = new Set(comment.dislikes || [])
 
-    // Remove from both
     likes.delete(uid)
     dislikes.delete(uid)
 
-    // Then add to selected
     if (type === 'like') likes.add(uid)
     else dislikes.add(uid)
 
@@ -42,6 +44,9 @@ export async function POST(req, { params }) {
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error('[COMMENT_REACT_ERROR]', err)
-    return NextResponse.json({ error: err.message || 'Failed to update reaction' }, { status: 500 })
+    return NextResponse.json(
+      { error: err.message || 'Failed to update reaction' },
+      { status: 500 }
+    )
   }
 }
