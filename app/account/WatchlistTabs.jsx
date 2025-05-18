@@ -10,8 +10,8 @@ const sections = ['watching', 'completed', 'planning', 'dropped'];
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const fetchAnimeDetailsWithRateLimit = async (list) => {
-  const batchSize = 10; // 10 requests per batch
-  const delayBetweenBatches = 7000; // 7 seconds between batches
+  const batchSize = 8; 
+  const delayBetweenBatches = 10000; 
 
   const results = [];
   for (let i = 0; i < list.length; i += batchSize) {
