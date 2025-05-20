@@ -10,10 +10,13 @@ const sections = ['watching', 'completed', 'planning', 'dropped'];
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const fetchAnimeDetailsWithRateLimit = async (list) => {
-  const batchSize = 8; 
-  const delayBetweenBatches = 10000; 
-
+  const batchSize = 8;
+  const delayBetweenBatches = 10000;
   const results = [];
+
+  const token = Cookies.get('anilistAuthToken');
+  if (!token) throw new Error('AniList access token not found in cookies (anilistAuthToken).');
+
   for (let i = 0; i < list.length; i += batchSize) {
     const batch = list.slice(i, i + batchSize);
 
@@ -44,10 +47,15 @@ const fetchAnimeDetailsWithRateLimit = async (list) => {
         const variables = { id: animeId };
 
         try {
-          const { data } = await axios.post('https://graphql.anilist.co', {
-            query,
-            variables,
-          });
+          const { data } = await axios.post(
+            'https://graphql.anilist.co',
+            { query, variables },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
 
           const anime = data.data.Media;
 
@@ -64,7 +72,7 @@ const fetchAnimeDetailsWithRateLimit = async (list) => {
             rating: anime.averageScore / 10,
           };
         } catch (err) {
-          console.error(`AniList error for ID ${animeId}:`, err);
+          console.error(`AniList error for ID ${animeId}:`, err.response?.data || err.message);
           return null;
         }
       })
@@ -100,7 +108,6 @@ const WatchlistTabs = () => {
 
         for (const section of sections) {
           const list = watchlist[section] || [];
-
           const animeDetails = await fetchAnimeDetailsWithRateLimit(list);
           allSections[section] = animeDetails;
         }
@@ -143,7 +150,7 @@ const WatchlistTabs = () => {
       ) : activeList.length === 0 ? (
         <p className="text-center text-gray-500 text-lg">No anime found in {currentTab}.</p>
       ) : (
-            <div className="pb-10 mt-5 grid grid-cols-3 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 auto-rows-[1fr] 2xl:grid-cols-7 3xl:grid-cols-8">
+        <div className="pb-10 mt-5 grid grid-cols-3 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 auto-rows-[1fr] 2xl:grid-cols-7 3xl:grid-cols-8">
           {activeList.map((anime) => (
             <AnimeCard key={anime.id} data={anime} />
           ))}
