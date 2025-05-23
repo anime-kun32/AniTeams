@@ -26,31 +26,39 @@ const WatchlistTabs = () => {
 
         for (const section of sections) {
           const list = watchlist[section] || [];
-          const ids = list.map((anime) => anime.animeId).join(',');
 
-          const res = await fetch(`https://no-drab.vercel.app/meta/anilist/info/${ids}`);
-          const details = await res.json();
+          const details = await Promise.all(
+            list.map(async (entry) => {
+              try {
+                const res = await fetch(`https://no-drab.vercel.app/meta/anilist/info/${entry.animeId}`);
+                if (!res.ok) throw new Error(`Failed to fetch ID ${entry.animeId}`);
+                const data = await res.json();
 
-          // Normalize each item to what AnimeCard expects
-          const normalized = details.map((anime) => ({
-            id: anime.id,
-            image: anime.image,
-            title: {
-              english: anime.title.english,
-              romaji: anime.title.romaji,
-            },
-            status: anime.status,
-            releaseDate: anime.releaseDate,
-            totalEpisodes: anime.totalEpisodes,
-            rating: anime.rating / 10, // Assuming rating is out of 100
-          }));
+                return {
+                  id: data.id,
+                  image: data.image,
+                  title: {
+                    english: data.title?.english || '',
+                    romaji: data.title?.romaji || '',
+                  },
+                  status: data.status,
+                  releaseDate: data.releaseDate,
+                  totalEpisodes: data.totalEpisodes,
+                  rating: data.rating ? data.rating / 10 : null,
+                };
+              } catch (error) {
+                console.error(`Error fetching anime ID ${entry.animeId}:`, error.message);
+                return null;
+              }
+            })
+          );
 
-          allSections[section] = normalized;
+          allSections[section] = details.filter(Boolean); // remove nulls
         }
 
         setAnimeData(allSections);
       } catch (error) {
-        console.error('Error fetching watchlist:', error);
+        console.error('Error fetching user watchlist:', error);
       } finally {
         setLoading(false);
       }
