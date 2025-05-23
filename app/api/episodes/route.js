@@ -1,5 +1,3 @@
-import { NextResponse } from "next/server";
-
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const animeId = searchParams.get("animeId");
@@ -9,19 +7,22 @@ export async function GET(req) {
   }
 
   try {
-    // Fetch API 2 for images and synopsis first (we always need this)
-    const api2Res = await fetch(`https://api.ani.zip/mappings?anilist_id=${animeId}`);
-    const api2Data = await api2Res.json();
+    // Fetch both in parallel
+    const [api2Res, newApiRes] = await Promise.all([
+      fetch(`https://api.ani.zip/mappings?anilist_id=${animeId}`),
+      fetch(`https://no-drab.vercel.app/meta/anilist/info/${animeId}`),
+    ]);
+
+    const [api2Data, newApiData] = await Promise.all([
+      api2Res.json(),
+      newApiRes.ok ? newApiRes.json() : Promise.resolve(null),
+    ]);
 
     if (!api2Data?.episodes) {
       return NextResponse.json({ error: "Invalid response from API 2" }, { status: 500 });
     }
 
-    // Try New API (for list of episodes, number, ID, etc.)
-    const newApiRes = await fetch(`https://no-drab.vercel.app/meta/anilist/info/${animeId}`);
-    if (newApiRes.ok) {
-      const newApiData = await newApiRes.json();
-
+    if (newApiData) {
       const mergedData = newApiData.episodes.map((ep) => {
         let episodeId = ep.id;
         if (episodeId?.includes("$episode$")) {
@@ -44,7 +45,7 @@ export async function GET(req) {
       return NextResponse.json({ episodes: mergedData });
     }
 
-    // Fallback to old APIs if new one fails
+    // Fallback fetch for legacy API if new API failed
     const res1 = await fetch(`${process.env.NEXT_PUBLIC_HIANIME_MAPPER_URL}/anime/info/${animeId}`);
     const api1Data = await res1.json();
 
