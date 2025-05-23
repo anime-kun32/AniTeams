@@ -1,7 +1,19 @@
 import { NextResponse } from 'next/server';
 import { db } from '@lib/firebaseAdmin';
 
-// PUT: To update or create resume data for the user
+// Utility: parse seriesId and episode from animeId string like "tower-of-god-866?ep=15024"
+function parseAnimeId(fullId) {
+  if (!fullId) return { seriesId: null, ep: null };
+
+  const [seriesId, query] = fullId.split('?');
+  if (!query) return { seriesId, ep: null };
+
+  const params = new URLSearchParams(query);
+  const ep = params.get('ep');
+  return { seriesId, ep };
+}
+
+// PUT: Create or update resume data per anime series, storing the current episode inside
 export async function PUT(req) {
   try {
     const { uid, animeId, time, anilistId, duration } = await req.json();
@@ -13,9 +25,19 @@ export async function PUT(req) {
       );
     }
 
-    const userRef = db.collection('users').doc(uid);
+    // Parse anime series ID and episode from animeId
+    const { seriesId, ep } = parseAnimeId(animeId);
 
+    if (!seriesId || !ep) {
+      return NextResponse.json(
+        { error: 'Invalid animeId format, missing episode info' },
+        { status: 400 }
+      );
+    }
+
+    const userRef = db.collection('users').doc(uid);
     const userDoc = await userRef.get();
+
     if (!userDoc.exists) {
       return NextResponse.json(
         { error: `User with UID ${uid} not found` },
@@ -23,16 +45,17 @@ export async function PUT(req) {
       );
     }
 
-    const resumeRef = userRef.collection('resumes').doc(animeId);
-    const resumeDoc = await resumeRef.get();
+    const resumeRef = userRef.collection('resumes').doc(seriesId);
 
-    const resumeData = { time, anilistId, duration };
+    const resumeData = {
+      time,
+      anilistId,
+      duration,
+      episode: ep, // current episode number stored here
+      lastUpdated: new Date().toISOString(),
+    };
 
-    if (!resumeDoc.exists) {
-      await resumeRef.set(resumeData);
-    } else {
-      await resumeRef.update(resumeData);
-    }
+    await resumeRef.set(resumeData, { merge: true });
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -41,7 +64,7 @@ export async function PUT(req) {
   }
 }
 
-// POST: To fetch specific resume data for a user
+// POST: Fetch resume data for an anime series
 export async function POST(req) {
   try {
     const { uid, animeId } = await req.json();
@@ -53,27 +76,31 @@ export async function POST(req) {
       );
     }
 
-    const userRef = db.collection('users').doc(uid);
-    const userDoc = await userRef.get();
-    if (!userDoc.exists) {
+    const { seriesId } = parseAnimeId(animeId);
+
+    if (!seriesId) {
       return NextResponse.json(
-        { error: `User with UID ${uid} not found` },
-        { status: 404 }
+        { error: 'Invalid animeId format' },
+        { status: 400 }
       );
     }
 
-    const resumeRef = userRef.collection('resumes').doc(animeId);
+    const userRef = db.collection('users').doc(uid);
+    const resumeRef = userRef.collection('resumes').doc(seriesId);
+
     const resumeDoc = await resumeRef.get();
 
     if (!resumeDoc.exists) {
-      return NextResponse.json({ time: 0, anilistId: '', duration: 0 });
+      return NextResponse.json({ time: 0, anilistId: '', duration: 0, episode: null });
     }
 
     const resumeData = resumeDoc.data();
+
     return NextResponse.json({
       time: resumeData?.time || 0,
       anilistId: resumeData?.anilistId || '',
-      duration: resumeData?.duration || 0
+      duration: resumeData?.duration || 0,
+      episode: resumeData?.episode || null,
     });
   } catch (error) {
     console.error('Error fetching resume data:', error);
@@ -81,7 +108,7 @@ export async function POST(req) {
   }
 }
 
-// GET: To list all resume data for the user
+// GET: List all resume data for a user (per series)
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -118,7 +145,7 @@ export async function GET(req) {
   }
 }
 
-// DELETE: To delete specific resume data for a user
+// DELETE: Delete resume data for a given anime series
 export async function DELETE(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -132,19 +159,28 @@ export async function DELETE(req) {
       );
     }
 
-    const resumeRef = db.collection('users').doc(uid).collection('resumes').doc(animeId);
+    const { seriesId } = parseAnimeId(animeId);
+
+    if (!seriesId) {
+      return NextResponse.json(
+        { error: 'Invalid animeId format' },
+        { status: 400 }
+      );
+    }
+
+    const resumeRef = db.collection('users').doc(uid).collection('resumes').doc(seriesId);
     const resumeDoc = await resumeRef.get();
 
     if (!resumeDoc.exists) {
       return NextResponse.json(
-        { error: `No resume data found for animeId "${animeId}" under user "${uid}"` },
+        { error: `No resume data found for animeId "${seriesId}" under user "${uid}"` },
         { status: 404 }
       );
     }
 
     await resumeRef.delete();
 
-    return NextResponse.json({ success: true, message: `Resume data for "${animeId}" deleted` });
+    return NextResponse.json({ success: true, message: `Resume data for "${seriesId}" deleted` });
   } catch (error) {
     console.error('Error deleting resume data:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
