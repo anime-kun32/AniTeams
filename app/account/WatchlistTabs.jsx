@@ -30,7 +30,7 @@ const WatchlistTabs = () => {
           const details = await Promise.all(
             list.map(async (entry) => {
               try {
-                const res = await fetch(`https://no-drab.vercel.app/meta/anilist/info/${entry.animeId}`);
+                const res = await fetch(`${process.env.NEXT_PUBLIC_CONSUMET_BASE_URL}/meta/anilist/info/${entry.animeId}`);
                 if (!res.ok) throw new Error(`Failed to fetch ID ${entry.animeId}`);
                 const data = await res.json();
 
