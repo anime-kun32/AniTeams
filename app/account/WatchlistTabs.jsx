@@ -2,91 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
-import axios from 'axios';
 import AnimeCard from '@components/AnimeCard';
 
 const sections = ['watching', 'completed', 'planning', 'dropped'];
-
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const fetchAnimeDetailsWithRateLimit = async (list) => {
-  const batchSize = 8;
-  const delayBetweenBatches = 10000;
-  const results = [];
-
-  const token = Cookies.get('anilistAuthToken');
-  if (!token) throw new Error('AniList access token not found in cookies (anilistAuthToken).');
-
-  for (let i = 0; i < list.length; i += batchSize) {
-    const batch = list.slice(i, i + batchSize);
-
-    const batchResults = await Promise.all(
-      batch.map(async (entry) => {
-        const animeId = parseInt(entry.animeId);
-        const query = `
-          query ($id: Int) {
-            Media(id: $id, type: ANIME) {
-              id
-              title {
-                romaji
-                english
-              }
-              coverImage {
-                large
-              }
-              status
-              startDate {
-                year
-              }
-              episodes
-              averageScore
-            }
-          }
-        `;
-
-        const variables = { id: animeId };
-
-        try {
-          const { data } = await axios.post(
-            'https://graphql.anilist.co',
-            { query, variables },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          const anime = data.data.Media;
-
-          return {
-            id: anime.id,
-            image: anime.coverImage.large,
-            title: {
-              english: anime.title.english,
-              romaji: anime.title.romaji,
-            },
-            status: anime.status,
-            releaseDate: anime.startDate.year,
-            totalEpisodes: anime.episodes,
-            rating: anime.averageScore / 10,
-          };
-        } catch (err) {
-          console.error(`AniList error for ID ${animeId}:`, err.response?.data || err.message);
-          return null;
-        }
-      })
-    );
-
-    results.push(...batchResults.filter(Boolean));
-
-    if (i + batchSize < list.length) {
-      await delay(delayBetweenBatches);
-    }
-  }
-
-  return results;
-};
 
 const WatchlistTabs = () => {
   const [currentTab, setCurrentTab] = useState('watching');
@@ -108,13 +26,31 @@ const WatchlistTabs = () => {
 
         for (const section of sections) {
           const list = watchlist[section] || [];
-          const animeDetails = await fetchAnimeDetailsWithRateLimit(list);
-          allSections[section] = animeDetails;
+          const ids = list.map((anime) => anime.animeId).join(',');
+
+          const res = await fetch(`https://no-drab.vercel.app/meta/anilist/info/${ids}`);
+          const details = await res.json();
+
+          // Normalize each item to what AnimeCard expects
+          const normalized = details.map((anime) => ({
+            id: anime.id,
+            image: anime.image,
+            title: {
+              english: anime.title.english,
+              romaji: anime.title.romaji,
+            },
+            status: anime.status,
+            releaseDate: anime.releaseDate,
+            totalEpisodes: anime.totalEpisodes,
+            rating: anime.rating / 10, // Assuming rating is out of 100
+          }));
+
+          allSections[section] = normalized;
         }
 
         setAnimeData(allSections);
       } catch (error) {
-        console.error('Error fetching user watchlist:', error);
+        console.error('Error fetching watchlist:', error);
       } finally {
         setLoading(false);
       }
