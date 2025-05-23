@@ -22,8 +22,8 @@ export default function ResumeWatching() {
 
       if (!success || !data?.length) return;
 
-      const detailed = await Promise.all(
-        data.map(async (item) => {
+      for (const item of data) {
+        try {
           const [epRes, titleRes] = await Promise.all([
             fetch(`/api/episodes?animeId=${item.anilistId}`),
             fetch(`${process.env.NEXT_PUBLIC_CONSUMET_BASE_URL}/meta/anilist/info/${item.anilistId}`),
@@ -35,16 +35,18 @@ export default function ResumeWatching() {
           const titleData = await titleRes.json();
           const animeTitle = titleData?.title?.romaji || 'Unknown Anime';
 
-          return {
+          const detailedItem = {
             ...item,
             episodeNumber: episode?.number,
             image: episode?.image || '/placeholder.jpg',
             animeTitle,
           };
-        })
-      );
 
-      setResumeData(detailed);
+          setResumeData((prev) => [...prev, detailedItem]);
+        } catch (err) {
+          console.error('Failed to fetch resume details for:', item.anilistId);
+        }
+      }
     };
 
     fetchResume();
@@ -100,7 +102,7 @@ export default function ResumeWatching() {
             return (
               <motion.div
                 key={anime.animeId}
-                initial={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
