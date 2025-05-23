@@ -41,7 +41,7 @@
     "swiper": "^11.2.1",
     "tailwind-scrollbar": "^3.1.0",
     "tailwind-scrollbar-hide": "^2.0.0",
-    "@consumet/extensions": "^1.8.1"
+    "@consumet/extensions": "github:consumet/consumet.ts"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
