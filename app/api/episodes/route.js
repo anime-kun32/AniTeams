@@ -1,4 +1,9 @@
 import { NextResponse } from "next/server";
+import { META, ANIME } from "@consumet/extensions";
+
+const anilist = new META.Anilist(new ANIME.Zoro());
+
+export const runtime = 'nodejs';
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
@@ -9,22 +14,24 @@ export async function GET(req) {
   }
 
   try {
-    // Fetch both in parallel
-    const [api2Res, newApiRes] = await Promise.all([
-      fetch(`https://api.ani.zip/mappings?anilist_id=${animeId}`),
-      fetch(`https://no-drab.vercel.app/meta/anilist/info/${animeId}`),
-    ]);
-
-    const [api2Data, newApiData] = await Promise.all([
-      api2Res.json(),
-      newApiRes.ok ? newApiRes.json() : Promise.resolve(null),
-    ]);
+    // Fetch the mappings from Ani.zip
+    const api2Res = await fetch(`https://api.ani.zip/mappings?anilist_id=${animeId}`);
+    const api2Data = await api2Res.json();
 
     if (!api2Data?.episodes) {
       return NextResponse.json({ error: "Invalid response from API 2" }, { status: 500 });
     }
 
-    if (newApiData) {
+    // Instead of fetching from external URL, get anime info via consumet/extensions
+    let newApiData = null;
+    try {
+      newApiData = await anilist.fetchAnimeInfo(animeId);
+    } catch (err) {
+      // If consumet fetch fails, just proceed with null to trigger fallback
+      newApiData = null;
+    }
+
+    if (newApiData && Array.isArray(newApiData.episodes)) {
       const mergedData = newApiData.episodes.map((ep) => {
         let episodeId = ep.id;
         if (episodeId?.includes("$episode$")) {
@@ -47,7 +54,7 @@ export async function GET(req) {
       return NextResponse.json({ episodes: mergedData });
     }
 
-    // Fallback fetch for legacy API if new API failed
+    // Fallback fetch for legacy API if consumet fetch failed or no episodes
     const res1 = await fetch(`${process.env.NEXT_PUBLIC_HIANIME_MAPPER_URL}/anime/info/${animeId}`);
     const api1Data = await res1.json();
 
