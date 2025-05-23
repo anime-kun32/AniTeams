@@ -24,31 +24,16 @@ export default function ResumeWatching() {
 
       const detailed = await Promise.all(
         data.map(async (item) => {
-          const [epRes, aniRes] = await Promise.all([
+          const [epRes, titleRes] = await Promise.all([
             fetch(`/api/episodes?animeId=${item.anilistId}`),
-            fetch(`https://graphql.anilist.co`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                query: `
-                  query ($id: Int) {
-                    Media(id: $id, type: ANIME) {
-                      title {
-                        romaji
-                      }
-                    }
-                  }
-                `,
-                variables: { id: item.anilistId },
-              }),
-            }),
+            fetch(`${process.env.NEXT_PUBLIC_CONSUMET_BASE_URL}/meta/anilist/info/${item.anilistId}`),
           ]);
 
           const { episodes } = await epRes.json();
           const episode = episodes.find((ep) => ep.episodeId === item.animeId);
 
-          const { data: aniData } = await aniRes.json();
-          const animeTitle = aniData?.Media?.title?.romaji || 'Unknown Anime';
+          const titleData = await titleRes.json();
+          const animeTitle = titleData?.title?.romaji || 'Unknown Anime';
 
           return {
             ...item,
@@ -133,12 +118,10 @@ export default function ResumeWatching() {
                     className="object-cover w-full h-36"
                   />
 
-                  {/* Episode overlay */}
                   <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent text-white text-sm px-2 py-1">
                     Episode {anime.episodeNumber || '?'}
                   </div>
 
-                  {/* Progress bar */}
                   <div className="absolute bottom-0 left-0 w-full h-1 bg-gray-700">
                     <div
                       className="h-full bg-purple-500"
@@ -147,7 +130,6 @@ export default function ResumeWatching() {
                   </div>
                 </Link>
 
-                {/* Delete Icon */}
                 <button
                   onClick={() => handleDelete(anime.animeId)}
                   disabled={removing === anime.animeId}
@@ -157,7 +139,6 @@ export default function ResumeWatching() {
                   <X className="w-4 h-4 text-white" />
                 </button>
 
-                {/* Anime title */}
                 <h3 className="text-white text-sm mt-2 truncate">{anime.animeTitle}</h3>
               </motion.div>
             );
