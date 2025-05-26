@@ -57,7 +57,7 @@ NEXT_PUBLIC_DEPLOYMENT_URL=https://http://localhost:3000 # your prodoction url
 FIREBASE_SERVICE_ACCOUNT_KEY=
 
 ```
-The FIREBASE_SERVICE_ACCOUNT_KEY is required , get it from firebase and then compress it to a single line.
+The FIREBASE_SERVICE_ACCOUNT_KEY is required , get it from firebase and then compress it to a single line.If this is not available, you will encounter an error when trying to run this.
 
 
 ### 5. Run the Development Server
