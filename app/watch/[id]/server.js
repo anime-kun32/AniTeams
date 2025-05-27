@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { FaClosedCaptioning, FaMicrophone, FaFileAlt } from "react-icons/fa";
+import { HiAnime } from "aniwatch";
+
+const hianime = new HiAnime.Scraper();
 
 const ServerSelector = ({ episodeId, setSelectedServer, setCategory }) => {
   const [servers, setServers] = useState({ sub: [], dub: [], raw: [] });
@@ -9,31 +12,27 @@ const ServerSelector = ({ episodeId, setSelectedServer, setCategory }) => {
 
   useEffect(() => {
     const fetchServers = async () => {
+      if (!episodeId) return;
+
       setLoading(true);
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/hianime/episode/servers?animeEpisodeId=${episodeId}`
-        );
+        const data = await hianime.getEpisodeServers(episodeId);
 
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-
-        const data = await res.json();
-
+        // Defensive check in case response is malformed
         setServers({
           sub: data.sub || [],
           dub: data.dub || [],
           raw: data.raw || [],
         });
       } catch (error) {
-        console.error("Fetch error:", error);
+        console.error("Error fetching servers:", error);
+        setServers({ sub: [], dub: [], raw: [] });
       } finally {
         setLoading(false);
       }
     };
 
-    if (episodeId) fetchServers();
+    fetchServers();
   }, [episodeId]);
 
   const handleSelect = (serverName, category) => {
@@ -62,7 +61,7 @@ const ServerSelector = ({ episodeId, setSelectedServer, setCategory }) => {
       );
     }
 
-    if (serversList.length === 0) return null;
+    if (!serversList.length) return null;
 
     return (
       <div className="mt-4">
@@ -91,9 +90,21 @@ const ServerSelector = ({ episodeId, setSelectedServer, setCategory }) => {
   try {
     return (
       <div className="mt-4">
-        {renderServers("sub", servers.sub, <FaClosedCaptioning className="text-yellow-400" />)}
-        {renderServers("dub", servers.dub, <FaMicrophone className="text-red-400" />)}
-        {renderServers("raw", servers.raw, <FaFileAlt className="text-green-400" />)}
+        {renderServers(
+          "sub",
+          servers.sub,
+          <FaClosedCaptioning className="text-yellow-400" />
+        )}
+        {renderServers(
+          "dub",
+          servers.dub,
+          <FaMicrophone className="text-red-400" />
+        )}
+        {renderServers(
+          "raw",
+          servers.raw,
+          <FaFileAlt className="text-green-400" />
+        )}
       </div>
     );
   } catch (error) {
