@@ -14,20 +14,23 @@ const ServerSelector = ({ episodeId, setSelectedServer, setCategory }) => {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/hianime/episode/servers?animeEpisodeId=${episodeId}`
         );
-        const data = await res.json();
-        if (data.success) {
-          setServers({
-            sub: data.data.sub || [],
-            dub: data.data.dub || [],
-            raw: data.data.raw || [],
-          });
-        } else {
-          console.error("API response success=false:", data);
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
         }
+
+        const data = await res.json();
+
+        setServers({
+          sub: data.sub || [],
+          dub: data.dub || [],
+          raw: data.raw || [],
+        });
       } catch (error) {
         console.error("Fetch error:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     if (episodeId) fetchServers();
@@ -63,12 +66,9 @@ const ServerSelector = ({ episodeId, setSelectedServer, setCategory }) => {
 
     return (
       <div className="mt-4">
-        {/* Icon + Category Header */}
         <div className="flex items-center gap-2 text-lg font-semibold">
           {icon} <span className="capitalize">{category}</span>
         </div>
-
-        {/* Server Buttons */}
         <div className="flex flex-wrap gap-2 mt-2 border-b border-gray-700 pb-2">
           {serversList.map((server) => (
             <button
