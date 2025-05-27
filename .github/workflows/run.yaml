@@ -1,0 +1,51 @@
+name: Run Custom NPM Command
+
+on:
+  workflow_dispatch:
+    inputs:
+      npm_command:
+        description: 'NPM command to run (e.g. "npm install cors")'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  run-npm-command:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check user identity
+        run: |
+          if [ "${{ github.actor }}" != "anime-kun32" ]; then
+            echo "Unauthorized: Only the repository owner can run this workflow."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Run NPM command
+        run: ${{ github.event.inputs.npm_command }}
+
+      - name: Commit package files if created or changed
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+          files_to_add=""
+          [ -f package.json ] && files_to_add="$files_to_add package.json"
+          [ -f package-lock.json ] && files_to_add="$files_to_add package-lock.json"
+
+          if [ -n "$files_to_add" ]; then
+            git add $files_to_add
+            git commit -m "chore: ${{ github.event.inputs.npm_command }}" || echo "No changes to commit"
+            git push
+          else
+            echo "No package files found to commit."
+          fi
