@@ -311,7 +311,7 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
                 src={track.file}
                 kind={track.kind || 'subtitles'}
                 label={track.label || `Track ${i + 1}`}
-                lang={track.lang || 'en'}
+                lang={track.label?.toLowerCase().slice(0, 3) || 'en'}
                 default={track.default || false}
               />
             ) : null
