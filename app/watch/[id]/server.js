@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
 import { FaClosedCaptioning, FaMicrophone, FaFileAlt } from "react-icons/fa";
-import { HiAnime } from "aniwatch";
-
-const hianime = new HiAnime.Scraper();
 
 const ServerSelector = ({ episodeId, setSelectedServer, setCategory }) => {
   const [servers, setServers] = useState({ sub: [], dub: [], raw: [] });
@@ -16,9 +13,10 @@ const ServerSelector = ({ episodeId, setSelectedServer, setCategory }) => {
 
       setLoading(true);
       try {
-        const data = await hianime.getEpisodeServers(episodeId);
+        const res = await fetch(`/api/server?episodeId=${encodeURIComponent(episodeId)}`);
+        if (!res.ok) throw new Error("Failed to fetch episode servers");
 
-        // Defensive check in case response is malformed
+        const data = await res.json();
         setServers({
           sub: data.sub || [],
           dub: data.dub || [],
