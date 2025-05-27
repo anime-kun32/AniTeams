@@ -20,28 +20,17 @@ const WatchPage = () => {
 
   const formattedId = animeSlug && episodeId ? `${animeSlug}?ep=${episodeId}` : '';
 
+  const playerTypes = [
+    { id: 'default', label: 'Default' },
+    { id: 'artplayer', label: 'ArtPlayer' },
+    { id: 'plyr', label: 'Plyr' },
+  ];
+
   return (
     <div className="flex flex-col lg:flex-row bg-black pt-20 text-white min-h-screen">
 
       {/* Main Content */}
       <div className="lg:w-3/4 w-full p-4 mt-6 flex flex-col gap-8">
-
-        {/* Player Switcher */}
-        {formattedId && selectedServer && category && (
-          <div className="flex items-center gap-4">
-            <label htmlFor="playerType" className="text-sm">Player:</label>
-            <select
-              id="playerType"
-              value={playerType}
-              onChange={(e) => setPlayerType(e.target.value)}
-              className="bg-gray-800 text-white px-3 py-2 rounded"
-            >
-              <option value="default">Default</option>
-              <option value="artplayer">ArtPlayer</option>
-              <option value="plyr">Plyr</option>
-            </select>
-          </div>
-        )}
 
         {/* Player Display */}
         {formattedId && selectedServer && category && (
@@ -70,6 +59,23 @@ const WatchPage = () => {
                 allowFullScreen
               />
             )}
+
+            {/* Player Switcher Toolbar */}
+            <div className="mt-4 flex gap-2 border border-gray-700 bg-gray-900 rounded-md p-2 w-fit">
+              {playerTypes.map(({ id, label }) => (
+                <button
+                  key={id}
+                  onClick={() => setPlayerType(id)}
+                  className={`px-4 py-2 rounded-md text-sm font-medium capitalize transition-colors duration-200 ${
+                    playerType === id
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </>
         )}
 
