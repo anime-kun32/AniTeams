@@ -46,7 +46,7 @@ const WatchPage = () => {
 
             {playerType === 'artplayer' && (
               <iframe
-                src={`https://aniteams-player-livid.vercel.app?id=${formattedId}&server=${selectedServer}&category=${category}`}
+                src={`${process.env.NEXT_PUBLIC_PLAYER}?id=${formattedId}&server=${selectedServer}&category=${category}`}
                 className="w-full aspect-video rounded-md border border-gray-700"
                 allowFullScreen
               />
@@ -54,7 +54,7 @@ const WatchPage = () => {
 
             {playerType === 'plyr' && (
               <iframe
-                src={`https://aniteams-player-livid.vercel.app/plyr?id=${formattedId}&server=${selectedServer}&category=${category}`}
+                src={`${process.env.NEXT_PUBLIC_PLAYER}/plyr?id=${formattedId}&server=${selectedServer}&category=${category}`}
                 className="w-full aspect-video rounded-md border border-gray-700"
                 allowFullScreen
               />
