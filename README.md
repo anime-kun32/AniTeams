@@ -50,10 +50,17 @@ npm install
 ```
 ### 4. make sure you fill up the env . This is required 
 ```.env
-NEXT_PUBLIC_CONSUMET_BASE_URL=https://your-consumet.com # your consumet api url base 
-NEXT_PUBLIC_ANILIST_CLIENT_ID=your-anilist-client-id
-NEXT_PUBLIC_DEPLOYMENT_URL=https://http://localhost:3000 # your prodoction url
+
+NEXT_PUBLIC_CONSUMET_BASE_URL=
+NEXT_PUBLIC_ANILIST_CLIENT_ID=
+NEXT_PUBLIC_DEPLOYMENT_URL= # your prodoction url 
+NEXT_PUBLIC_HIANIME_MAPPER_URL= # https://github.com/anime-kun32/hianime-mapper
+
+NEXT_PUBLIC_ANILIST_CLIENT_SECRET=
+NODE_ENV=production
 FIREBASE_SERVICE_ACCOUNT_KEY=
+NEXT_PUBLIC_PLAYER= # https://github.com/anime-kun32/aniteams-player
+
 
 ```
 The FIREBASE_SERVICE_ACCOUNT_KEY is required , get it from firebase and then compress it to a single line.If this is not available, you will encounter an error when trying to run this.
