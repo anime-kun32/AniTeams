@@ -18,7 +18,7 @@ Welcome to AniTeams verison 2 ! A modern anime streaming platform built with Nex
 ## Repositories Used
 
    - [hianime-mapper](https://github.com/IrfanKhan66/hianime-mapper)- For episode data 
-   - [aniwatch-api](https://github.com/ghoshRitesh12/aniwatch-api) - For streaming source 
+   - [aniwatch](https://www.npmjs.com/package/aniwatch) - For streaming source 
    - [api.consumet.org](https://github.com/consumet/api.consumet.org) - For anime data
 
 ## Installation Steps
