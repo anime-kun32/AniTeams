@@ -272,7 +272,7 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
   }
 
   const { sources, tracks, intro, outro } = sourceData;
-  const proxyUrl = `https://gogoanime-and-hianime-proxy-ten.vercel.app/m3u8-proxy?url=${encodeURIComponent(sources[0].url)}`;
+  const proxyUrl = `https://gogoanime-and-hianime-proxy-mu.vercel.app/m3u8-proxy?url=${encodeURIComponent(sources[0].url)}`;
   const thumbnailTrack = tracks?.find((t) => t.kind === 'thumbnails')?.file;
 
   return (
