@@ -92,8 +92,8 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
           params: { id, server, category },
         });
 
-        const data = res.data?.data;
-        if (!data?.sources?.length) throw new Error('Invalid source data');
+        const data = res.data;
+        if (!data) throw new Error('Invalid data');
 
         setSourceData(data);
         setRomajiTitle(data.title || 'AniTeams Player');
@@ -130,7 +130,10 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
 
   useEffect(() => {
     const fetchBanner = async () => {
-      if (!anilistId) return setBannerImage(null);
+      if (!anilistId) {
+        setBannerImage(null);
+        return;
+      }
       try {
         const res = await axios.post(
           'https://graphql.anilist.co',
@@ -160,9 +163,20 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
     fetchBanner();
   }, [anilistId]);
 
+  const getDOMDurationInSeconds = () => {
+    try {
+      const text = document.querySelector('.vds-time[data-type="duration"]')?.textContent;
+      if (!text) return 0;
+      const [min, sec] = text.split(':').map(Number);
+      return min * 60 + sec;
+    } catch {
+      return 0;
+    }
+  };
+
   const handleTimeUpdate = (e) => {
     const currentTime = e.currentTime || player?.currentTime || 0;
-    const duration = player?.duration || 0;
+    const duration = player?.duration || getDOMDurationInSeconds() || 0;
 
     const now = Date.now();
     if (now - lastSavedRef.current < 30000) return;
@@ -210,7 +224,9 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
 
   useEffect(() => {
     return () => {
-      if (saveIntervalRef.current) clearInterval(saveIntervalRef.current);
+      if (saveIntervalRef.current) {
+        clearInterval(saveIntervalRef.current);
+      }
     };
   }, []);
 
@@ -232,22 +248,31 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
           <svg width="48" height="48" viewBox="0 0 24 24">
             <style>
               {`
-                .spinner { animation: spin 2s linear infinite }
-                @keyframes spin {
-                  0% { transform: rotate(0deg); }
-                  100% { transform: rotate(360deg); }
+                .spinner_nOfF { animation: spinner_qtyZ 2s cubic-bezier(0.36, .6, .31, 1) infinite }
+                .spinner_fVhf { animation-delay: -0.5s }
+                .spinner_piVe { animation-delay: -1s }
+                .spinner_MSNs { animation-delay: -1.5s }
+                @keyframes spinner_qtyZ {
+                  0% { r: 0 }
+                  25% { r: 3px; cx: 4px }
+                  50% { r: 3px; cx: 12px }
+                  75% { r: 3px; cx: 20px }
+                  100% { r: 0; cx: 20px }
                 }
               `}
             </style>
-            <circle className="spinner" cx="12" cy="12" r="10" stroke="white" strokeWidth="4" fill="none" />
+            <circle className="spinner_nOfF" cx="4" cy="12" r="3" fill="white" />
+            <circle className="spinner_nOfF spinner_fVhf" cx="4" cy="12" r="3" fill="white" />
+            <circle className="spinner_nOfF spinner_piVe" cx="4" cy="12" r="3" fill="white" />
+            <circle className="spinner_nOfF spinner_MSNs" cx="4" cy="12" r="3" fill="white" />
           </svg>
         </div>
       </div>
     );
   }
 
-  const { sources, tracks, headers, intro, outro } = sourceData;
-  const videoSrc = `https://gogoanime-and-hianime-proxy-ten.vercel.app/m3u8-proxy?url=${encodeURIComponent(sources[0].url)}`;
+  const { sources, tracks, intro, outro } = sourceData;
+  const proxyUrl = `https://gogoanime-and-hianime-proxy-ten.vercel.app/m3u8-proxy?url=${encodeURIComponent(sources[0].url)}`;
   const thumbnailTrack = tracks?.find((t) => t.kind === 'thumbnails')?.file;
 
   return (
@@ -262,9 +287,8 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
 
       <MediaPlayer
         title={romajiTitle}
-        src={videoSrc}
+        src={proxyUrl}
         crossorigin
-        headers={headers}
         playsinline
         autoplay
         currentTime={resumeTime}
@@ -279,21 +303,18 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
           disablePictureInPicture
         />
         {Array.isArray(tracks) &&
-          tracks.map((track, i) => {
-            if (!track?.file) return null;
-            return (
+          tracks.map((track, i) =>
+            track?.file ? (
               <Track
                 key={i}
                 src={track.file}
                 kind={track.kind || 'subtitles'}
                 label={track.label || `Track ${i + 1}`}
-                lang={
-                  track.label?.toLowerCase().slice(0, 3) || 'en'
-                }
+                lang={track.lang || 'en'}
                 default={track.default || false}
               />
-            );
-          })}
+            ) : null
+          )}
         <SkipButtons intro={intro} outro={outro} />
         <DefaultVideoLayout
           thumbnails={thumbnailTrack}
