@@ -50,7 +50,6 @@ npm install
 ```
 ### 4. make sure you fill up the env . This is required 
 ```.env
-NEXT_PUBLIC_API_BASE_URL=https://youraniwatch-api.com # https://github.com/ghoshRitesh12/aniwatch-api
 NEXT_PUBLIC_CONSUMET_BASE_URL=https://your-consumet.com # your consumet api url base 
 NEXT_PUBLIC_ANILIST_CLIENT_ID=your-anilist-client-id
 NEXT_PUBLIC_DEPLOYMENT_URL=https://http://localhost:3000 # your prodoction url
