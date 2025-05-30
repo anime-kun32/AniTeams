@@ -44,7 +44,8 @@ export default function CommentSection({ id }) {
     }
   }
 
-  const postComment = async () => {
+  const postComment = async (event) => {
+    if(event.key == "Enter"){
     if (!text.trim()) return
     setLoading(true)
     await fetch(`/api/comments/${id}`, {
@@ -55,6 +56,7 @@ export default function CommentSection({ id }) {
     setText('')
     await fetchComments()
     setLoading(false)
+    }
   }
 
   const postReply = async (parentId) => {
@@ -90,6 +92,7 @@ export default function CommentSection({ id }) {
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
+          onkeydown={postComment(event)}
           placeholder="Add a comment..."
           className="w-full bg-transparent border-0 border-b-2 border-purple-500 focus:outline-none focus:ring-0 text-white placeholder-gray-400 py-2"
         />
