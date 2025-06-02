@@ -105,7 +105,9 @@ make sure you fill the required variables
 - [ ] new anime providers  : Animekai , animepahe.ru
 - [ ] based on the name "AniTeams" , community integration , user will be able to comment on episodes and also make posts as well.
 - [ ] settings page 
-- [ ] And lots more !! Any more features mention in issues or make a pull request.A  star ⭐ will also be appreciated.
+- [ ] And lots more !! Any more features mention in issues or make a pull request.
+  
+A  star ⭐ will also be appreciated.
 
 
 ### issues and contribution 
