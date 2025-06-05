@@ -24,6 +24,7 @@ const WatchPage = () => {
     { id: 'default', label: 'Default' },
     { id: 'artplayer', label: 'ArtPlayer' },
     { id: 'plyr', label: 'Plyr' },
+    { id: 'fast', label: 'Fast'
   ];
 
   return (
@@ -59,6 +60,15 @@ const WatchPage = () => {
                 allowFullScreen
               />
             )}
+                  
+            {playerType === 'fast' && (
+              <iframe
+                src={`https://megaplay.buzz/stream/s-2/${formattedId}/${category}`}
+                className="w-full aspect-video rounded-md border border-gray-700"
+                allowFullScreen
+              />
+            )}
+      
 
             {/* Player Switcher Toolbar */}
             <div className="mt-4 flex gap-2 border border-gray-700 bg-gray-900 rounded-md p-2 w-fit">
