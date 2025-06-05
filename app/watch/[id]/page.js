@@ -20,11 +20,11 @@ const WatchPage = () => {
 
   const formattedId = animeSlug && episodeId ? `${animeSlug}?ep=${episodeId}` : '';
 
-  const playerTypes = [
+   const playerTypes = [
     { id: 'default', label: 'Default' },
     { id: 'artplayer', label: 'ArtPlayer' },
     { id: 'plyr', label: 'Plyr' },
-    { id: 'fast', label: 'Fast'
+    { id: 'fast', label: 'Fast' },
   ];
 
   return (
