@@ -61,13 +61,7 @@ const WatchPage = () => {
               />
             )}
                   
-            {playerType === 'fast' && (
-              <iframe
-                src={`https://megaplay.buzz/stream/s-2/${episodeId}/${category}`}
-                className="w-full aspect-video rounded-md border border-gray-700"
-                allowFullScreen
-              />
-            )}
+            
       
 
             {/* Player Switcher Toolbar */}
