@@ -9,6 +9,7 @@ const nextConfig = {
       'artworks.thetvdb.com',
       's4.anilist.co',
       'media.kitsu.app',
+      'i.animepahe.ru ',
     ],
   },
 };
