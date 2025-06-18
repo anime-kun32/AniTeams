@@ -25,7 +25,7 @@ export default function ResumeWatching() {
       for (const item of data) {
         try {
           const [epRes, titleRes] = await Promise.all([
-            fetch(`/api/episodes?animeId=${item.anilistId}`),
+            fetch(`/api/provider/aniwatch/episodes?animeId=${item.anilistId}`),
             fetch(`${process.env.NEXT_PUBLIC_CONSUMET_BASE_URL}/meta/anilist/info/${item.anilistId}`),
           ]);
 
