@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import Aniwatch from "./aniwatch/aniwatch"; // assuming AnimePahe coming soon
+import Aniwatch from "./aniwatch/aniwatch"; 
+import AnimePahe from "./animepahe";
 
-const providers = ["Aniwatch" /*, "AnimePahe" */];
+const providers = ["Aniwatch" , "AnimePahe";
 
 export default function List({ id }) {
   const [active, setActive] = useState("Aniwatch");
 
   return (
     <div className="w-full">
-      {/* Tabs */}
+   
       <div className="flex space-x-6 px-4 border-b border-zinc-700 relative">
         {providers.map((provider) => (
           <button
@@ -28,10 +29,10 @@ export default function List({ id }) {
         ))}
       </div>
 
-      {/* Provider content */}
+     
       <div className="mt-4">
         {active === "Aniwatch" && <Aniwatch anilistId={id} />}
-        {/* active === "AnimePahe" && <AnimePahe anilistId={id} /> */}
+        { active === "AnimePahe" && <AnimePahe anilistId={id} />}
       </div>
     </div>
   );
