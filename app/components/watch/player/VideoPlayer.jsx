@@ -88,7 +88,7 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
   useEffect(() => {
     const fetchSource = async () => {
       try {
-        const res = await axios.get('/api/player', {
+        const res = await axios.get('/api/provider/aniwatch/player', {
           params: { id, server, category },
         });
 
