@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Aniwatch from "./aniwatch/aniwatch"; 
 import AnimePahe from "./animepahe";
 
-const providers = ["Aniwatch" , "AnimePahe";
+const providers = ["Aniwatch" , "AnimePahe";]
 
 export default function List({ id }) {
   const [active, setActive] = useState("Aniwatch");
