@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link"; // or "react-router-dom" if that's your stack
+import Link from "next/link";
 
 export default function Aniwatch({ anilistId }) {
   const [episodes, setEpisodes] = useState([]);
@@ -25,26 +25,27 @@ export default function Aniwatch({ anilistId }) {
   if (!episodes.length) return <div className="p-4 text-white">No episodes found.</div>;
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 p-4">
       {episodes.map((ep) => (
         <Link
           key={ep.episodeId}
           href={`/watch/${ep.episodeId}&anilist=${anilistId}`}
-          className="relative group rounded-xl overflow-hidden shadow-md"
+          className="relative group rounded-2xl overflow-hidden shadow-lg border border-zinc-700 bg-zinc-900 transition-transform duration-300 hover:scale-[1.05] hover:shadow-2xl"
         >
-          <div>
+          <div className="relative w-full h-32">
             <img
               src={ep.image}
               alt={`Episode ${ep.number}`}
-              className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-cover"
+              loading="lazy"
             />
-            <div className="absolute bottom-0 w-full p-2 bg-gradient-to-t from-black/80 to-transparent text-white">
-              <div className="text-sm font-semibold">
+            <div className="absolute bottom-0 w-full p-3 bg-gradient-to-t from-black/90 to-transparent text-white">
+              <div className="text-sm font-bold leading-tight">
                 Episode {ep.number}
               </div>
               <div className="text-xs truncate">{ep.title}</div>
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-70 transition-opacity duration-300" />
           </div>
         </Link>
       ))}
