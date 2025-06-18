@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import jsCookie from 'js-cookie'
 import { motion, AnimatePresence } from 'framer-motion'
-import EpisodeGuide from '@components/details/EpisodeGuide'
 import CharacterVoiceStaff from '@components/CharacterVoiceStaff'
 import RelatedAndRecommendations from './RelatedAndRecommendations'
 import List from '@components/details/list'
@@ -249,9 +248,9 @@ const AnimeContent = ({ anime, id, handleSelectList, selectedList, submitting, d
           </motion.div>
         )}
 
-        <div className="mt-4">
-          <EpisodeGuide animeId={id} />
-        </div>
+ <div className="mt-6">
+          <List id={id} />
+          </div>
 
         <div className="mt-4">
           <CharacterVoiceStaff animeId={id} />
@@ -271,10 +270,7 @@ const AnimeContent = ({ anime, id, handleSelectList, selectedList, submitting, d
 <div className="mt-6">
   <RelatedAndRecommendations animeId={id} />
 </div>
-          <div className="mt-6">
-          <List id={id} />
-          </div>
-
+         
       </div>
     </>
   )
