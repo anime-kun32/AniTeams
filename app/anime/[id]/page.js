@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import EpisodeGuide from '@components/details/EpisodeGuide'
 import CharacterVoiceStaff from '@components/CharacterVoiceStaff'
 import RelatedAndRecommendations from './RelatedAndRecommendations'
+import List from '@components/details/list'
 
 const AnimeDetails = () => {
   const { id } = useParams()
@@ -270,6 +271,10 @@ const AnimeContent = ({ anime, id, handleSelectList, selectedList, submitting, d
 <div className="mt-6">
   <RelatedAndRecommendations animeId={id} />
 </div>
+          <div className="mt-6">
+          <List id={id} />
+          </div>
+
       </div>
     </>
   )
