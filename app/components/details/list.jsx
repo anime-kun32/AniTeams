@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Aniwatch from "./Aniwatch"; // assuming AnimePahe coming soon
+import Aniwatch from "./aniwatch/aniwatch"; // assuming AnimePahe coming soon
 
 const providers = ["Aniwatch" /*, "AnimePahe" */];
 
