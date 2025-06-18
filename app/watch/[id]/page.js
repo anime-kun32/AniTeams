@@ -24,7 +24,6 @@ const WatchPage = () => {
     { id: 'default', label: 'Default' },
     { id: 'artplayer', label: 'ArtPlayer' },
     { id: 'plyr', label: 'Plyr' },
-    { id: 'fast', label: 'Fast' },
   ];
 
   return (
