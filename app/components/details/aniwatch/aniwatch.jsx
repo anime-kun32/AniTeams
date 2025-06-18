@@ -8,7 +8,7 @@ export default function Aniwatch({ anilistId }) {
   useEffect(() => {
     async function fetchEpisodes() {
       try {
-        const res = await fetch(`https://your-api.com/aniwatch/episodes/${anilistId}`);
+        const res = await fetch(`/api/provider/aniwatch/episodes?animeId=${anilistId}`);
         const data = await res.json();
         setEpisodes(data.episodes || []);
       } catch (err) {
