@@ -271,9 +271,10 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
     );
   }
 
-  const { sources, tracks, intro, outro } = sourceData;
+  const { sources, tracks = [], intro, outro } = sourceData;
   const proxyUrl = `https://gogoanime-and-hianime-proxy-mu.vercel.app/m3u8-proxy?url=${encodeURIComponent(sources[0].url)}`;
-  const thumbnailTrack = tracks?.find((t) => t.kind === 'thumbnails')?.file;
+  const thumbnailTrack = tracks.find(t => t.lang === 'thumbnails')?.url;
+  const subtitleTracks = tracks.filter(t => t.lang !== 'thumbnails');
 
   return (
     <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden z-10">
@@ -297,25 +298,29 @@ export default function VideoPlayer({ id, server, category, anilistId }) {
         className="text-white"
         fullscreenOrientation="landscape"
       >
-        <MediaProvider
-          playsinline
-          disableRemotePlayback
-          disablePictureInPicture
-        />
-        {Array.isArray(tracks) &&
-          tracks.map((track, i) =>
-            track?.file ? (
-              <Track
-                key={i}
-                src={track.file}
-                kind={track.kind || 'subtitles'}
-                label={track.label || `Track ${i + 1}`}
-                lang={track.lang || 'en'}
-                default={track.default || false}
-              />
-            ) : null
-          )}
+        <MediaProvider playsinline disableRemotePlayback disablePictureInPicture />
+
+        {subtitleTracks.map((track, index) => (
+          <Track
+            key={index}
+            src={track.url}
+            kind="subtitles"
+            label={track.lang.toUpperCase()}
+            lang={track.lang}
+            default={track.lang === 'en'}
+          />
+        ))}
+
+        {thumbnailTrack && (
+          <Track
+            src={thumbnailTrack}
+            kind="metadata"
+            label="Thumbnails"
+          />
+        )}
+
         <SkipButtons intro={intro} outro={outro} />
+
         <DefaultVideoLayout
           thumbnails={thumbnailTrack}
           icons={defaultLayoutIcons}
